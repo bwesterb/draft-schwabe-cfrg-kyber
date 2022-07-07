@@ -83,13 +83,20 @@ Kyber is defined over Z\_q, the integers modulo q = 13\*2^8+1 = 3329.
 
 ## Size
 
-We write
+To define the size of a field element, we need a signed modulo. For any odd m,
+we write
 
-    a smod q
+    a smod m
 
-for the unique integer b with (q-1)/2 < b <= (q-1)/2 and b = a modulo q.
+for the unique integer b with (m-1)/2 < b <= (m-1)/2 and b = a modulo m.
 
-We write
+To avoid confusion, for the more familiar modulo we write umod; that is
+
+    a umod m
+
+is the unique integer b with 0 <= b < m and b = a modulo m.
+
+Now we can define the norm of a field element:
 
     || a || = abs(a smod q)
 
@@ -100,6 +107,35 @@ Examples:
 
 ## Compression
 
+In several parts of the algorithm, we will need a method to compress
+fied elements down into d bits. To do this, we use the following method.
+
+For any positive integer d, integer x and integer 0 <= y < 2^d, we define
+
+      Compress(x, d) = Round( (2^d / q) x ) umod 2^d
+    Decompress(y, d) = Round( (q / 2^d) y )
+
+where Round(x) rounds any fraction to the nearest integer going up with ties.
+
+Note that in TODO we define Compress and Decompress for polynomials and vectors.
+
+These two operations have the following properties:
+
+ * 0 <= Compress(x, d) < 2^d
+ * 0 <= Decompress(y, d) < q
+ * Compress(Decompress(y, d), d) = y
+ * If Decompress(Compress(x, d), d) = x', then || x' - x || <= Round(q/2^(d+1))
+ * If x = x' modulo q, then Compress(x, d) = Compress(x', d)
+
+For implementation efficiency, these can be computed as follows.
+
+      Compress(x, d) = Div( (x << d) + q/2), d ) & ((1 << d) - 1)
+    Decompress(y, d) = (q*y + (1 << (d-1))) >> d
+
+where Div(x, a) = Floor(x / a).
+
+TODO Do we want to include the proof that this is correct?
+TODO Do we need to define >> and <<?
 
 # The ring R
 
@@ -129,7 +165,8 @@ that x^256=-1. To wit
            a\_0 * b\_255 + ... + a\_255 * b\_0)
 
 We will not use this schoolbook multiplication to compute the product.
-Instead we will use the more efficient, number theoretic transform (NTT), see TODO.
+Instead we will use the more efficient, number theoretic transform (NTT),
+see TODO.
 
 ### Size of polynomials
 
@@ -138,8 +175,6 @@ For a polynomial a = (a\_0, ..., a\_255) in R, we write:
     || a || = max_i || a_i ||
 
 Thus a polynomial is considered large if one of its components is large.
-
-
 
 # Security Considerations
 
