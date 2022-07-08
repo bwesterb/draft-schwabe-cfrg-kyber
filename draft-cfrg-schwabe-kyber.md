@@ -176,7 +176,7 @@ For a polynomial a = (a\_0, ..., a\_255) in R, we write:
 
 Thus a polynomial is considered large if one of its components is large.
 
-### The Number Theoretic Transform (NTT)
+### Background on the Number Theoretic Transform (NTT)
 
 TODO This section gives background not necessary for the implementation.
      Should we keep it?
@@ -244,32 +244,49 @@ for the first step we get:
 
 We can see this as 128 applications of the linear map CT\_64, where
 
-    CT\_i: (a, b) |-> (a + zeta^i b, a - zeta^i b)
+    CT\_i: (a, b) |-> (a + zeta^i b, a - zeta^i b)   modulo q
 
 for the appropriate i in the following order, pictured in the case of n=16:
 
-    x---------------x--------x---
-    |-x-------------|-x------|-x-
-    |-|-x-----------|-|-x----x-|-
-    |-|-|-x---------|-|-|-x----x-
-    |-|-|-|-x-------x-|-|-|--x---
-    |-|-|-|-|-x-------x-|-|--|-x-
-    |-|-|-|-|-|-x-------x-|--x-|-
-    |-|-|-|-|-|-|-x-------x----x-
-    x-|-|-|-|-|-|-|-x--------x---
-    --x-|-|-|-|-|-|-|-x------|-x-
-    ----x-|-|-|-|-|-|-|-x----x-|-
-    ------x-|-|-|-|-|-|-|-x----x-
-    --------x-|-|-|-x-|-|-|--x---
-    ----------x-|-|---x-|-|--|-x-
-    ------------x-|-----x-|--x-|-
-    --------------x-------x----x-
+    -x----------------x--------x---
+    -|-x--------------|-x------|-x-
+    -|-|-x------------|-|-x----x-|-
+    -|-|-|-x----------|-|-|-x----x-
+    -|-|-|-|-x--------x-|-|-|--x---
+    -|-|-|-|-|-x--------x-|-|--|-x-
+    -|-|-|-|-|-|-x--------x-|--x-|-
+    -|-|-|-|-|-|-|-x--------x----x-
+    -x-|-|-|-|-|-|-|--x--------x---
+    ---x-|-|-|-|-|-|--|-x------|-x-
+    -----x-|-|-|-|-|--|-|-x----x-|-
+    -------x-|-|-|-|--|-|-|-x----x-
+    ---------x-|-|-|--x-|-|-|--x---
+    -----------x-|-|----x-|-|--|-x-
+    -------------x-|------x-|--x-|-
+    ---------------x--------x----x-
 
-    
+This CT\_i is known as a Cooley-Tukey butterfly. Its inverse is given
+by the Gentleman-Sande butterfly:
+
+    GS\_i: (a, b) |-> ( (a+b)/2, zeta^i(a-b)/2 )    modulo q
+
+The inverse NTT can be computed by replacing CS\_i by GS\_i and flipping
+the diagram horizontally.
+
+# NTT and InvNTT
+
+Define zeta=17. 
 
 
+# Parameters
 
-there are 256th primitive roots of unity such as zeta=17.
+## Common to all parameter sets
+
+    Name    Value   Reference
+    -----------------------------------
+    q       3329    See section TODO
+    zeta    17      See section TODO
+
 
 # Security Considerations
 
