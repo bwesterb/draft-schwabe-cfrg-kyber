@@ -2,6 +2,9 @@ from math import floor
 
 q = 3329
 n = 256
+zeta = 17
+
+assert pow(zeta, 128, q) == q-1
 
 def smod(x):
     r = x % q

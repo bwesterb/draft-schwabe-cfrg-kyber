@@ -77,9 +77,9 @@ TODO
 
 TODO
 
-# The field Z\_q
+# The field GF(q)
 
-Kyber is defined over Z\_q, the integers modulo q = 13\*2^8+1 = 3329.
+Kyber is defined over GF(q) = Z/qZ, the integers modulo q = 13\*2^8+1 = 3329.
 
 ## Size
 
@@ -139,7 +139,7 @@ TODO Do we need to define >> and <<?
 
 # The ring R
 
-Kyber is defined over a polynomial ring R = Z\_q[x]/(x^n+1)
+Kyber is defined over a polynomial ring R = GF(q)[x]/(x^n+1)
 where n=256 (and q=3329). Elements of R are tuples of 256 integers modulo q.
 We will call them polynomials or elements interchangeably.
 
@@ -175,6 +175,101 @@ For a polynomial a = (a\_0, ..., a\_255) in R, we write:
     || a || = max_i || a_i ||
 
 Thus a polynomial is considered large if one of its components is large.
+
+### The Number Theoretic Transform (NTT)
+
+TODO This section gives background not necessary for the implementation.
+     Should we keep it?
+
+The modulus q was chosen such that 256 divides into q-1. This means that
+there are zeta with
+
+    zeta^128 = -1  modulo  q
+
+With such a zeta, we can almost completely split the polynomial x^256+1
+used to define R over GF(q):
+
+    x^256 + 1 = x^256 - zeta^128
+              = (x^128 - zeta^64)(x^128 + zeta^64)
+              = (x^128 - zeta^64)(x^128 - zeta^192)
+              = (x^64 - zeta^32)(x^64 + zeta^32)
+                    (x^64 - zeta^96)(x^64 + zeta^96)
+        
+                ...
+
+              = (x^2 - zeta)(x^2 + zeta)(x^2 - zeta^65)(x^2 + zeta^65)
+                        ... (x^2 - zeta^127)(x^2 + zeta^127)
+
+Note that the powers of zeta that appear, from the third line down,
+are in binary:
+
+    010000 110000
+    001000 101000 011000 111000
+    000100 100100 010100 110100 001100 101100 011100 111100
+                ...
+
+That is: brv(2), brv(3), brv(4), ..., where brv(x) denotes the 7-bit
+bitreversal of x.
+
+These polynomials x^2 +- zeta^i are irreducible and coprime, hence by
+the Chinese Remainder Theorem for commutative rings, we know
+
+    R = GF(q)[x]/(x^256+1) -> GF(q)[x]/(x^2-zeta) x ... x GF(q)[x]/(x^2+zeta^127)
+
+given by a |-> ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
+This is the Number Theoretic Transform. Multiplication on the right is
+much easier: it's almost componentwise. Thus to compute a multiplication
+in R efficiently, one can first use this isomorphism, the NTT, to go
+to the rigth; compute the multiplication there and move back with the
+inverse NTT.
+
+The NTT can be computed efficiently by performing each binary split
+of the polynomial separately as follows:
+
+    a |-> ( a mod x^128 - zeta^64, a mod x^128 + zeta^64),
+      |-> ( a mod x^64 - zeta^32, a mod x^64 + zeta^32,
+            a mod x^64 - zeta^96, a mod x^64 + zeta^96)
+
+        et cetera
+
+If we concatenate the resulting coefficients, expanding the definitions,
+for the first step we get:
+
+    a |-> ( a\_0 + zeta^64 a\_128, a\_1 + zeta^64 a\_129,
+             ...
+            a\_126 + zeta^64 a\_254, a\_127 + zeta^64 a\_255,
+            a\_0 - zeta^64 a\_128, a\_1 - zeta^64 a\_129,
+             ...
+            a\_126 - zeta^64 a\_254, a\_127 - zeta^64 a\_255)
+
+We can see this as 128 applications of the linear map CT\_64, where
+
+    CT\_i: (a, b) |-> (a + zeta^i b, a - zeta^i b)
+
+for the appropriate i in the following order, pictured in the case of n=16:
+
+    x---------------x--------x---
+    |-x-------------|-x------|-x-
+    |-|-x-----------|-|-x----x-|-
+    |-|-|-x---------|-|-|-x----x-
+    |-|-|-|-x-------x-|-|-|--x---
+    |-|-|-|-|-x-------x-|-|--|-x-
+    |-|-|-|-|-|-x-------x-|--x-|-
+    |-|-|-|-|-|-|-x-------x----x-
+    x-|-|-|-|-|-|-|-x--------x---
+    --x-|-|-|-|-|-|-|-x------|-x-
+    ----x-|-|-|-|-|-|-|-x----x-|-
+    ------x-|-|-|-|-|-|-|-x----x-
+    --------x-|-|-|-x-|-|-|--x---
+    ----------x-|-|---x-|-|--|-x-
+    ------------x-|-----x-|--x-|-
+    --------------x-------x----x-
+
+    
+
+
+
+there are 256th primitive roots of unity such as zeta=17.
 
 # Security Considerations
 
