@@ -143,6 +143,10 @@ Kyber is defined over a polynomial ring R = GF(q)[x]/(x^n+1)
 where n=256 (and q=3329). Elements of R are tuples of 256 integers modulo q.
 We will call them polynomials or elements interchangeably.
 
+A tuple a = (a\_0, ..., a\_255) represents the polynomial
+
+    a\_0 + a\_1 x + a\_2 x^2 + ... + a\_255 x^255.
+
 ## Operations
 
 ### Addition and multiplication
@@ -200,16 +204,17 @@ used to define R over GF(q):
               = (x^2 - zeta)(x^2 + zeta)(x^2 - zeta^65)(x^2 + zeta^65)
                         ... (x^2 - zeta^127)(x^2 + zeta^127)
 
-Note that the powers of zeta that appear, from the third line down,
-are in binary:
+Note that the powers of zeta that appear in the second, fourth, ...,
+and final lines are in binary:
 
-    010000 110000
-    001000 101000 011000 111000
-    000100 100100 010100 110100 001100 101100 011100 111100
+    0100000 1100000
+    0010000 1010000 0110000 1110000
+    0001000 1001000 0101000 1101000 0011000 1011000 0111000 1111000
                 ...
+    0000001 1000001 0100001 1100001 0010001 1010001 0110001 ... 1111111
 
 That is: brv(2), brv(3), brv(4), ..., where brv(x) denotes the 7-bit
-bitreversal of x.
+bitreversal of x. The final line is brv(64), brv(65), ..., brv(127).
 
 These polynomials x^2 +- zeta^i are irreducible and coprime, hence by
 the Chinese Remainder Theorem for commutative rings, we know
@@ -226,19 +231,19 @@ inverse NTT.
 The NTT can be computed efficiently by performing each binary split
 of the polynomial separately as follows:
 
-    a |-> ( a mod x^128 - zeta^64, a mod x^128 + zeta^64),
-      |-> ( a mod x^64 - zeta^32, a mod x^64 + zeta^32,
-            a mod x^64 - zeta^96, a mod x^64 + zeta^96)
+    a |-> ( a mod x^128 - zeta^64, a mod x^128 + zeta^64 ),
+      |-> ( a mod  x^64 - zeta^32, a mod  x^64 + zeta^32,
+            a mod  x^64 - zeta^96, a mod  x^64 + zeta^96 ),
 
         et cetera
 
 If we concatenate the resulting coefficients, expanding the definitions,
 for the first step we get:
 
-    a |-> ( a\_0 + zeta^64 a\_128, a\_1 + zeta^64 a\_129,
+    a |-> (   a\_0 + zeta^64 a\_128,   a\_1 + zeta^64 a\_129,
              ...
             a\_126 + zeta^64 a\_254, a\_127 + zeta^64 a\_255,
-            a\_0 - zeta^64 a\_128, a\_1 - zeta^64 a\_129,
+              a\_0 - zeta^64 a\_128,   a\_1 - zeta^64 a\_129,
              ...
             a\_126 - zeta^64 a\_254, a\_127 - zeta^64 a\_255)
 
@@ -265,17 +270,53 @@ for the appropriate i in the following order, pictured in the case of n=16:
     -------------x-|------x-|--x-|-
     ---------------x--------x----x-
 
-This CT\_i is known as a Cooley-Tukey butterfly. Its inverse is given
+For n=16 there are 3 levels with 1, 2 and 4 row groups respectively.
+For the full n=256, there are 7 levels with 1, 2, 4, 8, 16, 32 and 64
+row groups respectively. The appropriate power of zeta in the first
+level is brv(1)=64. The second level has brv(2) and brv(3) as powers
+of zeta for the top and bottom row group respectively, and so on.
+
+The CT\_i is known as a Cooley-Tukey butterfly. Its inverse is given
 by the Gentleman-Sande butterfly:
 
-    GS\_i: (a, b) |-> ( (a+b)/2, zeta^i(a-b)/2 )    modulo q
+    GS\_i: (a, b) |-> ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
 
 The inverse NTT can be computed by replacing CS\_i by GS\_i and flipping
 the diagram horizontally.
 
+#### Optimization notes
+The modular divisions by two in the InvNTT can be collected into a
+single modular division by 128.
+
+zeta^-i can be computed as -zeta^(128-i), which allows one to use the same
+precomputed table of powers of zeta for both the NTT and InvNTT.
+
+TODO Montgomery, Barrett and https://eprint.iacr.org/2020/1377.pdf
+TODO perhaps move this elsewhere?
+
 # NTT and InvNTT
 
-Define zeta=17. 
+As primitive 256th root of unity we use zeta=17.
+
+As before, brv(i) denotes the 7-bit bitreversal of i, so brv(1)=64
+and brv(91)=109.
+
+The NTT is a linear bijection R -> R given by the matrix:
+
+                 / zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
+    (NTT)_{ij} = |
+                 \ 0                                  otherwise
+
+Its inverse is called the InvNTT.
+
+It can be computed more efficiently as described in section TODO.
+
+Examples:
+
+    NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
+    NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
+
+
 
 
 # Parameters
@@ -284,8 +325,10 @@ Define zeta=17.
 
     Name    Value   Reference
     -----------------------------------
-    q       3329    See section TODO
-    zeta    17      See section TODO
+    q       3329    TODO
+    n       256     TODO
+    zeta    17      TODO
+    
 
 
 # Security Considerations
