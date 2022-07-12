@@ -96,6 +96,20 @@ class Poly:
             layer *= 2
         return Poly(cs)
 
+    def MulNTT(self, other):
+        """ Computes self o other, the multiplication of self and other
+            in the NTT domain. """
+        cs = [None]*n
+        for i in range(0, n, 2):
+            a1 = self.cs[i]
+            a2 = self.cs[i+1]
+            b1 = other.cs[i]
+            b2 = other.cs[i+1]
+            z = pow(zeta, 2*brv(i//2)+1, q)
+            cs[i] = (a1 * b1 + z * a2 * b2) % q
+            cs[i+1] = (a2 * b1 + a1 * b2) % q
+        return Poly(cs)
+
 assert Poly([1,1] + [0]*254).NTT() == Poly([1]*256)
 
 range256NTT = Poly((
@@ -130,3 +144,6 @@ assert Poly(range(256)).NTT() == Poly(range(256)).RefNTT()
 assert range256NTT.InvNTT() == Poly(range(256))
 assert Poly(range(256)).NTT() == range256NTT
 
+p2 = Poly([1]*256).NTT()
+p1 = Poly([1,0,1]+[0]*253).NTT()
+print(p1.MulNTT(p2).InvNTT())

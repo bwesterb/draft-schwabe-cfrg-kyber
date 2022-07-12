@@ -222,11 +222,27 @@ the Chinese Remainder Theorem for commutative rings, we know
     R = GF(q)[x]/(x^256+1) -> GF(q)[x]/(x^2-zeta) x ... x GF(q)[x]/(x^2+zeta^127)
 
 given by a |-> ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
-This is the Number Theoretic Transform. Multiplication on the right is
-much easier: it's almost componentwise. Thus to compute a multiplication
-in R efficiently, one can first use this isomorphism, the NTT, to go
-to the rigth; compute the multiplication there and move back with the
-inverse NTT.
+This is the Number Theoretic Transform (NTT). Multiplication on the right is
+much easier: it's almost componentwise, see section TODO.
+
+A propos, the the constant factors that appear in the moduli in order
+can be computed efficiently as follows (all modulo q):
+
+    -zeta     = -zeta^brv(64)  = -zeta^{1 + 2 brv(0)}
+     zeta     =  zeta^brv(64)  = -zeta^{1 + 2 brv(1)}
+    -zeta^65  = -zeta^brv(65)  = -zeta^{1 + 2 brv(2)}
+     zeta^65  =  zeta^brv(65)  = -zeta^{1 + 2 brv(3)}
+    -zeta^33  = -zeta^brv(66)  = -zeta^{1 + 2 brv(4)}
+     zeta^33  =  zeta^brv(66)  = -zeta^{1 + 2 brv(5)}
+
+                 ...
+
+    -zeta^127 = -zeta^brv(127) = -zeta^{1 + 2 brv(126)}
+     zeta^127 =  zeta^brv(127) = -zeta^{1 + 2 brv(127)}
+    
+To compute a multiplication in R efficiently, one can first use the
+NTT, to go to the rigth; compute the multiplication there and move
+back with the inverse NTT.
 
 The NTT can be computed efficiently by performing each binary split
 of the polynomial separately as follows:
@@ -303,9 +319,9 @@ and brv(91)=109.
 
 The NTT is a linear bijection R -> R given by the matrix:
 
-                 / zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
-    (NTT)_{ij} = |
-                 \ 0                                  otherwise
+                  [ zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
+    (NTT)\_{ij} = [
+                  [ 0                                  otherwise
 
 Its inverse is called the InvNTT.
 
@@ -316,6 +332,42 @@ Examples:
     NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
     NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 
+## Multiplication in NTT domain
+
+For elements a, b in R, we write a o b for multiplication in the NTT domain.
+That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
+
+                 [ a\_i b\_i + zeta^{2 brv(i >> 1) + 1} a\_{i+1} b\_{i+1}   if i even
+    (a o b)\_i = [
+                 [ a\_{i+1} b\_i + a\_i b\_{i+1}                            otherwise
+
+# Serialization
+
+## OctetsToBits
+For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
+is a list of bits of length 8s, defined by
+
+    OctetsToBits(a)\_i = ((a\_(i>>3)) >> (i umod 8)) umod 2.
+
+## Encode\_w and Decode\_w
+For an integer 0 < w <= 12, we define Decode\_w(a), which converts
+a list of 32w octets into a polynomial with coefficients in {0, ..., 2^w-1}
+as follows.
+
+    Decode\_w(a)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w-1},
+
+where b = OctetsToBits(a).
+
+Encode\_w is the unique inverse of Decode\_w.
+
+# Kyber.CPAPKE
+
+We are ready to define the IND-CPA secure Public-Key Encryption scheme that
+underlies Kyber.
+
+## Key generation
+
+
 
 
 
@@ -323,11 +375,17 @@ Examples:
 
 ## Common to all parameter sets
 
-    Name    Value   Reference
+    Name        Value
     -----------------------------------
-    q       3329    TODO
-    n       256     TODO
-    zeta    17      TODO
+    q           3329
+    n           256
+    zeta        17
+
+    XOF         SHAKE-128
+    H           SHA3-256
+    G           SHA3-512    
+    PRF(s,b)    SHAKE-256(s || b)
+    KDF         SHAKE-256
     
 
 
