@@ -341,6 +341,18 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
     (a o b)\_i = [
                  [ a\_{i+1} b\_i + a\_i b\_{i+1}                            otherwise
 
+# Symmetric cryptographic primitives
+Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
+
+    XOF(seed) = SHAKE-128(seed)
+    PRF(seed, counter) = SHAKE-256(seed || counter)
+    KDF(msg) = SHAKE-256(msg)
+    H(msg) = SHA3-256(msg)
+    G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
+
+TODO Elaborate on types and usage
+TODO Stick to one?
+
 # Serialization
 
 ## OctetsToBits
@@ -348,6 +360,10 @@ For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
 is a list of bits of length 8s, defined by
 
     OctetsToBits(a)\_i = ((a\_(i>>3)) >> (i umod 8)) umod 2.
+
+Example:
+
+    OctetsToBits(12,34) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
 
 ## Encode\_w and Decode\_w
 For an integer 0 < w <= 12, we define Decode\_w(a), which converts
@@ -359,6 +375,53 @@ as follows.
 where b = OctetsToBits(a).
 
 Encode\_w is the unique inverse of Decode\_w.
+
+## Sampling of polynomials
+
+### Uniformly
+The polynomials in the matrix A are sampled uniformly and deterministically
+from an octet stream (XOF) using rejection sampling as follows.
+
+Three octets b\_0, b\_1, b\_2 are read from the stream at a time. These are
+interpreted as two 12-bit unsigned integers d\_1, d\_2 via
+
+    d\_1 + d\_2 2^12 = b\_0 + b\_1 2^8 + b\_2 2^16
+
+This creates a stream of 12-bit `d`s. Of these, the elements >= q are
+ignored. From the resultant stream, the coefficients of the polynomial
+are taken in order. In Python:
+
+    def sampleUniform(stream):
+        cs = []
+        while True:
+            b = stream.read(3)
+            d1 = b[0] + 256*(b[1] % 16)
+            d2 = (b[1] >> 4) + 16*b[2]
+            for d in [d1, d2]:
+                if d >= q: continue
+                cs.append(d)
+                if len(cs) == n: return Poly(cs)
+
+Example:
+
+    sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
+
+### From a binomial distribution
+Noise is sampled from a centered binomial distribution B(2eta, 1/2) - eta
+deterministically  as follows.
+
+An octet array a of length 2\*eta is converted to a polynomial CBD(a, eta)
+
+    CBD(a, eta)\_i = b\_{2i eta} + b\_{2i eta + 1} + ... + b\_{2i eta + eta-1}
+                  - b\_{2i eta + eta} + ... + b\_{2i eta + 2eta - 1},
+
+where b = OctetsToBits(a).
+
+Examples:
+
+    CBD((0, 1, 2, ..., 127), 2) = (0, 0, 1, 0, 1, 0, ..., 3328, 1, 0, 1)
+    CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
+
 
 # Kyber.CPAPKE
 
@@ -375,11 +438,11 @@ underlies Kyber.
 
 ## Common to all parameter sets
 
-    Name        Value
+    Name    Value
     -----------------------------------
-    q           3329
-    n           256
-    zeta        17
+    q       3329    Order of base field
+    n       256     Degree of polynomials
+    zeta    17      nth root of unity in base field
 
     XOF         SHAKE-128
     H           SHA3-256
