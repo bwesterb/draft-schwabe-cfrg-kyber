@@ -365,16 +365,16 @@ Example:
 
     OctetsToBits(12,34) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
 
-## Encode\_w and Decode\_w
-For an integer 0 < w <= 12, we define Decode\_w(a), which converts
-a list of 32w octets into a polynomial with coefficients in {0, ..., 2^w-1}
+## Encode and Decode
+For an integer 0 < w <= 12, we define Decode(a, w), which converts
+a list a of 32w octets into a polynomial with coefficients in {0, ..., 2^w-1}
 as follows.
 
-    Decode\_w(a)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w-1},
+    Decode(a, w)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w-1},
 
 where b = OctetsToBits(a).
 
-Encode\_w is the unique inverse of Decode\_w.
+Encode(-, w) is the unique inverse of Decode(-, w)
 
 ## Sampling of polynomials
 
