@@ -68,6 +68,12 @@ Kyber is NIST's pick for a post-quantum key agreement.
 
 TODO
 
+## Warning on stability
+
+**NOTE** This draft is not stable and does not (yet) match the final
+NIST standard expected in 2024. Currently it matches Kyber as submitted
+to round 3 of the NIST PQC process. 
+
 
 # Conventions and Definitions
 
