@@ -20,7 +20,7 @@ title: "Kyber Post-Quantum KEM"
 abbrev: "kyber"
 category: info # TODO
 
-docname: draft-cfrg-schwabe-kyber
+docname: draft-cfrg-schwabe-kyber-latest
 submissiontype: IETF
 number:
 date:
@@ -72,7 +72,7 @@ TODO
 
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process. 
+to round 3 of the NIST PQC process.
 
 # Conventions and Definitions
 
@@ -103,7 +103,7 @@ the value of k is 2.
 The public key consists of two values:
 
     - *A* a uniformly sampled  k by k matrix over R _and_
-    - *t* = A s + e, where `e` is a suitably small masking vector. 
+    - *t* = A s + e, where `e` is a suitably small masking vector.
 
 Distinguishing between such A s + e and a uniformly sampled t is the
 MLWE problem.
@@ -129,7 +129,7 @@ TODO add a quick rationale.
 To decrypt the ciphertext, one computes
 
     m = Compress(Decompress(c\_2, d\_v) - s^T Decompress(c\_1, d\_u), 1).
-    
+
 To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
 and how to compress. Then we define the polynomial ring R; its operations
@@ -181,11 +181,11 @@ Note that in TODO we define Compress and Decompress for polynomials and vectors.
 
 These two operations have the following properties:
 
- * 0 <= Compress(x, d) < 2^d
- * 0 <= Decompress(y, d) < q
- * Compress(Decompress(y, d), d) = y
- * If Decompress(Compress(x, d), d) = x', then || x' - x || <= Round(q/2^(d+1))
- * If x = x' modulo q, then Compress(x, d) = Compress(x', d)
+ * `0 <= Compress(x, d) < 2^d`
+ * `0 <= Decompress(y, d) < q`
+ * `Compress(Decompress(y, d), d) = y`
+ * If `Decompress(Compress(x, d), d) = x'`, then `|| x' - x || <= Round(q/2^(d+1))`
+ * If `x = x' modulo q`, then `Compress(x, d) = Compress(x', d)`
 
 For implementation efficiency, these can be computed as follows.
 
@@ -223,7 +223,7 @@ that x^256=-1. To wit
     (a\_0, ..., a\_255) \* (b\_0, ..., b\_255)
         = (a\_0 * b\_0 - a\_255 * b\_1 - ... - a\_1 * b\_255,
            a\_0 * b\_1 + a\_1 * b\_0 - a\_255 * b\_2 - ... - a\_2 * b\_255,
-        
+
                 ...
 
            a\_0 * b\_255 + ... + a\_255 * b\_0)
@@ -258,7 +258,7 @@ used to define R over GF(q):
               = (x^128 - zeta^64)(x^128 - zeta^192)
               = (x^64 - zeta^32)(x^64 + zeta^32)
                     (x^64 - zeta^96)(x^64 + zeta^96)
-        
+
                 ...
 
               = (x^2 - zeta)(x^2 + zeta)(x^2 - zeta^65)(x^2 + zeta^65)
@@ -299,7 +299,7 @@ can be computed efficiently as follows (all modulo q):
 
     -zeta^127 = -zeta^brv(127) = -zeta^{1 + 2 brv(126)}
      zeta^127 =  zeta^brv(127) = -zeta^{1 + 2 brv(127)}
-    
+
 To compute a multiplication in R efficiently, one can first use the
 NTT, to go to the rigth; compute the multiplication there and move
 back with the inverse NTT.
@@ -506,10 +506,10 @@ underlies Kyber.
 
     XOF         SHAKE-128
     H           SHA3-256
-    G           SHA3-512    
+    G           SHA3-512
     PRF(s,b)    SHAKE-256(s || b)
     KDF         SHAKE-256
-    
+
 ## Parameter sets
 
     Name        Description
