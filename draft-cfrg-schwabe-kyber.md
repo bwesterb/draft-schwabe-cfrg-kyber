@@ -81,7 +81,62 @@ to round 3 of the NIST PQC process.
 
 # Overview
 
-TODO
+Kyber is an IND-CCA2 secure KEM. It is constructed by applying a
+Fujisaki--Okamato style transformation on Kyber.CPAPKE, which is
+the underlying IND-CPA secure Public Key Encryption scheme.
+We cannot use Kyber.CPAPKE directly, as its ciphertexts are malleable.
+
+                       F.O. transform
+    Kyber.CPAPKE   ---------------------->   Kyber
+       IND-CPA                              IND-CCA2
+
+Kyber.CPAPKE is a lattice-based scheme. More precisely, its security
+is based on the learning-with-errors problem in module lattices (MLWE).
+The underlying polynomial ring R (defined in TODO) is chosen such that
+multiplication is very fast using the number theoretic transform
+(NTT, see TODO).
+
+A Kyber.CPAPKE private key is a vector *s* over R of length k which is
+_small_ in a particular way. Here `k` is a security parameter akin to the
+size of a prime modulus. For Kyber512, which targets AES-128's security level,
+the value of k is 2.
+
+The public key consists of two values:
+
+    - *A* a uniformly sampled  k by k matrix over R _and_
+    - *t* = A s + e, where `e` is a suitably small masking vector. 
+
+Distinguishing between such A s + e and a uniformly sampled t is the
+MLWE problem.
+
+To save space in the public key, A is recomputed deterministically from
+a seed *rho*.
+
+A ciphertext for a message m under this public key is a pair (c\_1, c\_2)
+computed roughly as follows:
+
+    c\_1 = Compress(A^T r + e\_1, d\_u)
+    c\_2 = Compress(t^T r + e\_2 + Decompress(m, 1), d\_v)
+
+where
+
+    - e\_1, e\_2 and r are small blinds;
+    - Compress(-, d) removes some information, leaving d bits per coefficient
+      and Decompress is such that Compress after Decompress does nothing and
+    - d\_u, d\_v are scheme parameters.
+
+TODO add a quick rationale.
+
+To decrypt the ciphertext, one computes
+
+    m = Compress(Decompress(c\_2, d\_v) - s^T Decompress(c\_1, d\_u), 1).
+    
+To define all these operations precisely, we first define the field
+of coefficients for our polynomial ring; what it means to be small;
+and how to compress. Then we define the polynomial ring R; its operations
+and in particular the NTT. We continue with the different methods of
+sampling and (de)serialization. Then, we define first Kyber.CPAPKE
+and finally Kyber proper.
 
 # The field GF(q)
 
@@ -444,8 +499,8 @@ underlies Kyber.
 
 ## Common to all parameter sets
 
-    Name    Value
-    -----------------------------------
+    Name    Value   Description
+    -------------------------------------------------------------------------
     q       3329    Order of base field
     n       256     Degree of polynomials
     zeta    17      nth root of unity in base field
@@ -456,6 +511,23 @@ underlies Kyber.
     PRF(s,b)    SHAKE-256(s || b)
     KDF         SHAKE-256
     
+## Parameter sets
+
+    Name        Description
+    --------------------------------------------------------------------------
+    k           Dimension of module
+    eta1, eta2  Size of "small" coefficients used in the private key
+                and noise vectors.
+    d\_u        How many bits to retain per coefficient of `u`, the
+                private-key independent part of the ciphertext.
+    d\_v        How many bits to retain per coefficient of `v`, the
+                private-key dependent part of the ciphertext.
+
+    Parameter set   k eta1 eta2 d\_u d\_v sec
+    --------------------------------------
+    Kyber512        2   3   2   10  4   I
+    Kyber768        3   2   2   10  4   III
+    Kyber1024       4   2   2   11  5   V
 
 
 # Security Considerations
