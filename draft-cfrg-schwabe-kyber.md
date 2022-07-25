@@ -9,19 +9,19 @@ number:
 date:
 consensus: true # TODO
 v: 3 # TODO
-area: AREA # TODO
-workgroup: WG Working Group
+# area: AREA # TODO
+# workgroup: WG Working Group
 keyword:
  - kyber
  - kem
  - post-quantum
 venue:
-  group: CFRG
-  type: Working Group
-  mail: WG@example.com  # TODO
-  arch: https://example.com/WG # TODO
-  github: bwesterb/draft-schwabe-cfrg-kyber
-  latest: https://example.com/LATEST # TODO
+#  group: CFRG
+#  type: Working Group
+#  mail: WG@example.com  # TODO
+#  arch: https://example.com/WG # TODO
+  github: "bwesterb/draft-schwabe-cfrg-kyber"
+  latest: "https://bwesterb.github.io/draft-schwabe-cfrg-kyber/draft-cfrg-schwabe-kyber.html"
 
 author:
  -
