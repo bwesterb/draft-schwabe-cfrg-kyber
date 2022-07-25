@@ -1308,12 +1308,14 @@ multiplication is very fast using the number theoretic transform
 size of a prime modulus. For Kyber512, which targets AES-128's security level,
 the value of k is 2.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-5">The public key consists of two values:<a href="#section-3-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-6">
-<pre>
-- *A* a uniformly sampled  k by k matrix over R _and_
-- *t* = A s + e, where `e` is a suitably small masking vector.
-</pre><a href="#section-3-6" class="pilcrow">¶</a>
-</div>
+<ul class="normal">
+<li class="normal" id="section-3-6.1">
+          <em>A</em> a uniformly sampled  k by k matrix over R <em>and</em><a href="#section-3-6.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-6.2">
+          <em>t = A s + e</em>, where <code>e</code> is a suitably small masking vector.<a href="#section-3-6.2" class="pilcrow">¶</a>
+</li>
+      </ul>
 <p id="section-3-7">Distinguishing between such A s + e and a uniformly sampled t is the
 MLWE problem.<a href="#section-3-7" class="pilcrow">¶</a></p>
 <p id="section-3-8">To save space in the public key, A is recomputed deterministically from
@@ -1327,14 +1329,15 @@ c\_2 = Compress(t^T r + e\_2 + Decompress(m, 1), d\_v)
 </pre><a href="#section-3-10" class="pilcrow">¶</a>
 </div>
 <p id="section-3-11">where<a href="#section-3-11" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-12">
-<pre>
-- e\_1, e\_2 and r are small blinds;
-- Compress(-, d) removes some information, leaving d bits per coefficient
-  and Decompress is such that Compress after Decompress does nothing and
-- d\_u, d\_v are scheme parameters.
-</pre><a href="#section-3-12" class="pilcrow">¶</a>
-</div>
+<ul class="normal">
+<li class="normal" id="section-3-12.1">e_1, e_2 and r are small blinds;<a href="#section-3-12.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-12.2">Compress(-, d) removes some information, leaving d bits per coefficient
+and Decompress is such that Compress after Decompress does nothing and<a href="#section-3-12.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-12.3">d_u, d_v are scheme parameters.<a href="#section-3-12.3" class="pilcrow">¶</a>
+</li>
+      </ul>
 <p id="section-3-13">TODO add a quick rationale.<a href="#section-3-13" class="pilcrow">¶</a></p>
 <p id="section-3-14">To decrypt the ciphertext, one computes<a href="#section-3-14" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3-15">
@@ -1858,21 +1861,64 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
         <h3 id="name-common-to-all-parameter-set">
 <a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-common-to-all-parameter-set" class="section-name selfRef">Common to all parameter sets</a>
         </h3>
-<div class="alignLeft art-text artwork" id="section-10.1-1">
-<pre>
-Name    Value   Description
--------------------------------------------------------------------------
-q       3329    Order of base field
-n       256     Degree of polynomials
-zeta    17      nth root of unity in base field
-
-XOF         SHAKE-128
-H           SHA3-256
-G           SHA3-512
-PRF(s,b)    SHAKE-256(s || b)
-KDF         SHAKE-256
-</pre><a href="#section-10.1-1" class="pilcrow">¶</a>
-</div>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Name</th>
+              <th class="text-center" rowspan="1" colspan="1">Value</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">q</td>
+              <td class="text-center" rowspan="1" colspan="1">3329</td>
+              <td class="text-left" rowspan="1" colspan="1">Order of base field</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">n</td>
+              <td class="text-center" rowspan="1" colspan="1">256</td>
+              <td class="text-left" rowspan="1" colspan="1">Degree of polynomials</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">zeta</td>
+              <td class="text-center" rowspan="1" colspan="1">17</td>
+              <td class="text-left" rowspan="1" colspan="1">nth root of unity in base field</td>
+            </tr>
+          </tbody>
+        </table>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Primitive</th>
+              <th class="text-left" rowspan="1" colspan="1">Instantiation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">XOF</td>
+              <td class="text-left" rowspan="1" colspan="1">SHAKE-128</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">H</td>
+              <td class="text-left" rowspan="1" colspan="1">SHA3-256</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">G</td>
+              <td class="text-left" rowspan="1" colspan="1">SHA3-512</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">PRF(s,b)</td>
+              <td class="text-left" rowspan="1" colspan="1">SHAKE-256(s || b)</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">KDF</td>
+              <td class="text-left" rowspan="1" colspan="1">SHAKE-256</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
 <div id="parameter-sets">
@@ -1880,25 +1926,76 @@ KDF         SHAKE-256
         <h3 id="name-parameter-sets">
 <a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-parameter-sets" class="section-name selfRef">Parameter sets</a>
         </h3>
-<div class="alignLeft art-text artwork" id="section-10.2-1">
-<pre>
-Name        Description
---------------------------------------------------------------------------
-k           Dimension of module
-eta1, eta2  Size of "small" coefficients used in the private key
-            and noise vectors.
-d\_u        How many bits to retain per coefficient of `u`, the
-            private-key independent part of the ciphertext.
-d\_v        How many bits to retain per coefficient of `v`, the
-            private-key dependent part of the ciphertext.
-
-Parameter set   k eta1 eta2 d\_u d\_v sec
---------------------------------------
-Kyber512        2   3   2   10  4   I
-Kyber768        3   2   2   10  4   III
-Kyber1024       4   2   2   11  5   V
-</pre><a href="#section-10.2-1" class="pilcrow">¶</a>
-</div>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">k</td>
+              <td class="text-left" rowspan="1" colspan="1">Dimension of module</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">eta1, eta2</td>
+              <td class="text-left" rowspan="1" colspan="1">Size of "small" coefficients used in the private key  and noise vectors.</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">d_u</td>
+              <td class="text-left" rowspan="1" colspan="1">How many bits to retain per coefficient of <code>u</code>, the private-key independent part of the ciphertext</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">d_v</td>
+              <td class="text-left" rowspan="1" colspan="1">How many bits to retain per coefficient of <code>v</code>, the private-key dependent part of the ciphertext.</td>
+            </tr>
+          </tbody>
+        </table>
+<table class="center" id="table-4">
+          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+            <tr>
+              <th class="text-right" rowspan="1" colspan="1">Parameter set</th>
+              <th class="text-center" rowspan="1" colspan="1">k</th>
+              <th class="text-center" rowspan="1" colspan="1">eta1</th>
+              <th class="text-center" rowspan="1" colspan="1">eta2</th>
+              <th class="text-center" rowspan="1" colspan="1">d_u</th>
+              <th class="text-center" rowspan="1" colspan="1">d_v</th>
+              <th class="text-center" rowspan="1" colspan="1">sec</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">Kyber512</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">10</td>
+              <td class="text-center" rowspan="1" colspan="1">4</td>
+              <td class="text-center" rowspan="1" colspan="1">I</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">Kyber768</td>
+              <td class="text-center" rowspan="1" colspan="1">3</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">10</td>
+              <td class="text-center" rowspan="1" colspan="1">4</td>
+              <td class="text-center" rowspan="1" colspan="1">III</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">Kyber1024</td>
+              <td class="text-center" rowspan="1" colspan="1">4</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">2</td>
+              <td class="text-center" rowspan="1" colspan="1">11</td>
+              <td class="text-center" rowspan="1" colspan="1">5</td>
+              <td class="text-center" rowspan="1" colspan="1">V</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
 </section>
