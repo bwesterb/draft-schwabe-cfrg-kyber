@@ -12,6 +12,7 @@
 /lib
 /node_modules/
 /versioned/
+/__pycache__/
 Gemfile.lock
 archive.json
 draft-cfrg-schwabe-kyber.xml
