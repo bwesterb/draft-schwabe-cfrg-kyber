@@ -1,6 +1,14 @@
 # Kyber Post-Quantum KEM
 
 This is the working area for the individual Internet-Draft, "Kyber Post-Quantum KEM".
+It described [Kyber](https://pq-crystals.org/kyber/index.shtml),
+NIST's pick for post-quantum key agreement.
+
+Very much work-in-progress at the moment!
+
+**NOTE** This draft is not stable and does not (yet) match the final
+NIST standard expected in 2024. Currently it matches Kyber as submitted
+to round 3 of the NIST PQC process.
 
 * [Editor's Copy](https://bwesterb.github.io/draft-schwabe-cfrg-kyber/#go.draft-cfrg-schwabe-kyber.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-cfrg-schwabe-kyber)
