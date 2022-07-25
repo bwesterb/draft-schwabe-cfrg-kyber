@@ -197,7 +197,7 @@ class Vec:
         return Vec(p.Compress(d) for p in self.ps)
 
     def Decompress(self, d):
-        return sum(p.Decompress(d) for p in self.ps)
+        return Vec(p.Decompress(d) for p in self.ps)
 
     def Encode(self, d):
         return Encode(sum((p.cs for p in self.ps), ()), d)
@@ -264,8 +264,8 @@ def CPAPKE_Enc(pk, msg, seed, params):
 def CPAPKE_Dec(sk, ct, params):
     split = params.du * params.k * n // 8
     c1, c2 = ct[:split], ct[split:]
-    u = DecodeVec(c1, params.k, params.du)
-    v = DecodePoly(c2, params.dv)
+    u = DecodeVec(c1, params.k, params.du).Decompress(params.du)
+    v = DecodePoly(c2, params.dv).Decompress(params.dv)
     sHat = DecodeVec(sk, params.k, 12)
     return (v - sHat.DotNTT(u.NTT()).InvNTT()).Compress(1).Encode(1)
 
@@ -374,4 +374,5 @@ for params in [params512, params768, params1024]:
     seed = bytes(range(32))
     pk, sk = CPAPKE_KeyGen(seed, params)
     ct = CPAPKE_Enc(pk, bytes(range(32)), seed, params)
-    print(CPAPKE_Dec(sk, ct, params))
+    m = CPAPKE_Dec(sk, ct, params)
+    assert m == bytes(range(32))
