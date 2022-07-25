@@ -1,7 +1,7 @@
 ---
 title: "Kyber Post-Quantum KEM"
 abbrev: "kyber"
-category: info # TODO
+category: info # TODO (#6)
 
 docname: draft-cfrg-schwabe-kyber-latest
 submissiontype: IETF
@@ -49,7 +49,7 @@ This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 Kyber is NIST's pick for a post-quantum key agreement.
 
-TODO
+TODO #7
 
 ## Warning on stability
 
@@ -225,7 +225,7 @@ Thus a polynomial is considered large if one of its components is large.
 
 ### Background on the Number Theoretic Transform (NTT)
 
-TODO This section gives background not necessary for the implementation.
+TODO (#8) This section gives background not necessary for the implementation.
      Should we keep it?
 
 The modulus q was chosen such that 256 divides into q-1. This means that
@@ -398,6 +398,8 @@ TODO Stick to one?
 
 # Serialization
 
+TODO #20
+
 ## OctetsToBits
 For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
 is a list of bits of length 8s, defined by
@@ -475,8 +477,6 @@ underlies Kyber.
 
 
 
-
-
 # Parameters
 
 ## Common to all parameter sets
@@ -513,16 +513,16 @@ underlies Kyber.
 
 # Machine-readable implementation
 
-TODO insert kyber.py automatically
+TODO insert kyber.py automatically (#14)
 
 # Security Considerations
 
-TODO Security
+TODO Security (#18)
 
 
 # IANA Considerations
 
-This document has no IANA actions.
+TODO (#17)
 
 
 --- back
@@ -530,4 +530,4 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+TODO acknowledge. (#16)

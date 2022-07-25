@@ -165,11 +165,11 @@ def CBD(a, eta):
     return Poly(cs)
 
 def XOF(seed, j, i):
-    # TODO proper streaming SHAKE128
+    # TODO #5 proper streaming SHAKE128
     return io.BytesIO(hashlib.shake_128(seed + bytes([j, i])).digest(length=1344))
 
 def PRF(seed, nonce):
-    # TODO proper streaming SHAKE256
+    # TODO #5 proper streaming SHAKE256
     assert len(seed) == 32
     return io.BytesIO(hashlib.shake_256(seed + bytes([nonce])
         ).digest(length=2000))

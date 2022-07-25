@@ -103,4 +103,4 @@ noise2Test = Poly(x%q for x in [
 ])
 assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
 
-#  Check NIST test vectors
+# TODO #4 Check NIST test vectors
