@@ -99,7 +99,7 @@ Table of Contents
 
    Kyber is NIST's pick for a post-quantum key agreement.
 
-   TODO
+   TODO #7
 
 1.1.  Warning on stability
 
@@ -296,7 +296,7 @@ Table of Contents
 
 5.1.3.  Background on the Number Theoretic Transform (NTT)
 
-   TODO This section gives background not necessary for the
+   TODO (#8) This section gives background not necessary for the
    implementation.  Should we keep it?
 
    The modulus q was chosen such that 256 divides into q-1.  This means
@@ -473,6 +473,8 @@ NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 
 8.  Serialization
 
+   TODO #20
+
 8.1.  OctetsToBits
 
    For any list of octets a_0, ..., a_{s-1}, we define OctetsToBits(a),
@@ -618,15 +620,15 @@ CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
 
 11.  Machine-readable implementation
 
-   TODO insert kyber.py automatically
+   TODO insert kyber.py automatically (#14)
 
 12.  Security Considerations
 
-   TODO Security
+   TODO Security (#18)
 
 13.  IANA Considerations
 
-   This document has no IANA actions.
+   TODO (#17)
 
 14.  Normative References
 
@@ -641,7 +643,7 @@ CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
 
 Acknowledgments
 
-   TODO acknowledge.
+   TODO acknowledge. (#16)
 
 Authors' Addresses
 
