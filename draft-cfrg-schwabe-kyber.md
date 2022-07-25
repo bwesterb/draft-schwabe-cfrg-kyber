@@ -26,8 +26,8 @@ venue:
 author:
  -
     fullname: Peter Schwabe
-    organization: todo
-    email: todo
+    organization: MPI-SPI & Radboud University
+    email: peter@cryptojedi.org
  -
     fullname: Bas Westerbaan
     organization: Cloudflare
