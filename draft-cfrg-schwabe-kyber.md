@@ -85,8 +85,8 @@ the value of k is 2.
 
 The public key consists of two values:
 
-    - *A* a uniformly sampled  k by k matrix over R _and_
-    - *t* = A s + e, where `e` is a suitably small masking vector.
+- _A_ a uniformly sampled  k by k matrix over R _and_
+- _t = A s + e_, where `e` is a suitably small masking vector.
 
 Distinguishing between such A s + e and a uniformly sampled t is the
 MLWE problem.
@@ -102,10 +102,10 @@ computed roughly as follows:
 
 where
 
-    - e\_1, e\_2 and r are small blinds;
-    - Compress(-, d) removes some information, leaving d bits per coefficient
-      and Decompress is such that Compress after Decompress does nothing and
-    - d\_u, d\_v are scheme parameters.
+- e\_1, e\_2 and r are small blinds;
+- Compress(-, d) removes some information, leaving d bits per coefficient
+  and Decompress is such that Compress after Decompress does nothing and
+- d\_u, d\_v are scheme parameters.
 
 TODO add a quick rationale.
 
@@ -481,35 +481,35 @@ underlies Kyber.
 
 ## Common to all parameter sets
 
-    Name    Value   Description
-    -------------------------------------------------------------------------
-    q       3329    Order of base field
-    n       256     Degree of polynomials
-    zeta    17      nth root of unity in base field
+|Name  | Value | Description                        |
+|-----:|:-----:|:-----------------------------------|
+|q     | 3329  | Order of base field                |
+|n     | 256   | Degree of polynomials              |
+|zeta  | 17    | nth root of unity in base field    |
 
-    XOF         SHAKE-128
-    H           SHA3-256
-    G           SHA3-512
-    PRF(s,b)    SHAKE-256(s || b)
-    KDF         SHAKE-256
+
+|Primitive| Instantiation        |
+|--------:|:---------------------|
+|XOF      | SHAKE-128            |
+|H        | SHA3-256             |
+|G        | SHA3-512             |
+|PRF(s,b) | SHAKE-256(s \|\| b)  |
+|KDF      | SHAKE-256            |
 
 ## Parameter sets
 
-    Name        Description
-    --------------------------------------------------------------------------
-    k           Dimension of module
-    eta1, eta2  Size of "small" coefficients used in the private key
-                and noise vectors.
-    d\_u        How many bits to retain per coefficient of `u`, the
-                private-key independent part of the ciphertext.
-    d\_v        How many bits to retain per coefficient of `v`, the
-                private-key dependent part of the ciphertext.
+| Name       |Description                                                                                        |
+|-----------:|:--------------------------------------------------------------------------------------------------|
+| k          |Dimension of module                                                                                |
+| eta1, eta2 |Size of "small" coefficients used in the private key  and noise vectors.                           |
+| d\_u       |How many bits to retain per coefficient of `u`, the private-key independent part of the ciphertext |
+| d\_v       |How many bits to retain per coefficient of `v`, the private-key dependent part of the ciphertext.  |
 
-    Parameter set   k eta1 eta2 d\_u d\_v sec
-    --------------------------------------
-    Kyber512        2   3   2   10  4   I
-    Kyber768        3   2   2   10  4   III
-    Kyber1024       4   2   2   11  5   V
+|Parameter set | k |eta1|eta2|d\_u|d\_v|sec|
+|-------------:|:-:|:--:|:--:|:--:|:--:|:-:|
+|Kyber512      | 2 |  3 | 2  |10  |4   |I  |
+|Kyber768      | 3 |  2 | 2  |10  |4   |III|
+|Kyber1024     | 4 |  2 | 2  |11  |5   |V  |
 
 # Machine-readable implementation
 
