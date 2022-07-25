@@ -18,15 +18,15 @@
 ###
 title: "Kyber Post-Quantum KEM"
 abbrev: "kyber"
-category: info
+category: info # TODO
 
 docname: draft-cfrg-schwabe-kyber
 submissiontype: IETF
 number:
 date:
-consensus: true
-v: 3
-area: AREA
+consensus: true # TODO
+v: 3 # TODO
+area: AREA # TODO
 workgroup: WG Working Group
 keyword:
  - kyber
@@ -35,10 +35,10 @@ keyword:
 venue:
   group: CFRG
   type: Working Group
-  mail: WG@example.com  # todo
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  mail: WG@example.com  # TODO
+  arch: https://example.com/WG # TODO
+  github: bwesterb/draft-schwabe-cfrg-kyber
+  latest: https://example.com/LATEST # TODO
 
 author:
  -
@@ -73,7 +73,6 @@ TODO
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
 to round 3 of the NIST PQC process. 
-
 
 # Conventions and Definitions
 
@@ -468,7 +467,7 @@ Example:
     sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
 
 ### From a binomial distribution
-Noise is sampled from a centered binomial distribution B(2eta, 1/2) - eta
+Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
 deterministically  as follows.
 
 An octet array a of length 2\*eta is converted to a polynomial CBD(a, eta)
@@ -529,6 +528,9 @@ underlies Kyber.
     Kyber768        3   2   2   10  4   III
     Kyber1024       4   2   2   11  5   V
 
+# Machine-readable implementation
+
+TODO insert kyber.py automatically
 
 # Security Considerations
 
