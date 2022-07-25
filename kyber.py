@@ -1,5 +1,9 @@
+# WARNING This is a specification of Kyber; not a production ready
+# implementation. It is slow and does not run in constant time.
+
 import io
 import hashlib
+import functools
 import collections
 
 from math import floor
@@ -170,11 +174,15 @@ def PRF(seed, nonce):
     return io.BytesIO(hashlib.shake_256(seed + bytes([nonce])
         ).digest(length=2000))
 
-
 def G(seed):
-    assert len(seed) == 32
     h = hashlib.sha3_512(seed).digest()
     return h[:32], h[32:]
+
+def H(msg):
+    return hashlib.sha3_256(msg).digest()
+
+def KDF(msg):
+    return hashlib.shake_128(msg).digest(length=32)
 
 class Vec:
     def __init__(self, ps):
@@ -268,6 +276,36 @@ def CPAPKE_Dec(sk, ct, params):
     v = DecodePoly(c2, params.dv).Decompress(params.dv)
     sHat = DecodeVec(sk, params.k, 12)
     return (v - sHat.DotNTT(u.NTT()).InvNTT()).Compress(1).Encode(1)
+
+def KeyGen(seed, params):
+    assert len(seed) == 64
+    z = seed[32:]
+    pk, sk2 = CPAPKE_KeyGen(seed[:32], params)
+    h = H(pk)
+    return (pk, sk2 + pk + h + z)
+
+def Enc(pk, seed, params):
+    assert len(seed) == 32
+
+    m = H(seed)
+    Kbar, r = G(m + H(pk))
+    ct = CPAPKE_Enc(pk, m, r, params)
+    K = KDF(Kbar + H(ct))
+    return (ct, K)
+
+def Dec(sk, ct, params):
+    sk2 = sk[:12 * params.k * n//8]
+    pk = sk[12 * params.k * n//8 : 24 * params.k * n//8 + 32]
+    h = sk[24 * params.k * n//8 + 32 : 24 * params.k * n//8 + 64]
+    z = sk[24 * params.k * n//8 + 64 : 24 * params.k * n//8 + 96]
+    m2 = CPAPKE_Dec(sk, ct, params)
+    Kbar2, r2 = G(m2 + h)
+    ct2 = CPAPKE_Enc(pk, m2, r2, params)
+    if ct == ct2: # NOTE <- in production this must be done in constant time!
+        return KDF(Kbar2 + H(ct))
+    return KDF(z + H(ct))
+
+# Down below are assertions used in the draft.
 
 assert pow(zeta, 128, q) == q-1
 
@@ -370,9 +408,4 @@ noise2Test = Poly(x%q for x in [
 ])
 assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
 
-for params in [params512, params768, params1024]:
-    seed = bytes(range(32))
-    pk, sk = CPAPKE_KeyGen(seed, params)
-    ct = CPAPKE_Enc(pk, bytes(range(32)), seed, params)
-    m = CPAPKE_Dec(sk, ct, params)
-    assert m == bytes(range(32))
+#  Check NIST test vectors

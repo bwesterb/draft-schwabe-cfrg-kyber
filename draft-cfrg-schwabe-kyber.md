@@ -406,7 +406,7 @@ Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
 
     XOF(seed) = SHAKE-128(seed)
     PRF(seed, counter) = SHAKE-256(seed || counter)
-    KDF(msg) = SHAKE-256(msg)
+    KDF(msg) = SHAKE-256(msg)[:32]
     H(msg) = SHA3-256(msg)
     G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
 
