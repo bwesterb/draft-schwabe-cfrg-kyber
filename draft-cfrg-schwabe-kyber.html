@@ -2,7 +2,7 @@
 <html lang="en" class="Internet-Draft">
 <head>
 <meta charset="utf-8">
-<meta content="Common,Latin" name="scripts">
+<meta content="Common,Greek,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
 <title>Kyber Post-Quantum KEM</title>
 <meta content="Peter Schwabe" name="author">
@@ -1038,7 +1038,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Schwabe &amp; Westerbaan</td>
-<td class="center">Expires 26 January 2023</td>
+<td class="center">Expires 27 January 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1051,12 +1051,12 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-cfrg-schwabe-kyber-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-07-25" class="published">25 July 2022</time>
+<time datetime="2022-07-26" class="published">26 July 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-01-26">26 January 2023</time></dd>
+<dd class="expires"><time datetime="2023-01-27">27 January 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1105,7 +1105,7 @@ svg :is([stroke="fill"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 26 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1319,18 +1319,18 @@ the value of k is 2.<a href="#section-3-4" class="pilcrow">¶</a></p>
 <p id="section-3-7">Distinguishing between such A s + e and a uniformly sampled t is the
 MLWE problem.<a href="#section-3-7" class="pilcrow">¶</a></p>
 <p id="section-3-8">To save space in the public key, A is recomputed deterministically from
-a seed <em>rho</em>.<a href="#section-3-8" class="pilcrow">¶</a></p>
-<p id="section-3-9">A ciphertext for a message m under this public key is a pair (c_1, c_2)
+a seed &amp;#961;.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">A ciphertext for a message m under this public key is a pair (c&amp;#8321;, c&amp;#8322;)
 computed roughly as follows:<a href="#section-3-9" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-10">
-<pre>
-c\_1 = Compress(A^T r + e\_1, d\_u)
-c\_2 = Compress(t^T r + e\_2 + Decompress(m, 1), d\_v)
-</pre><a href="#section-3-10" class="pilcrow">¶</a>
-</div>
+<ul class="normal">
+<li class="normal" id="section-3-10.1">c&amp;#8321; = Compress(A^T r + e&amp;#8321;, d_u)<a href="#section-3-10.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-10.2">c&amp;#8322; = Compress(t^T r + e&amp;#8322; + Decompress(m, 1), d_v)<a href="#section-3-10.2" class="pilcrow">¶</a>
+</li>
+      </ul>
 <p id="section-3-11">where<a href="#section-3-11" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-12.1">e_1, e_2 and r are small blinds;<a href="#section-3-12.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3-12.1">e&amp;#8321;, e&amp;#8322; and r are small blinds;<a href="#section-3-12.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-3-12.2">Compress(-, d) removes some information, leaving d bits per coefficient
 and Decompress is such that Compress after Decompress does nothing and<a href="#section-3-12.2" class="pilcrow">¶</a>
@@ -1340,11 +1340,11 @@ and Decompress is such that Compress after Decompress does nothing and<a href="#
       </ul>
 <p id="section-3-13">TODO add a quick rationale.<a href="#section-3-13" class="pilcrow">¶</a></p>
 <p id="section-3-14">To decrypt the ciphertext, one computes<a href="#section-3-14" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-15">
-<pre>
-m = Compress(Decompress(c\_2, d\_v) - s^T Decompress(c\_1, d\_u), 1).
-</pre><a href="#section-3-15" class="pilcrow">¶</a>
-</div>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3-15.1">
+          <p id="section-3-15.1.1">m = Compress(Decompress(c&amp;#8322;, d_v) - s^T Decompress(c&amp;#8321;, d_u), 1).<a href="#section-3-15.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <p id="section-3-16">To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
 and how to compress. Then we define the polynomial ring R; its operations
@@ -1358,7 +1358,7 @@ and finally Kyber proper.<a href="#section-3-16" class="pilcrow">¶</a></p>
       <h2 id="name-the-field-gfq">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-the-field-gfq" class="section-name selfRef">The field GF(q)</a>
       </h2>
-<p id="section-4-1">Kyber is defined over GF(q) = Z/qZ, the integers modulo q = 13*2^8+1 = 3329.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Kyber is defined over GF(q) = &amp;#8484;/q&amp;#8484;, the integers modulo q = 13&amp;#8901;2&amp;#8312;+1 = 3329.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="size">
 <section id="section-4.1">
         <h3 id="name-size">
@@ -1382,14 +1382,14 @@ a umod m
 <p id="section-4.1-7">Now we can define the norm of a field element:<a href="#section-4.1-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.1-8">
 <pre>
-|| a || = abs(a smod q)
+‖a‖ = abs(a smod q)
 </pre><a href="#section-4.1-8" class="pilcrow">¶</a>
 </div>
 <p id="section-4.1-9">Examples:<a href="#section-4.1-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.1-10">
 <pre>
- 3325 smod q = -4        ||  3325 || = 4
--3320 smod q =  9        || -3320 || = 9
+ 3325 smod q = -4        ‖ 3325 ‖ = 4
+-3320 smod q =  9        ‖-3320 ‖ = 9
 </pre><a href="#section-4.1-10" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1412,30 +1412,27 @@ Decompress(y, d) = Round( (q / 2^d) y )
 <p id="section-4.2-5">Note that in TODO we define Compress and Decompress for polynomials and vectors.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 <p id="section-4.2-6">These two operations have the following properties:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-4.2-7.1">
-            <code>0 &lt;= Compress(x, d) &lt; 2^d</code><a href="#section-4.2-7.1" class="pilcrow">¶</a>
+<li class="normal" id="section-4.2-7.1">0 &lt;= Compress(x, d) &lt; 2^d<a href="#section-4.2-7.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-7.2">
-            <code>0 &lt;= Decompress(y, d) &lt; q</code><a href="#section-4.2-7.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.2">0 &lt;= Decompress(y, d) &lt; q<a href="#section-4.2-7.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-7.3">
-            <code>Compress(Decompress(y, d), d) = y</code><a href="#section-4.2-7.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.3">Compress(Decompress(y, d), d) = y<a href="#section-4.2-7.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-7.4">If <code>Decompress(Compress(x, d), d) = x'</code>, then <code>|| x' - x || &lt;= Round(q/2^(d+1))</code><a href="#section-4.2-7.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.4">If Decompress(Compress(x, d), d) = x', then &amp;#8214; x' - x &amp;#8214; &lt;= Round(q/2^(d+1)`<a href="#section-4.2-7.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-4.2-7.5">If <code>x = x' modulo q</code>, then <code>Compress(x, d) = Compress(x', d)</code><a href="#section-4.2-7.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.5">If x = x' modulo q, then Compress(x, d) = Compress(x', d)<a href="#section-4.2-7.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-4.2-8">For implementation efficiency, these can be computed as follows.<a href="#section-4.2-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.2-9">
 <pre>
-  Compress(x, d) = Div( (x &lt;&lt; d) + q/2), d ) &amp; ((1 &lt;&lt; d) - 1)
-Decompress(y, d) = (q*y + (1 &lt;&lt; (d-1))) &gt;&gt; d
+  Compress(x, d) = Div( (x ≪ d) + q/2), d ) &amp; ((1 ≪ d) - 1)
+Decompress(y, d) = (q⋅y + (1 ≪ (d-1))) ≫ d
 </pre><a href="#section-4.2-9" class="pilcrow">¶</a>
 </div>
 <p id="section-4.2-10">where Div(x, a) = Floor(x / a).<a href="#section-4.2-10" class="pilcrow">¶</a></p>
 <p id="section-4.2-11">TODO Do we want to include the proof that this is correct?
-TODO Do we need to define &gt;&gt; and &lt;&lt;?<a href="#section-4.2-11" class="pilcrow">¶</a></p>
+TODO Do we need to define &amp;#8811; and &amp;#8810;?<a href="#section-4.2-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1445,13 +1442,13 @@ TODO Do we need to define &gt;&gt; and &lt;&lt;?<a href="#section-4.2-11" class=
       <h2 id="name-the-ring-r">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-ring-r" class="section-name selfRef">The ring R</a>
       </h2>
-<p id="section-5-1">Kyber is defined over a polynomial ring R = GF(q)[x]/(x^n+1)
+<p id="section-5-1">Kyber is defined over a polynomial ring R = GF(q)[x]/(x&amp;#8319;+1)
 where n=256 (and q=3329). Elements of R are tuples of 256 integers modulo q.
 We will call them polynomials or elements interchangeably.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">A tuple a = (a_0, ..., a_255) represents the polynomial<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-2">A tuple a = (a&amp;#8320;, ..., a&amp;#8322;&amp;#8325;&amp;#8325;) represents the polynomial<a href="#section-5-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5-3">
 <pre>
-a\_0 + a\_1 x + a\_2 x^2 + ... + a\_255 x^255.
+a₀ + a₁ x + a₂ x² + … + a₂₅₅ x²⁵⁵
 </pre><a href="#section-5-3" class="pilcrow">¶</a>
 </div>
 <div id="operations">
@@ -1467,21 +1464,21 @@ a\_0 + a\_1 x + a\_2 x^2 + ... + a\_255 x^255.
 <p id="section-5.1.1-1">Addition of elements is componentwise. Thus<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.1-2">
 <pre>
-(a\_0, ..., a\_255) +  (b\_0, ..., b\_255) = (a\_0 + b\_0, ..., a\_255 + b\_255)
+(a₀, …, a₂₅₅) +  (b₀, …, b₂₅₅) = (a₀ + b₀, …, a₂₅₅ + b₂₅₅)
 </pre><a href="#section-5.1.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.1-3">where addition in each component is computed modulo q.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-4">Multiplication is that of polynomials (convolution) with the additional rule
-that x^256=-1. To wit<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
+that x^2&amp;#8309;&amp;#8310;=-1. To wit<a href="#section-5.1.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.1-5">
 <pre>
-(a\_0, ..., a\_255) \* (b\_0, ..., b\_255)
-    = (a\_0 * b\_0 - a\_255 * b\_1 - ... - a\_1 * b\_255,
-       a\_0 * b\_1 + a\_1 * b\_0 - a\_255 * b\_2 - ... - a\_2 * b\_255,
+(a₀, …, a₂₅₅) ⋅ (b₀, …, b₂₅₅)
+    = (a₀ ⋅ b₀ - a₂₅₅ ⋅ b₁ - … - a₁ ⋅ b₂₅₅,
+       a₀ ⋅ b₁ + a₁ ⋅ b₀ - a₂₅₅ ⋅ b₂ - … - a₂ ⋅ b₂₅₅,
 
-            ...
+            …
 
-       a\_0 * b\_255 + ... + a\_255 * b\_0)
+       a₀ ⋅ b₂₅₅ + … + a₂₅₅ ⋅ b₀)
 </pre><a href="#section-5.1.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.1-6">We will not use this schoolbook multiplication to compute the product.
@@ -1494,10 +1491,10 @@ see TODO.<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
           <h4 id="name-size-of-polynomials">
 <a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-size-of-polynomials" class="section-name selfRef">Size of polynomials</a>
           </h4>
-<p id="section-5.1.2-1">For a polynomial a = (a_0, ..., a_255) in R, we write:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-1">For a polynomial a = (a&amp;#8320;, ..., a&amp;#8322;&amp;#8325;&amp;#8325;) in R, we write:<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.2-2">
 <pre>
-|| a || = max_i || a_i ||
+‖a‖ = maxᵢ ‖aᵢ‖
 </pre><a href="#section-5.1.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.2-3">Thus a polynomial is considered large if one of its components is large.<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
@@ -1511,66 +1508,64 @@ see TODO.<a href="#section-5.1.1-6" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-1">TODO (#8) This section gives background not necessary for the implementation.
      Should we keep it?<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-2">The modulus q was chosen such that 256 divides into q-1. This means that
-there are zeta with<a href="#section-5.1.3-2" class="pilcrow">¶</a></p>
+there are &amp;#950; with<a href="#section-5.1.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-3">
 <pre>
-zeta^128 = -1  modulo  q
+ζ¹²⁸ = -1  modulo  q
 </pre><a href="#section-5.1.3-3" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.3-4">With such a zeta, we can almost completely split the polynomial x^256+1
+<p id="section-5.1.3-4">With such a &amp;#950;, we can almost completely split the polynomial x^2&amp;#8309;&amp;#8310;+1
 used to define R over GF(q):<a href="#section-5.1.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-5">
 <pre>
-x^256 + 1 = x^256 - zeta^128
-          = (x^128 - zeta^64)(x^128 + zeta^64)
-          = (x^128 - zeta^64)(x^128 - zeta^192)
-          = (x^64 - zeta^32)(x^64 + zeta^32)
-                (x^64 - zeta^96)(x^64 + zeta^96)
+x²⁵⁶ + 1 = x²⁵⁶ - ζ¹²⁸
+         = (x¹²⁸ - ζ⁶⁴)(x¹²⁸ + ζ⁶⁴)
+         = (x¹²⁸ - ζ⁶⁴)(x¹²⁸ - ζ¹⁹²)
+         = (x⁶⁴ - ζ³²)(x⁶⁴ + ζ³²)(x⁶⁴ - ζ⁹⁶)(x⁶⁴ + ζ⁹⁶)
 
-            ...
+            …
 
-          = (x^2 - zeta)(x^2 + zeta)(x^2 - zeta^65)(x^2 + zeta^65)
-                    ... (x^2 - zeta^127)(x^2 + zeta^127)
+         = (x² - ζ)(x² + ζ)(x² - ζ⁶⁵)(x² + ζ⁶⁵) ⋯ (x² - ζ¹²⁷)(x² + ζ¹²⁷)
 </pre><a href="#section-5.1.3-5" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.3-6">Note that the powers of zeta that appear in the second, fourth, ...,
-and final lines are in binary:<a href="#section-5.1.3-6" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-6">Note that the powers of &amp;#950; that appear in the second, fourth, ..., and final
+lines are in binary:<a href="#section-5.1.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-7">
 <pre>
 0100000 1100000
 0010000 1010000 0110000 1110000
 0001000 1001000 0101000 1101000 0011000 1011000 0111000 1111000
-            ...
-0000001 1000001 0100001 1100001 0010001 1010001 0110001 ... 1111111
+            …
+0000001 1000001 0100001 1100001 0010001 1010001 0110001 … 1111111
 </pre><a href="#section-5.1.3-7" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.3-8">That is: brv(2), brv(3), brv(4), ..., where brv(x) denotes the 7-bit
 bitreversal of x. The final line is brv(64), brv(65), ..., brv(127).<a href="#section-5.1.3-8" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-9">These polynomials x^2 +- zeta^i are irreducible and coprime, hence by
+<p id="section-5.1.3-9">These polynomials x^2 +/- &amp;#950;&amp;#8305; are irreducible and coprime, hence by
 the Chinese Remainder Theorem for commutative rings, we know<a href="#section-5.1.3-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-10">
 <pre>
-R = GF(q)[x]/(x^256+1) -&gt; GF(q)[x]/(x^2-zeta) x ... x GF(q)[x]/(x^2+zeta^127)
+R = GF(q)[x]/(x²⁵⁶+1) -&gt; GF(q)[x]/(x²-ζ) x … x GF(q)[x]/(x²+ζ¹²⁷)
 </pre><a href="#section-5.1.3-10" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.3-11">given by a |-&gt; ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
+<p id="section-5.1.3-11">given by a &amp;#8614; ( a mod x^2 - &amp;#950;, ..., a mod x^2 + &amp;#950;^1^2&amp;#8311; ) is an isomorphism.
 This is the Number Theoretic Transform (NTT). Multiplication on the right is
 much easier: it's almost componentwise, see section TODO.<a href="#section-5.1.3-11" class="pilcrow">¶</a></p>
 <p id="section-5.1.3-12">A propos, the the constant factors that appear in the moduli in order
 can be computed efficiently as follows (all modulo q):<a href="#section-5.1.3-12" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-13">
 <pre>
--zeta     = -zeta^brv(64)  = -zeta^{1 + 2 brv(0)}
- zeta     =  zeta^brv(64)  = -zeta^{1 + 2 brv(1)}
--zeta^65  = -zeta^brv(65)  = -zeta^{1 + 2 brv(2)}
- zeta^65  =  zeta^brv(65)  = -zeta^{1 + 2 brv(3)}
--zeta^33  = -zeta^brv(66)  = -zeta^{1 + 2 brv(4)}
- zeta^33  =  zeta^brv(66)  = -zeta^{1 + 2 brv(5)}
+-ζ    = -ζ^brv(64)  = -ζ^{1 + 2 brv(0)}
+ ζ    =  ζ^brv(64)  = -ζ^{1 + 2 brv(1)}
+-ζ⁶⁵  = -ζ^brv(65)  = -ζ^{1 + 2 brv(2)}
+ ζ⁶⁵  =  ζ^brv(65)  = -ζ^{1 + 2 brv(3)}
+-ζ³³  = -ζ^brv(66)  = -ζ^{1 + 2 brv(4)}
+ ζ³³  =  ζ^brv(66)  = -ζ^{1 + 2 brv(5)}
 
-             ...
+             …§
 
--zeta^127 = -zeta^brv(127) = -zeta^{1 + 2 brv(126)}
- zeta^127 =  zeta^brv(127) = -zeta^{1 + 2 brv(127)}
+-ζ¹²⁷ = -ζ^brv(127) = -ζ^{1 + 2 brv(126)}
+ ζ¹²⁷ =  ζ^brv(127) = -ζ^{1 + 2 brv(127)}
 </pre><a href="#section-5.1.3-13" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.3-14">To compute a multiplication in R efficiently, one can first use the
@@ -1580,9 +1575,9 @@ back with the inverse NTT.<a href="#section-5.1.3-14" class="pilcrow">¶</a></p>
 of the polynomial separately as follows:<a href="#section-5.1.3-15" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-16">
 <pre>
-a |-&gt; ( a mod x^128 - zeta^64, a mod x^128 + zeta^64 ),
-  |-&gt; ( a mod  x^64 - zeta^32, a mod  x^64 + zeta^32,
-        a mod  x^64 - zeta^96, a mod  x^64 + zeta^96 ),
+a ↦ ( a mod x¹²⁸ - ζ⁶⁴, a mod x¹²⁸ + ζ⁶⁴ ),
+  ↦ ( a mod  x⁶⁴ - ζ³², a mod  x⁶⁴ + ζ³²,
+      a mod  x⁶⁴ - ζ⁹⁶, a mod  x⁶⁴ + ζ⁹⁶ ),
 
     et cetera
 </pre><a href="#section-5.1.3-16" class="pilcrow">¶</a>
@@ -1591,18 +1586,18 @@ a |-&gt; ( a mod x^128 - zeta^64, a mod x^128 + zeta^64 ),
 for the first step we get:<a href="#section-5.1.3-17" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-18">
 <pre>
-a |-&gt; (   a\_0 + zeta^64 a\_128,   a\_1 + zeta^64 a\_129,
-         ...
-        a\_126 + zeta^64 a\_254, a\_127 + zeta^64 a\_255,
-          a\_0 - zeta^64 a\_128,   a\_1 - zeta^64 a\_129,
-         ...
-        a\_126 - zeta^64 a\_254, a\_127 - zeta^64 a\_255)
+a |-&gt; (   a₀ + ζ⁶⁴ a₁₂₈,   a₁ + ζ⁶⁴ a₁₂₉,
+            …
+        a₁₂₆ + ζ⁶⁴ a₂₅₄, a₁₂₇ + ζ⁶⁴ a₂₅₅,
+          a₀ - ζ⁶⁴ a₁₂₈,   a₁ - ζ⁶⁴ a₁₂₉,
+            …
+        a₁₂₆ - ζ⁶⁴ a₂₅₄, a₁₂₇ - ζ⁶⁴ a₂₅₅ )
 </pre><a href="#section-5.1.3-18" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.3-19">We can see this as 128 applications of the linear map CT_64, where<a href="#section-5.1.3-19" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-19">We can see this as 128 applications of the linear map CT&amp;#8326;&amp;#8324;, where<a href="#section-5.1.3-19" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-20">
 <pre>
-CT\_i: (a, b) |-&gt; (a + zeta^i b, a - zeta^i b)   modulo q
+CTᵢ: (a, b) |-&gt; (a + ζⁱ b, a - ζⁱ b)   modulo q
 </pre><a href="#section-5.1.3-20" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1.3-21">for the appropriate i in the following order, pictured in the case of n=16:<a href="#section-5.1.3-21" class="pilcrow">¶</a></p>
@@ -1628,17 +1623,17 @@ CT\_i: (a, b) |-&gt; (a + zeta^i b, a - zeta^i b)   modulo q
 </div>
 <p id="section-5.1.3-23">For n=16 there are 3 levels with 1, 2 and 4 row groups respectively.
 For the full n=256, there are 7 levels with 1, 2, 4, 8, 16, 32 and 64
-row groups respectively. The appropriate power of zeta in the first
+row groups respectively. The appropriate power of &amp;#950; in the first
 level is brv(1)=64. The second level has brv(2) and brv(3) as powers
-of zeta for the top and bottom row group respectively, and so on.<a href="#section-5.1.3-23" class="pilcrow">¶</a></p>
-<p id="section-5.1.3-24">The CT_i is known as a Cooley-Tukey butterfly. Its inverse is given
+of &amp;#950; for the top and bottom row group respectively, and so on.<a href="#section-5.1.3-23" class="pilcrow">¶</a></p>
+<p id="section-5.1.3-24">The CT&amp;#7522; is known as a Cooley-Tukey butterfly. Its inverse is given
 by the Gentleman-Sande butterfly:<a href="#section-5.1.3-24" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.1.3-25">
 <pre>
-GS\_i: (a, b) |-&gt; ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
+GSᵢ: (a, b) |-&gt; ( (a+b)/2, ζ^-i (a-b)/2 )    modulo q
 </pre><a href="#section-5.1.3-25" class="pilcrow">¶</a>
 </div>
-<p id="section-5.1.3-26">The inverse NTT can be computed by replacing CS_i by GS_i and flipping
+<p id="section-5.1.3-26">The inverse NTT can be computed by replacing CS&amp;#7522; by GS&amp;#7522; and flipping
 the diagram horizontally.<a href="#section-5.1.3-26" class="pilcrow">¶</a></p>
 <div id="optimization-notes">
 <section id="section-5.1.3.1">
@@ -1647,8 +1642,8 @@ the diagram horizontally.<a href="#section-5.1.3-26" class="pilcrow">¶</a></p>
             </h5>
 <p id="section-5.1.3.1-1">The modular divisions by two in the InvNTT can be collected into a
 single modular division by 128.<a href="#section-5.1.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1.3.1-2">zeta^-i can be computed as -zeta^(128-i), which allows one to use the same
-precomputed table of powers of zeta for both the NTT and InvNTT.<a href="#section-5.1.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1-2">&amp;#950;^-i can be computed as -&amp;#950;^(128-i), which allows one to use the same
+precomputed table of powers of &amp;#950; for both the NTT and InvNTT.<a href="#section-5.1.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1.3.1-3">TODO Montgomery, Barrett and https://eprint.iacr.org/2020/1377.pdf
 TODO perhaps move this elsewhere?<a href="#section-5.1.3.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1664,15 +1659,15 @@ TODO perhaps move this elsewhere?<a href="#section-5.1.3.1-3" class="pilcrow">¶
       <h2 id="name-ntt-and-invntt">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-ntt-and-invntt" class="section-name selfRef">NTT and InvNTT</a>
       </h2>
-<p id="section-6-1">As primitive 256th root of unity we use zeta=17.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">As primitive 256th root of unity we use &amp;#950;=17.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">As before, brv(i) denotes the 7-bit bitreversal of i, so brv(1)=64
 and brv(91)=109.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">The NTT is a linear bijection R -&gt; R given by the matrix:<a href="#section-6-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6-4">
 <pre>
-              [ zeta^{ (2 brv(i &gt;&gt; 1) + 1) j }     if i=j modulo 2
+              [ ζ^{ (2 brv(i ≫ 1) + 1) j }     if i=j modulo 2
 (NTT)\_{ij} = [
-              [ 0                                  otherwise
+              [ 0                               otherwise
 </pre><a href="#section-6-4" class="pilcrow">¶</a>
 </div>
 <p id="section-6-5">Its inverse is called the InvNTT.<a href="#section-6-5" class="pilcrow">¶</a></p>
@@ -1680,8 +1675,8 @@ and brv(91)=109.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-7">Examples:<a href="#section-6-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6-8">
 <pre>
-NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
-NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
+NTT(1, 1, 0, …, 0)   = (1, 1, …, 1, 1)
+NTT(1, 2, 3, …, 255) = (2429, 2845, 425, 1865, …, 2502, 2134, 2717, 2303)
 </pre><a href="#section-6-8" class="pilcrow">¶</a>
 </div>
 <div id="multiplication-in-ntt-domain">
@@ -1690,12 +1685,12 @@ NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-multiplication-in-ntt-domai" class="section-name selfRef">Multiplication in NTT domain</a>
         </h3>
 <p id="section-6.1-1">For elements a, b in R, we write a o b for multiplication in the NTT domain.
-That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+That is: a &amp;#8901; b = InvNTT(NTT(a) o NTT(b)). Concretely:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.1-2">
 <pre>
-             [ a\_i b\_i + zeta^{2 brv(i &gt;&gt; 1) + 1} a\_{i+1} b\_{i+1}   if i even
-(a o b)\_i = [
-             [ a\_{i+1} b\_i + a\_i b\_{i+1}                            otherwise
+          [ aᵢ bᵢ + ζ^{2 brv(i ≫ 1) + 1} aᵢ₊₁ bᵢ₊₁   if i even
+(a o b)ᵢ= [
+          [ aᵢ₊₁ bᵢ + aᵢ bᵢ₊₁                         otherwise
 </pre><a href="#section-6.1-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1711,7 +1706,7 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:<a href="#section-6.1-1" cl
 <div class="alignLeft art-text artwork" id="section-7-2">
 <pre>
 XOF(seed) = SHAKE-128(seed)
-PRF(seed, counter) = SHAKE-256(seed || counter)
+PRF(seed, counter) = SHAKE-256(seed ‖ counter)
 KDF(msg) = SHAKE-256(msg)[:32]
 H(msg) = SHA3-256(msg)
 G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
@@ -1732,11 +1727,11 @@ TODO Stick to one?<a href="#section-7-3" class="pilcrow">¶</a></p>
         <h3 id="name-octetstobits">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-octetstobits" class="section-name selfRef">OctetsToBits</a>
         </h3>
-<p id="section-8.1-1">For any list of octets a_0, ..., a_{s-1}, we define OctetsToBits(a), which
+<p id="section-8.1-1">For any list of octets a&amp;#8320;, ..., a&amp;#8347;&amp;#8331;&amp;#8321;, we define OctetsToBits(a), which
 is a list of bits of length 8s, defined by<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.1-2">
 <pre>
-OctetsToBits(a)\_i = ((a\_(i&gt;&gt;3)) &gt;&gt; (i umod 8)) umod 2.
+OctetsToBits(a)ᵢ = ((a\_(i≫3)) ≫ (i umod 8)) umod 2.
 </pre><a href="#section-8.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-8.1-3">Example:<a href="#section-8.1-3" class="pilcrow">¶</a></p>
@@ -1757,7 +1752,7 @@ a list a of 32w octets into a polynomial with coefficients in {0, ..., 2^w-1}
 as follows.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.2-2">
 <pre>
-Decode(a, w)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w-1},
+Decode(a, w)ᵢ = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2² + … + b\_{wi+w-1} 2^{w-1},
 </pre><a href="#section-8.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-8.2-3">where b = OctetsToBits(a).<a href="#section-8.2-3" class="pilcrow">¶</a></p>
@@ -1776,11 +1771,11 @@ Decode(a, w)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w
           </h4>
 <p id="section-8.3.1-1">The polynomials in the matrix A are sampled uniformly and deterministically
 from an octet stream (XOF) using rejection sampling as follows.<a href="#section-8.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.3.1-2">Three octets b_0, b_1, b_2 are read from the stream at a time. These are
-interpreted as two 12-bit unsigned integers d_1, d_2 via<a href="#section-8.3.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.3.1-2">Three octets b&amp;#8320;, b&amp;#8321;, b&amp;#8322; are read from the stream at a time. These are
+interpreted as two 12-bit unsigned integers d&amp;#8321;, d&amp;#8322; via<a href="#section-8.3.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3.1-3">
 <pre>
-d\_1 + d\_2 2^12 = b\_0 + b\_1 2^8 + b\_2 2^16
+d₁ + d₂ 2¹² = b₀ + b₁ 2⁸ + b₂ 2¹⁶
 </pre><a href="#section-8.3.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-8.3.1-4">This creates a stream of 12-bit <code>d</code>s. Of these, the elements &gt;= q are
@@ -1803,7 +1798,7 @@ def sampleUniform(stream):
 <p id="section-8.3.1-6">Example:<a href="#section-8.3.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3.1-7">
 <pre>
-sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
+sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, …, 255, 846, 1)
 </pre><a href="#section-8.3.1-7" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1813,21 +1808,21 @@ sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
           <h4 id="name-from-a-binomial-distributio">
 <a href="#section-8.3.2" class="section-number selfRef">8.3.2. </a><a href="#name-from-a-binomial-distributio" class="section-name selfRef">From a binomial distribution</a>
           </h4>
-<p id="section-8.3.2-1">Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
+<p id="section-8.3.2-1">Noise is sampled from a centered binomial distribution Binomial(2&amp;#951;, 1/2) - &amp;#951;
 deterministically  as follows.<a href="#section-8.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.3.2-2">An octet array a of length 2*eta is converted to a polynomial CBD(a, eta)<a href="#section-8.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.3.2-2">An octet array a of length 2&amp;#951; is converted to a polynomial CBD(a, &amp;#951;)<a href="#section-8.3.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3.2-3">
 <pre>
-CBD(a, eta)\_i = b\_{2i eta} + b\_{2i eta + 1} + ... + b\_{2i eta + eta-1}
-              - b\_{2i eta + eta} + ... + b\_{2i eta + 2eta - 1},
+CBD(a, η)ᵢ = b\_{2i η} + b\_{2i η + 1} + … + b\_{2i η + η-1}
+              - b\_{2i η + η} + … + b\_{2i η + 2η - 1},
 </pre><a href="#section-8.3.2-3" class="pilcrow">¶</a>
 </div>
 <p id="section-8.3.2-4">where b = OctetsToBits(a).<a href="#section-8.3.2-4" class="pilcrow">¶</a></p>
 <p id="section-8.3.2-5">Examples:<a href="#section-8.3.2-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3.2-6">
 <pre>
-CBD((0, 1, 2, ..., 127), 2) = (0, 0, 1, 0, 1, 0, ..., 3328, 1, 0, 1)
-CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
+CBD((0, 1, 2, …, 127), 2) = (0, 0, 1, 0, 1, 0, …, 3328, 1, 0, 1)
+CBD((0, 1, 2, …, 191), 3) = (0, 1, 3328, 0, 2, …, 3328, 3327, 3328, 1)
 </pre><a href="#section-8.3.2-6" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1883,7 +1878,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
               <td class="text-left" rowspan="1" colspan="1">Degree of polynomials</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">zeta</td>
+              <td class="text-right" rowspan="1" colspan="1">&amp;#950;</td>
               <td class="text-center" rowspan="1" colspan="1">17</td>
               <td class="text-left" rowspan="1" colspan="1">nth root of unity in base field</td>
             </tr>
@@ -1912,7 +1907,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">PRF(s,b)</td>
-              <td class="text-left" rowspan="1" colspan="1">SHAKE-256(s || b)</td>
+              <td class="text-left" rowspan="1" colspan="1">SHAKE-256(s &amp;#8214; b)</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">KDF</td>
@@ -1941,7 +1936,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
               <td class="text-left" rowspan="1" colspan="1">Dimension of module</td>
             </tr>
             <tr>
-              <td class="text-right" rowspan="1" colspan="1">eta1, eta2</td>
+              <td class="text-right" rowspan="1" colspan="1">&amp;#951;&amp;#8321;, &amp;#951;&amp;#8322;</td>
               <td class="text-left" rowspan="1" colspan="1">Size of "small" coefficients used in the private key  and noise vectors.</td>
             </tr>
             <tr>
@@ -1960,8 +1955,8 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Parameter set</th>
               <th class="text-center" rowspan="1" colspan="1">k</th>
-              <th class="text-center" rowspan="1" colspan="1">eta1</th>
-              <th class="text-center" rowspan="1" colspan="1">eta2</th>
+              <th class="text-center" rowspan="1" colspan="1">&amp;#951;&amp;#8321;</th>
+              <th class="text-center" rowspan="1" colspan="1">&amp;#951;&amp;#8322;</th>
               <th class="text-center" rowspan="1" colspan="1">d_u</th>
               <th class="text-center" rowspan="1" colspan="1">d_v</th>
               <th class="text-center" rowspan="1" colspan="1">sec</th>
@@ -1975,7 +1970,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
               <td class="text-center" rowspan="1" colspan="1">2</td>
               <td class="text-center" rowspan="1" colspan="1">10</td>
               <td class="text-center" rowspan="1" colspan="1">4</td>
-              <td class="text-center" rowspan="1" colspan="1">I</td>
+              <td class="text-center" rowspan="1" colspan="1">&amp;#8544;</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">Kyber768</td>
@@ -1984,7 +1979,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
               <td class="text-center" rowspan="1" colspan="1">2</td>
               <td class="text-center" rowspan="1" colspan="1">10</td>
               <td class="text-center" rowspan="1" colspan="1">4</td>
-              <td class="text-center" rowspan="1" colspan="1">III</td>
+              <td class="text-center" rowspan="1" colspan="1">&amp;#8546;</td>
             </tr>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">Kyber1024</td>
@@ -1993,7 +1988,7 @@ underlies Kyber.<a href="#section-9-1" class="pilcrow">¶</a></p>
               <td class="text-center" rowspan="1" colspan="1">2</td>
               <td class="text-center" rowspan="1" colspan="1">11</td>
               <td class="text-center" rowspan="1" colspan="1">5</td>
-              <td class="text-center" rowspan="1" colspan="1">V</td>
+              <td class="text-center" rowspan="1" colspan="1">&amp;#8548;</td>
             </tr>
           </tbody>
         </table>
