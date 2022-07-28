@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-07-26T00:56:44.978036+00:00",
+  "timestamp": "2022-07-28T00:54:45.369831+00:00",
   "repo": "bwesterb/draft-schwabe-cfrg-kyber",
   "labels": [
     {
@@ -62,7 +62,7 @@
       "labels": [],
       "body": "MacOS 12.5, Python-3.10.5\r\n\r\n```\r\n$ make\r\ngit clone -q --depth 10  \\\r\n    -b main https://github.com/martinthomson/i-d-template lib\r\npython3 -m venv /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/python -m pip install --upgrade pip setuptools wheel\r\nRequirement already satisfied: pip in ./lib/.venv/lib/python3.10/site-packages (22.0.4)\r\nCollecting pip\r\n  Downloading pip-22.2-py3-none-any.whl (2.0 MB)\r\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 2.0/2.0 MB 21.0 MB/s eta 0:00:00\r\nRequirement already satisfied: setuptools in ./lib/.venv/lib/python3.10/site-packages (58.1.0)\r\nCollecting setuptools\r\n  Using cached setuptools-63.2.0-py3-none-any.whl (1.2 MB)\r\nCollecting wheel\r\n  Using cached wheel-0.37.1-py2.py3-none-any.whl (35 kB)\r\nInstalling collected packages: wheel, setuptools, pip\r\n  Attempting uninstall: setuptools\r\n    Found existing installation: setuptools 58.1.0\r\n    Uninstalling setuptools-58.1.0:\r\n      Successfully uninstalled setuptools-58.1.0\r\n  Attempting uninstall: pip\r\n    Found existing installation: pip 22.0.4\r\n    Uninstalling pip-22.0.4:\r\n      Successfully uninstalled pip-22.0.4\r\nSuccessfully installed pip-22.2 setuptools-63.2.0 wheel-0.37.1\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/pip install -r lib/requirements.txt\r\nCollecting archive-repo\r\n  Using cached archive_repo-0.0.2-py3-none-any.whl (10 kB)\r\n.  .  .\r\nInstalling kramdown-rfc 1.6.14\r\nFetching net-http-persistent 4.0.1\r\nInstalling net-http-persistent 4.0.1\r\nBundle complete! 2 Gemfile dependencies, 10 gems now installed.\r\nBundled gems are installed into `./lib/.gems`\r\nPost-install message from certified:\r\nIMPORTANT: Remember to use the included executable `certifed-update` regularly to keep your certificate bundle up to date.\r\ncat draft-cfrg-schwabe-kyber.md  | kramdown-rfc --v3 | lib/trace.sh draft-cfrg-schwabe-kyber.xml -s venue /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/python lib/add-note.py | lib/trace.sh draft-cfrg-schwabe-kyber.xml -s v2v3 /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/xml2rfc -q -s 'Setting consensus=\"true\" for IETF STD document' --rfc-base-url https://www.rfc-editor.org/rfc/ --id-base-url https://datatracker.ietf.org/doc/html/ --cache=/Users/ur20980/.cache/xml2rfc --v2v3 /dev/stdin -o /dev/stdout >draft-cfrg-schwabe-kyber.xml\r\n---\r\n- No link definition for link ID 'x' found on line 233\r\n/Users/ur20980/.cache/xml2rfc/reference.RFC.2119.xml: fetching from https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml\r\n*** execution expired while fetching https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1069:in `read': execution expired (Net::OpenTimeout)\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1069:in `get_and_cache_resource'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1157:in `block in convert_img'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1143:in `scan'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1143:in `convert_img'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:335:in `block in inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `map'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:340:in `inner'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:353:in `convert_p'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:335:in `block in inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `map'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:340:in `inner'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1395:in `convert_root'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:328:in `convert1'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:323:in `convert'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-2.4.0/lib/kramdown/converter/base.rb:107:in `convert'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-2.4.0/lib/kramdown/document.rb:116:in `method_missing'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc/command.rb:575:in `<top (required)>'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/bin/kramdown-rfc:8:in `require'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/bin/kramdown-rfc:8:in `<top (required)>'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/bin/kramdown-rfc:29:in `load'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/bin/kramdown-rfc:29:in `<main>'\r\nError: Unable to parse the XML document: /dev/stdin\r\nmake: *** [lib/main.mk:72: draft-cfrg-schwabe-kyber.xml] Error 1\r\nmake: *** Deleting file 'draft-cfrg-schwabe-kyber.xml'\r\n```",
       "createdAt": "2022-07-25T15:54:07Z",
-      "updatedAt": "2022-07-25T23:44:48Z",
+      "updatedAt": "2022-07-26T11:38:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -75,9 +75,37 @@
         {
           "author": "mouse07410",
           "authorAssociation": "NONE",
-          "body": "> This might be it?\n\nI've no idea. \n\nDoes this ton of stuff that the `make` gets involved, understand web proxy?\n\nIf not, may I suggest that the build process is flawed for corporate users?",
+          "body": "> This might be it?\n\nI've no idea. \n\nDoes this ton of stuff that the `make` gets involved, understand web proxy?\n\nIf not, may I suggest that the build process is flawed for corporate users? And, more importantly, how to fix it?",
           "createdAt": "2022-07-25T23:44:48Z",
-          "updatedAt": "2022-07-25T23:44:48Z"
+          "updatedAt": "2022-07-26T01:59:23Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "> And, more importantly, how to fix it?\r\n\r\nNo clue. I\u2019m new to this tooling as well, and I cannot reproduce your error myself.\r\n",
+          "createdAt": "2022-07-26T09:45:41Z",
+          "updatedAt": "2022-07-26T09:45:41Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Note that you can read the draft already [here](https://bwesterb.github.io/draft-schwabe-cfrg-kyber/draft-cfrg-schwabe-kyber.html) as CI builds it for us.",
+          "createdAt": "2022-07-26T09:47:50Z",
+          "updatedAt": "2022-07-26T09:47:50Z"
+        },
+        {
+          "author": "mouse07410",
+          "authorAssociation": "NONE",
+          "body": "> Note that you can read the draft already here as CI builds it for us.\n\nExcellent, thanks!\n\nI assume you tried to reproduce the error **not** from behind a firewall?\n\nIf you're new to this tooling - you probably got it from somewhere? Would it be possible to report this problem there?",
+          "createdAt": "2022-07-26T10:57:30Z",
+          "updatedAt": "2022-07-26T10:57:30Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "> I assume you tried to reproduce the error **not** from behind a firewall?\r\n\r\nExactly.\r\n\r\n> If you're new to this tooling - you probably got it from somewhere? Would it be possible to report this problem there?\r\n\r\nIt\u2019s [Martin\u2019s template](https://github.com/martinthomson/internet-draft-template).\r\n",
+          "createdAt": "2022-07-26T11:38:00Z",
+          "updatedAt": "2022-07-26T11:38:00Z"
         }
       ]
     },
@@ -93,9 +121,17 @@
       "labels": [],
       "body": "",
       "createdAt": "2022-07-25T19:18:44Z",
-      "updatedAt": "2022-07-25T19:18:58Z",
+      "updatedAt": "2022-07-26T10:08:31Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "_draft-ietf-tcpm-rfc8312bis_ uses \u03b2.",
+          "createdAt": "2022-07-26T10:08:31Z",
+          "updatedAt": "2022-07-26T10:08:31Z"
+        }
+      ]
     },
     {
       "number": 4,
