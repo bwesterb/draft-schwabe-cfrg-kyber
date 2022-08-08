@@ -36,12 +36,36 @@ author:
 normative:
 
 informative:
-
-
+  KyberV302:
+    target: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
+    title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.02)
+    author:
+      -
+        ins: R. Avanzi
+      -
+        ins: J. Bos
+      -
+        ins: L. Ducas
+      -
+        ins: E. Kiltz
+      -
+        ins: T. Lepoint
+      -
+        ins: V. Lyubashevsky
+      -
+        ins: J. Schanck
+      -
+        ins: P. Schwabe
+      -
+        ins: G. Seiler
+      -
+        ins: D. Stehle # TODO unicode in references
+    date: 2021
+    format:
+      PDF: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
 --- abstract
 
 This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
-
 
 --- middle
 
@@ -55,7 +79,7 @@ TODO #7
 
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process.
+to round 3 of the NIST PQC process. {{KyberV302}}
 
 # Conventions and Definitions
 
@@ -97,8 +121,8 @@ a seed *rho*.
 A ciphertext for a message m under this public key is a pair (c\_1, c\_2)
 computed roughly as follows:
 
-    c\_1 = Compress(A^T r + e\_1, d\_u)
-    c\_2 = Compress(t^T r + e\_2 + Decompress(m, 1), d\_v)
+    c_1 = Compress(A^T r + e_1, d_u)
+    c_2 = Compress(t^T r + e_2 + Decompress(m, 1), d_v)
 
 where
 
@@ -111,7 +135,7 @@ TODO add a quick rationale.
 
 To decrypt the ciphertext, one computes
 
-    m = Compress(Decompress(c\_2, d\_v) - s^T Decompress(c\_1, d\_u), 1).
+    m = Compress(Decompress(c_2, d_v) - s^T Decompress(c_1, d_u), 1).
 
 To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
@@ -188,7 +212,7 @@ We will call them polynomials or elements interchangeably.
 
 A tuple a = (a\_0, ..., a\_255) represents the polynomial
 
-    a\_0 + a\_1 x + a\_2 x^2 + ... + a\_255 x^255.
+    a_0 + a_1 x + a_2 x^2 + ... + a_255 x^255.
 
 With polynomial coefficients, vector and matrix indices, we will start
 counting at zero.
@@ -199,20 +223,20 @@ counting at zero.
 
 Addition of elements is componentwise. Thus
 
-    (a\_0, ..., a\_255) +  (b\_0, ..., b\_255) = (a\_0 + b\_0, ..., a\_255 + b\_255)
+    (a_0, ..., a_255) +  (b_0, ..., b_255) = (a_0 + b_0, ..., a_255 + b_255)
 
 where addition in each component is computed modulo q.
 
 Multiplication is that of polynomials (convolution) with the additional rule
 that x^256=-1. To wit
 
-    (a\_0, ..., a\_255) \* (b\_0, ..., b\_255)
-        = (a\_0 * b\_0 - a\_255 * b\_1 - ... - a\_1 * b\_255,
-           a\_0 * b\_1 + a\_1 * b\_0 - a\_255 * b\_2 - ... - a\_2 * b\_255,
+    (a_0, ..., a_255) \* (b_0, ..., b_255)
+        = (a_0 * b_0 - a_255 * b_1 - ... - a_1 * b_255,
+           a_0 * b_1 + a_1 * b_0 - a_255 * b_2 - ... - a_2 * b_255,
 
                 ...
 
-           a\_0 * b\_255 + ... + a\_255 * b\_0)
+           a_0 * b_255 + ... + a_255 * b_0)
 
 We will not use this schoolbook multiplication to compute the product.
 Instead we will use the more efficient, number theoretic transform (NTT),
@@ -302,16 +326,16 @@ of the polynomial separately as follows:
 If we concatenate the resulting coefficients, expanding the definitions,
 for the first step we get:
 
-    a |-> (   a\_0 + zeta^64 a\_128,   a\_1 + zeta^64 a\_129,
+    a |-> (   a_0 + zeta^64 a_128,   a_1 + zeta^64 a_129,
              ...
-            a\_126 + zeta^64 a\_254, a\_127 + zeta^64 a\_255,
-              a\_0 - zeta^64 a\_128,   a\_1 - zeta^64 a\_129,
+            a_126 + zeta^64 a_254, a_127 + zeta^64 a_255,
+              a_0 - zeta^64 a_128,   a_1 - zeta^64 a_129,
              ...
-            a\_126 - zeta^64 a\_254, a\_127 - zeta^64 a\_255)
+            a_126 - zeta^64 a_254, a_127 - zeta^64 a_255)
 
 We can see this as 128 applications of the linear map CT\_64, where
 
-    CT\_i: (a, b) |-> (a + zeta^i b, a - zeta^i b)   modulo q
+    CT_i: (a, b) |-> (a + zeta^i b, a - zeta^i b)   modulo q
 
 for the appropriate i in the following order, pictured in the case of n=16:
 
@@ -341,7 +365,7 @@ of zeta for the top and bottom row group respectively, and so on.
 The CT\_i is known as a Cooley-Tukey butterfly. Its inverse is given
 by the Gentleman-Sande butterfly:
 
-    GS\_i: (a, b) |-> ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
+    GS_i: (a, b) |-> ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
 
 The inverse NTT can be computed by replacing CS\_i by GS\_i and flipping
 the diagram horizontally.
@@ -365,9 +389,9 @@ and brv(91)=109.
 
 The NTT is a linear bijection R -> R given by the matrix:
 
-                  [ zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
-    (NTT)\_{ij} = [
-                  [ 0                                  otherwise
+                 [ zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
+    (NTT)_{ij} = [
+                 [ 0                                  otherwise
 
 Its inverse is called the InvNTT.
 
@@ -439,7 +463,7 @@ TODO #20
 For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
 is a list of bits of length 8s, defined by
 
-    OctetsToBits(a)\_i = ((a\_(i>>3)) >> (i umod 8)) umod 2.
+    OctetsToBits(a)_i = ((a_(i>>3)) >> (i umod 8)) umod 2.
 
 Example:
 
@@ -482,7 +506,7 @@ from an octet stream (XOF) using rejection sampling as follows.
 Three octets b\_0, b\_1, b\_2 are read from the stream at a time. These are
 interpreted as two 12-bit unsigned integers d\_1, d\_2 via
 
-    d\_1 + d\_2 2^12 = b\_0 + b\_1 2^8 + b\_2 2^16
+    d_1 + d_2 2^12 = b_0 + b_1 2^8 + b_2 2^16
 
 This creates a stream of 12-bit `d`s. Of these, the elements >= q are
 ignored. From the resultant stream, the coefficients of the polynomial
@@ -524,8 +548,8 @@ deterministically  as follows.
 
 An octet array a of length 2\*eta is converted to a polynomial CBD(a, eta)
 
-    CBD(a, eta)\_i = b\_{2i eta} + b\_{2i eta + 1} + ... + b\_{2i eta + eta-1}
-                  - b\_{2i eta + eta} + ... + b\_{2i eta + 2eta - 1},
+    CBD(a, eta)_i = b_{2i eta} + b_{2i eta + 1} + ... + b_{2i eta + eta-1}
+                  - b_{2i eta + eta} + ... + b_{2i eta + 2eta - 1},
 
 where b = OctetsToBits(a).
 
