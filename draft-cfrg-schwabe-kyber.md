@@ -190,6 +190,9 @@ A tuple a = (a\_0, ..., a\_255) represents the polynomial
 
     a\_0 + a\_1 x + a\_2 x^2 + ... + a\_255 x^255.
 
+With polynomial coefficients, vector and matrix indices, we will start
+counting at zero.
+
 ## Operations
 
 ### Addition and multiplication
@@ -380,11 +383,28 @@ Examples:
 For elements a, b in R, we write a o b for multiplication in the NTT domain.
 That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
 
-                 [ a\_i b\_i + zeta^{2 brv(i >> 1) + 1} a\_{i+1} b\_{i+1}   if i even
-    (a o b)\_i = [
-                 [ a\_{i+1} b\_i + a\_i b\_{i+1}                            otherwise
+                [ a_i b_i + zeta^{2 brv(i >> 1) + 1} a_{i+1} b_{i+1}   if i even
+    (a o b)_i = [
+                [ a_{i+1} b_i + a_i b_{i+1}                            otherwise
+
+### Dot product and matrix multiplication
+
+We will also use "o" to denote the dot product and matrix multiplication
+in the NTT. Concretely:
+
+1. For two length k vector v and w, we write
+
+        v o w = v_0 o w_0 + ... + v_{k-1} o w_{k-1}
+
+2. For a k by k matrix A and a length k vector v, we have
+
+        (A o v)_i = A_i o v,
+
+   where A\_i denotes the (i+1)th row of the matrix A as we start
+   counting at zero.
 
 # Symmetric cryptographic primitives
+
 Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
 
     XOF(seed) = SHAKE-128(seed)
@@ -395,6 +415,21 @@ Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
 
 TODO Elaborate on types and usage
 TODO Stick to one?
+
+# Operations on vectors
+
+Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
+In Kyber always d <= 11 and so we can interpret Compress(x, d) as a field
+element again.
+
+In this way, we can extend Compress(-, d) to polynomials by applying
+to each coefficient separately and in turn to vectors by applying
+to each polynomial. That is, for a vector v and polynomial p:
+
+    Compress(p, d)_i = Compress(p_i, d)
+    Compress(v, d)_i = Compress(v_i, d)
+
+We define Decompress(-, d) for vectors and polynomials in the same way.
 
 # Serialization
 
@@ -412,14 +447,31 @@ Example:
 
 ## Encode and Decode
 For an integer 0 < w <= 12, we define Decode(a, w), which converts
-a list a of 32w octets into a polynomial with coefficients in {0, ..., 2^w-1}
-as follows.
+any  list a of w\*l/8 octets into a list of length l with
+values in {0, ..., 2^w-1} as follows.
 
-    Decode(a, w)\_i = b\_{wi} + b\_{wi+1} 2 + b\_{wi+2} 2^2 + ... + b\_{wi+w-1} 2^{w-1},
+    Decode(a, w)_i = b_{wi} + b_{wi+1} 2 + b_{wi+2} 2^2 + ... + b_{wi+w-1} 2^{w-1},
 
 where b = OctetsToBits(a).
 
 Encode(-, w) is the unique inverse of Decode(-, w)
+
+### Polynomials
+A polynomial p is encoded by passing its coefficients to Encode:
+
+    EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1})
+
+DecodePoly(-, w) is the unique inverse of EncodePoly(-, w).
+
+### Vectors
+A vector v of length k over R is encoded by concatenating the coefficients
+in the obvious way:
+
+    EncodeVec(v, w) = Encode((v_0)_0, ..., (v_0)_{n-1},
+                             (v_1)_{0}, ..., (v_1)_{n-1},
+                                    ..., (v_{k-1})_{n-1})
+
+DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
 
 ## Sampling of polynomials
 
@@ -451,6 +503,21 @@ Example:
 
     sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
 
+#### sampleMatrix
+Now, the *k* by *k* matrix *A* over *R* is derived deterministically
+from a 32-octet seed *rho* using sampleUniform as follows.
+
+    sampleMatrix(rho)_{ij} = sampleUniform(XOF(rho || octet(j) || octet(i))
+
+That is, to derive the polynomial at the *i*th row and *j*th column,
+sampleUniform is called with the 34-octet seed created by first appending
+the octet *j* and then the octet *i* to *rho*. Recall that we start counting
+rows and columns from zero.
+
+As the NTT is a bijection, it does not matter whether we interpret
+the polynomials of the sampled matrix in the NTT domain or not.
+For efficiency, we do interpret the sampled matrix in the NTT domain.
+
 ### From a binomial distribution
 Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
 deterministically  as follows.
@@ -467,17 +534,156 @@ Examples:
     CBD((0, 1, 2, ..., 127), 2) = (0, 0, 1, 0, 1, 0, ..., 3328, 1, 0, 1)
     CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
 
+#### sampleNoise
+A *k* component small vector *v* is derived from a seed 32-octet seed *sigma*,
+an offset *offset* and size *eta* as follows:
+
+    sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, i+offset), eta)
+
+Recall that we start counting vector indices at zero.
 
 # Kyber.CPAPKE
 
 We are ready to define the IND-CPA secure Public-Key Encryption scheme that
 underlies Kyber.
 
+TODO warning about using Kyber.CPAPKE directly (#21)
+
+## Parameters
+We have already been introduced to the following parameters:
+
+*q*
+: Order of field underlying *R*.
+
+*n*
+: Length of polynomials in *R*.
+
+*zeta*
+: Primitive root of unity in GF(q), used for NTT in R.
+
+*XOF*, *H*, *G*, *PRF*, *KDF*
+: Various symmetric primitives.
+
+*k*
+: Main security parameter: the number of rows and columns in the matrix *A*.
+
+Additionally, Kyber takes the following parameters
+
+*eta1*, *eta2*
+: Size of small coefficients used in the private key and noise vectors.
+
+*d\_u*, *d\_v*
+: How many bits to retain per coefficient of the *u* and *v* components
+of the ciphertext.
+
+TODO reference to table with values.
+
+## Key generation
+Kyber.CPAPKE.KeyGen(seed) takes a 32 octet **seed** and deterministically
+produces a keypair as follows.
+
+1. Set (rho, sigma) = G(seed).
+2. Derive
+    1. AHat = sampleMatrix(rho).
+    2. s = sampleNoise(sigma, eta1, 0)
+    3. e = sampleNoise(sigma, eta1, k)
+3. Compute
+    1. sHat = NTT(s)
+    2. tHat = AHat o sHat + NTT(e)
+4. Return
+    1. publicKey = EncodeVec(tHat, 12) \|\| rho
+    2. privateKey = EncodeVec(sHat, 12)
+
+Note that in essence we're simply computing t = A s + e.
+
+## Encryption
+Kyber.CPAPKE.Enc(msg, publicKey, seed) takes a 32-octet seed,
+and deterministically encrypts the 32-octet msg for the Kyber.CPAPKE public
+key publicKey as follows.
+
+1. Split publicKey into
+    1. n/8\*12-octet tHatPacked
+    2. 32-octet rho
+2. Parse tHat = DecodeVec(tHat, 12)
+3. Derive
+    1. AHat = sampleMatrix(rho)
+    2. r = sampleNoise(seed, eta1, 0)
+    3. e\_1 = sampleNoise(seed, eta2, k)
+    4. e\_2 = sampleNoise(seed, eta2, 2k)\_0
+4. Compute
+    1. rHat = NTT(r)
+    2. u = InvNTT(AHat^T o rHat) + e\_1
+    3. v = InvNTT(tHat o rHat) + e\_2 + Decompress(Decode(msg, 1), 1)
+    4. c\_1 = EncodeVec(Compress(u, d\_u), d\_u)
+    5. c\_2 = EncodePoly(Compress(v, d\_v), d\_v)
+5. Return
+    1. cipherText = c\_1 \|\| c\_2
+
+## Decryption
+Kyber.CPAPKE.Dec(cipherText, privateKey) takes a Kyber.CPAPKE private key
+privateKey and decrypts a cipher text cipherText as follows.
+
+1. Split cipherText into
+    1. d\_u\*k\*n/8-octet c\_1
+    2. d\_v\*n/8-octet c\_2
+2. Parse
+    1. u = Decompress(DecodeVec(c\_1, d\_u), d\_u)
+    2. v = Decompress(DecodePoly(c\_2, d\_v), d\_v)
+    3. sHat = DecodeVec(privateKey, 12)
+3. Compute
+    1. m = v - InvNTT(sHat o NTT(u))
+4. Return
+    1. plainText = EncodePoly(Compress(m))
+
+# Kyber
+
+Now we are ready to define Kyber itself.
+
 ## Key generation
 
+A Kyber keypair is derived deterministically from a 64-octet seed as follows.
 
+1. Split seed into
+    1. A 32-octet z
+    2. A 32-octet cpaSeed
+2. Compute
+    1. (cpaPublicKey, cpaPrivateKey) = Kyber.CPAPKE.KeyGen(cpaSeed)
+    2. h = H(cpaPublicKey)
+3. Return
+    1. publicKey = cpaPublicKey
+    2. privateKey = cpaPrivateKey \|\| cpaPublicKey \|\| h \|\| z
 
-# Parameters
+## Encapsulation
+
+Kyber encapsulation takes a public key and a 32-octet seed and deterministically
+generates a shared secret and ciphertext for the public key as follows.
+
+1. Compute
+    1. m = H(seed)
+    2. (Kbar, cpaSeed) = G(m \|\| H(pk))
+    3. cpaCipherText = Kyber.CPAPKE.Enc(m, publicKey, cpaSeed)
+2. Return
+    1. cipherText = cpaCipherText
+    2. sharedSecret = KDF(KBar \|\| H(cpaCipherText))
+
+## Decapsulation
+Kyber decapsulation takes a private key and a cipher text and
+returns a shared secret as follows.
+
+1. Split privateKey into
+    1. A 12\*k\*n/8-octet cpaPrivateKey
+    2. A 12\*k\*n/8+32-octet cpaPublicKey
+    3. A 32-octet h
+    4. A 32-octet z
+2. Compute
+    1. m2 = Kyber.CPAPKE.Dec(cipherText, cpaPrivateKey)
+    2. (KBar2, cpaSeed2) = G(m2 \|\| h)
+    3. cipherText2 = Kyber.CPAPKE.Enc(m2, cpaPublicKey, cpaSeed2)
+    4. K1 = KDF(KBar2 \|\| H(cipherText))
+    5. K2 = KDF(z \|\| H(cipherText))
+3. In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.
+4. Return
+    1. sharedSecret = K
 
 ## Common to all parameter sets
 
@@ -501,7 +707,7 @@ underlies Kyber.
 | Name       |Description                                                                                        |
 |-----------:|:--------------------------------------------------------------------------------------------------|
 | k          |Dimension of module                                                                                |
-| eta1, eta2 |Size of "small" coefficients used in the private key  and noise vectors.                           |
+| eta1, eta2 |Size of "small" coefficients used in the private key and noise vectors.                           |
 | d\_u       |How many bits to retain per coefficient of `u`, the private-key independent part of the ciphertext |
 | d\_v       |How many bits to retain per coefficient of `v`, the private-key dependent part of the ciphertext.  |
 

@@ -236,15 +236,15 @@ def sampleMatrix(rho, k):
     return Matrix([[sampleUniform(XOF(rho, j, i))
             for j in range(k)] for i in range(k)])
 
-def sampleNoise(sigma, k, eta, offset):
+def sampleNoise(sigma, eta, offset, k):
     return Vec(CBD(PRF(sigma, i+offset).read(64*eta), eta) for i in range(k))
 
 def CPAPKE_KeyGen(seed, params):
     assert len(seed) == 32
     rho, sigma = G(seed)
     A = sampleMatrix(rho, params.k)
-    s = sampleNoise(sigma, params.k, params.eta1, 0)
-    e = sampleNoise(sigma, params.k, params.eta1, params.k)
+    s = sampleNoise(sigma, params.eta1, 0, params.k)
+    e = sampleNoise(sigma, params.eta1, params.k, params.k)
     sHat = s.NTT()
     eHat = e.NTT()
     tHat = A.MulNTT(sHat) + eHat
@@ -253,12 +253,13 @@ def CPAPKE_KeyGen(seed, params):
     return (pk, sk)
 
 def CPAPKE_Enc(pk, msg, seed, params):
+    assert len(msg) == 32
     tHat = DecodeVec(pk[:-32], params.k, 12)
     rho = pk[-32:]
     A = sampleMatrix(rho, params.k)
-    r = sampleNoise(seed, params.k, params.eta1, 0)
-    e1 = sampleNoise(seed, params.k, eta2, params.k)
-    e2 = sampleNoise(seed, 1, eta2, 2*params.k).ps[0]
+    r = sampleNoise(seed, params.eta1, 0, params.k)
+    e1 = sampleNoise(seed, eta2, params.k, params.k)
+    e2 = sampleNoise(seed, eta2, 2*params.k, 1).ps[0]
     rHat = r.NTT()
     u = A.T().MulNTT(rHat).InvNTT() + e1
     v = tHat.DotNTT(rHat).InvNTT() + e2 + Poly(Decode(msg, 1)).Decompress(1)
