@@ -18,3 +18,4 @@ archive.json
 draft-cfrg-schwabe-kyber.xml
 package-lock.json
 report.xml
+.DS_Store
