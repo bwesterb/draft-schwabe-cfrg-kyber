@@ -1,23 +1,21 @@
 ---
-title: "Kyber Post-Quantum KEM"
-abbrev: "kyber"
-category: info # TODO (#6)
+title: Kyber Post-Quantum KEM
+abbrev: kyber
+category: info
 
 docname: draft-cfrg-schwabe-kyber-latest
-submissiontype: IETF
-number:
 date:
-consensus: true # TODO
+stand_alone: yes
 v: 3 # TODO
 # area: AREA # TODO
-# workgroup: WG Working Group
+workgroup: None
 keyword:
  - kyber
  - kem
  - post-quantum
 venue:
-#  group: CFRG
-#  type: Working Group
+  group: CFRG
+  type: Working Group
 #  mail: WG@example.com  # TODO
 #  arch: https://example.com/WG # TODO
   github: "bwesterb/draft-schwabe-cfrg-kyber"
