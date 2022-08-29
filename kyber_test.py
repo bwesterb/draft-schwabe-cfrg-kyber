@@ -1,4 +1,5 @@
 from kyber import *
+from nistkat import Kyber512_nistkats, Kyber768_nistkats
 
 # Assertions used in the draft.
 
@@ -103,4 +104,13 @@ noise2Test = Poly(x%q for x in [
 ])
 assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
 
-# TODO #4 Check NIST test vectors
+for (params, kats) in [(params512, Kyber512_nistkats), (params768, Kyber768_nistkats)]:
+    for kat in kats:
+        (pk, sk) = KeyGen(kat.rand1, params)
+        assert(pk == kat.pk)
+        assert(sk == kat.sk)
+        (ct, ss) = Enc(pk, kat.rand2, params)
+        assert(ct == kat.ct)
+        assert(ss == kat.ss)
+        ss = Dec(sk, ct, params)
+        assert(ss == kat.ss)
