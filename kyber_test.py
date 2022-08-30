@@ -1,5 +1,11 @@
 from kyber import *
 
+import binascii
+import hashlib
+
+import Crypto
+from Crypto.Cipher import AES
+
 # Assertions used in the draft.
 
 assert pow(zeta, 128, q) == q-1
@@ -103,4 +109,59 @@ noise2Test = Poly(x%q for x in [
 ])
 assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
 
-# TODO #4 Check NIST test vectors
+class NistDRBG:
+    """ NIST's DRBG used to generate NIST's Known Answer Tests (KATs),
+        see PQCgenKAT.c. """
+    def __init__(self, seed):
+        self.key = b'\0'*32
+        self.v = 0
+        assert len(seed) == 48
+        self._update(seed)
+    def _update(self, seed):
+        b = AES.new(self.key, AES.MODE_ECB)
+        buf = b''
+        for i in range(3):
+            self.v += 1
+            buf += b.encrypt(self.v.to_bytes(16, 'big'))
+        if seed is not None:
+            buf = bytes([x ^ y for x, y in zip(seed, buf)])
+        self.key = buf[:32]
+        self.v = int.from_bytes(buf[32:], 'big')
+    def read(self, length):
+        b = AES.new(self.key, AES.MODE_ECB)
+        ret = b''
+        while len(ret) < length:
+            self.v += 1
+            block = b.encrypt(self.v.to_bytes(16, 'big'))
+            ret += block
+        self._update(None)
+        return ret[:length]
+
+for name, params, want in [
+            (b"Kyber512", params512, "e9c2bd37133fcb40772f81559f14b1f58dccd1c816701be9ba6214d43baf4547"),
+            (b"Kyber768", params768, "a1e122cad3c24bc51622e4c242d8b8acbcd3f618fee4220400605ca8f9ea02c2"),
+            (b"Kyber1024", params1024, "89248f2f33f7f4f7051729111f3049c409a933ec904aedadf035f30fa5646cd5"),
+        ]:
+    seed = bytes(range(48))
+    g = NistDRBG(seed)
+    f = io.BytesIO()
+    f.write(b"# %s\n\n" % name)
+    for i in range(100):
+        seed = g.read(48)
+        f.write(b"count = %d\n" % i)
+        f.write(b"seed = %s\n" % binascii.hexlify(seed).upper())
+        g2 = NistDRBG(seed)
+
+        kseed = g2.read(32) +  g2.read(32)
+        eseed = g2.read(32)
+
+        pk, sk = KeyGen(kseed, params)
+        ct, ss = Enc(pk, eseed, params)
+        ss2 = Dec(sk, ct, params)
+        assert ss == ss2
+        f.write(b"pk = %s\n" % binascii.hexlify(pk).upper())
+        f.write(b"sk = %s\n" % binascii.hexlify(sk).upper())
+        f.write(b"ct = %s\n" % binascii.hexlify(ct).upper())
+        f.write(b"ss = %s\n\n" % binascii.hexlify(ss).upper())
+
+    assert hashlib.sha256(f.getvalue()).hexdigest() == want
