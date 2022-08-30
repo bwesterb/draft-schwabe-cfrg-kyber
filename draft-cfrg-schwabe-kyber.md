@@ -666,8 +666,8 @@ Now we are ready to define Kyber itself.
 A Kyber keypair is derived deterministically from a 64-octet seed as follows.
 
 1. Split seed into
-    1. A 32-octet z
     2. A 32-octet cpaSeed
+    1. A 32-octet z
 2. Compute
     1. (cpaPublicKey, cpaPrivateKey) = Kyber.CPAPKE.KeyGen(cpaSeed)
     2. h = H(cpaPublicKey)
