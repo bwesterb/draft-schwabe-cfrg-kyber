@@ -38,3 +38,10 @@ $ make
 Command line usage requires that you have the necessary software installed.  See
 [the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
 
+Python tests (including test against NIST KAT test vectors) can be run using `pytest`:
+
+```sh
+$ pip3 install pycryptodome pytest
+[...]
+$ pytest
+```
