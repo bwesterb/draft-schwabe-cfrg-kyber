@@ -1,5 +1,5 @@
 from kyber import *
-from nistkat import Kyber512_nistkats, Kyber768_nistkats
+from nistkat import Kyber512_nistkats, Kyber768_nistkats, Kyber1024_nistkats
 
 # Assertions used in the draft.
 
@@ -104,7 +104,11 @@ noise2Test = Poly(x%q for x in [
 ])
 assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
 
-for (params, kats) in [(params512, Kyber512_nistkats), (params768, Kyber768_nistkats)]:
+for (params, kats) in [
+    (params512, Kyber512_nistkats),
+    (params768, Kyber768_nistkats),
+    (params1024, Kyber1024_nistkats),
+]:
     for kat in kats:
         (pk, sk) = KeyGen(kat.rand1, params)
         assert(pk == kat.pk)
