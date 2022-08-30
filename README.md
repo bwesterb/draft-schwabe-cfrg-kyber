@@ -4,7 +4,9 @@ This is the working area for the individual Internet-Draft, "Kyber Post-Quantum 
 It described [Kyber](https://pq-crystals.org/kyber/index.shtml),
 NIST's pick for post-quantum key agreement.
 
-Very much work-in-progress at the moment!
+It also contains "machine-readable" specification of Kyber in Python.
+
+Very much [work-in-progress](https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues) at the moment!
 
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
