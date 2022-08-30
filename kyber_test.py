@@ -144,12 +144,12 @@ for name, params, want in [
         ]:
     seed = bytes(range(48))
     g = NistDRBG(seed)
-    f = io.BytesIO()
-    f.write(b"# %s\n\n" % name)
+    f = hashlib.sha256()
+    f.update(b"# %s\n\n" % name)
     for i in range(100):
         seed = g.read(48)
-        f.write(b"count = %d\n" % i)
-        f.write(b"seed = %s\n" % binascii.hexlify(seed).upper())
+        f.update(b"count = %d\n" % i)
+        f.update(b"seed = %s\n" % binascii.hexlify(seed).upper())
         g2 = NistDRBG(seed)
 
         kseed = g2.read(32) +  g2.read(32)
@@ -159,9 +159,9 @@ for name, params, want in [
         ct, ss = Enc(pk, eseed, params)
         ss2 = Dec(sk, ct, params)
         assert ss == ss2
-        f.write(b"pk = %s\n" % binascii.hexlify(pk).upper())
-        f.write(b"sk = %s\n" % binascii.hexlify(sk).upper())
-        f.write(b"ct = %s\n" % binascii.hexlify(ct).upper())
-        f.write(b"ss = %s\n\n" % binascii.hexlify(ss).upper())
+        f.update(b"pk = %s\n" % binascii.hexlify(pk).upper())
+        f.update(b"sk = %s\n" % binascii.hexlify(sk).upper())
+        f.update(b"ct = %s\n" % binascii.hexlify(ct).upper())
+        f.update(b"ss = %s\n\n" % binascii.hexlify(ss).upper())
 
-    assert hashlib.sha256(f.getvalue()).hexdigest() == want
+    assert f.hexdigest() == want
