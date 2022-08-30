@@ -164,21 +164,17 @@ class NistDRBG:
             (b"Kyber1024", params1024, "89248f2f33f7f4f7051729111f3049c409a933ec904aedadf035f30fa5646cd5"),
         ])
 def test_nist_kat(name, params, want):
-    seed = bytes(range(48))
-    g = NistDRBG(seed)
+    entropy_input = bytes(range(48))
+    InitRandomBytes(NistDRBG(entropy_input))
+    seeds = [RandomBytes(48) for _ in range(100)]
     f = hashlib.sha256()
     f.update(b"# %s\n\n" % name)
     for i in range(100):
-        seed = g.read(48)
         f.update(b"count = %d\n" % i)
-        f.update(b"seed = %s\n" % binascii.hexlify(seed).upper())
-        g2 = NistDRBG(seed)
-
-        kseed = g2.read(32) +  g2.read(32)
-        eseed = g2.read(32)
-
-        pk, sk = KeyGen(kseed, params)
-        ct, ss = Enc(pk, eseed, params)
+        f.update(b"seed = %s\n" % binascii.hexlify(seeds[i]).upper())
+        InitRandomBytes(NistDRBG(seeds[i]))
+        pk, sk = KeyGen(params)
+        ct, ss = Enc(pk, params)
         ss2 = Dec(sk, ct, params)
         assert ss == ss2
         f.update(b"pk = %s\n" % binascii.hexlify(pk).upper())

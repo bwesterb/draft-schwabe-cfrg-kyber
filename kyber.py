@@ -141,6 +141,14 @@ class Poly:
     def Encode(self, d):
         return Encode(self.cs, d)
 
+def InitRandomBytes(stream):
+    global _STREAM
+    _STREAM = stream
+
+def RandomBytes(n):
+    global _STREAM
+    return _STREAM.read(n)
+
 def sampleUniform(stream):
     cs = []
     while True:
@@ -275,17 +283,14 @@ def CPAPKE_Dec(sk, ct, params):
     sHat = DecodeVec(sk, params.k, 12)
     return (v - sHat.DotNTT(u.NTT()).InvNTT()).Compress(1).Encode(1)
 
-def KeyGen(seed, params):
-    assert len(seed) == 64
-    z = seed[32:]
-    pk, sk2 = CPAPKE_KeyGen(seed[:32], params)
+def KeyGen(params):
+    pk, sk2 = CPAPKE_KeyGen(RandomBytes(32), params)
     h = H(pk)
+    z = RandomBytes(32)
     return (pk, sk2 + pk + h + z)
 
-def Enc(pk, seed, params):
-    assert len(seed) == 32
-
-    m = H(seed)
+def Enc(pk, params):
+    m = H(RandomBytes(32))
     Kbar, r = G(m + H(pk))
     ct = CPAPKE_Enc(pk, m, r, params)
     K = KDF(Kbar + H(ct))
