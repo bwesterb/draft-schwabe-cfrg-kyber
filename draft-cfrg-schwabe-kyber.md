@@ -924,7 +924,7 @@ TODO insert kyber.py automatically (#14)
         return h[:32], h[32:]
 
     def H(msg): return hashlib.sha3_256(msg).digest()
-    def KDF(msg): return hashlib.shake_128(msg).digest(length=32)
+    def KDF(msg): return hashlib.shake_256(msg).digest(length=32)
 
     class Vec:
         def __init__(self, ps):
