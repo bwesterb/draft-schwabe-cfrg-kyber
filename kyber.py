@@ -239,6 +239,12 @@ def sampleMatrix(rho, k):
 def sampleNoise(sigma, eta, offset, k):
     return Vec(CBD(PRF(sigma, i+offset).read(64*eta), eta) for i in range(k))
 
+def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
+    # WARNING! In production code this must be done in a data-independent
+    # constant-time manner, which this implementation is not. In fact,
+    # many more lines of code in this file are not constant-time.
+    return ifEq if a == b else ifNew
+
 def CPAPKE_KeyGen(seed, params):
     assert len(seed) == 32
     rho, sigma = G(seed)
@@ -299,7 +305,8 @@ def Dec(sk, ct, params):
     m2 = CPAPKE_Dec(sk, ct, params)
     Kbar2, r2 = G(m2 + h)
     ct2 = CPAPKE_Enc(pk, m2, r2, params)
-    if ct == ct2: # NOTE <- in production this must be done in constant time!
-        return KDF(Kbar2 + H(ct))
-    return KDF(z + H(ct))
-
+    return constantTimeSelectOnEquality(
+        ct2, ct,
+        KDF(Kbar2 + H(ct)),  # if ct == ct2
+        KDF(z + H(ct)),      # if ct != ct2
+    )
