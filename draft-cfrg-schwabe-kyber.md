@@ -96,9 +96,9 @@ We cannot use Kyber.CPAPKE directly, as its ciphertexts are malleable.
 
 Kyber.CPAPKE is a lattice-based scheme. More precisely, its security
 is based on the learning-with-errors problem in module lattices (MLWE).
-The underlying polynomial ring R (defined in TODO) is chosen such that
+The underlying polynomial ring R (defined in {{S-ring}}) is chosen such that
 multiplication is very fast using the number theoretic transform
-(NTT, see TODO).
+(NTT, see {{S-NTT}}).
 
 A Kyber.CPAPKE private key is a vector *s* over R of length k which is
 _small_ in a particular way. Here `k` is a security parameter akin to the
@@ -202,7 +202,7 @@ where Div(x, a) = Floor(x / a).
 TODO Do we want to include the proof that this is correct?
 TODO Do we need to define >> and <<?
 
-# The ring R
+# The ring R {#S-ring}
 
 Kyber is defined over a polynomial ring R = GF(q)[x]/(x^n+1)
 where n=256 (and q=3329). Elements of R are tuples of 256 integers modulo q.
@@ -238,7 +238,7 @@ that x^256=-1. To wit
 
 We will not use this schoolbook multiplication to compute the product.
 Instead we will use the more efficient, number theoretic transform (NTT),
-see TODO.
+see {{S-NTT}}.
 
 ### Size of polynomials
 
@@ -248,7 +248,7 @@ For a polynomial a = (a\_0, ..., a\_255) in R, we write:
 
 Thus a polynomial is considered large if one of its components is large.
 
-### Background on the Number Theoretic Transform (NTT)
+### Background on the Number Theoretic Transform (NTT) {#S-NTT}
 
 TODO (#8) This section gives background not necessary for the implementation.
      Should we keep it?
@@ -291,7 +291,7 @@ the Chinese Remainder Theorem for commutative rings, we know
 
 given by a |-> ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
 This is the Number Theoretic Transform (NTT). Multiplication on the right is
-much easier: it's almost componentwise, see section TODO.
+much easier: it's almost componentwise, see {{S-NTT-mul}}.
 
 A propos, the the constant factors that appear in the moduli in order
 can be computed efficiently as follows (all modulo q):
@@ -393,14 +393,14 @@ The NTT is a linear bijection R -> R given by the matrix:
 
 Its inverse is called the InvNTT.
 
-It can be computed more efficiently as described in section TODO.
+It can be computed more efficiently as described in section {{S-NTT}}.
 
 Examples:
 
     NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
     NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 
-## Multiplication in NTT domain
+## Multiplication in NTT domain {#S-NTT-mul}
 
 For elements a, b in R, we write a o b for multiplication in the NTT domain.
 That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
@@ -598,7 +598,7 @@ Additionally, Kyber takes the following parameters
 : How many bits to retain per coefficient of the *u* and *v* components
 of the ciphertext.
 
-TODO reference to table with values.
+The values of these parameters are given in {{S-params}}.
 
 ## Key generation
 Kyber.CPAPKE.KeyGen(seed) takes a 32 octet **seed** and deterministically
@@ -707,13 +707,14 @@ returns a shared secret as follows.
 4. Return
     1. sharedSecret = K
 
-## Common to all parameter sets
+# Parameter sets {#S-params}
 
 |Name  | Value | Description                        |
 |-----:|:-----:|:-----------------------------------|
 |q     | 3329  | Order of base field                |
 |n     | 256   | Degree of polynomials              |
 |zeta  | 17    | nth root of unity in base field    |
+{: #params-comm title="Common parameters to all versions of Kyber" }
 
 
 |Primitive| Instantiation        |
@@ -723,8 +724,7 @@ returns a shared secret as follows.
 |G        | SHA3-512             |
 |PRF(s,b) | SHAKE-256(s \|\| b)  |
 |KDF      | SHAKE-256            |
-
-## Parameter sets
+{: #params-symm title="Instantiation of symmetric primitives in Kyber" }
 
 | Name       |Description                                                                                        |
 |-----------:|:--------------------------------------------------------------------------------------------------|
@@ -732,19 +732,20 @@ returns a shared secret as follows.
 | eta1, eta2 |Size of "small" coefficients used in the private key and noise vectors.                           |
 | d\_u       |How many bits to retain per coefficient of `u`, the private-key independent part of the ciphertext |
 | d\_v       |How many bits to retain per coefficient of `v`, the private-key dependent part of the ciphertext.  |
+{: #params-desc title="Description of kyber parameters" }
 
 |Parameter set | k |eta1|eta2|d\_u|d\_v|sec|
 |-------------:|:-:|:--:|:--:|:--:|:--:|:-:|
 |Kyber512      | 2 |  3 | 2  |10  |4   |I  |
 |Kyber768      | 3 |  2 | 2  |10  |4   |III|
 |Kyber1024     | 4 |  2 | 2  |11  |5   |V  |
+{: #params title="Kyber parameter sets" }
 
-# Machine-readable specification
+# Machine-readable specification {#S-spec}
 
 ~~~~~~~~
 {::include ./kyber.py}
 ~~~~~~~~
-{: #spec title="Machine-readable specification of Kyber"}
 
 # Security Considerations
 
