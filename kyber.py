@@ -166,7 +166,8 @@ def CBD(a, eta):
 
 def XOF(seed, j, i):
     # TODO #5 proper streaming SHAKE128
-    return io.BytesIO(hashlib.shake_128(seed + bytes([j, i])).digest(length=1344))
+    return io.BytesIO(hashlib.shake_128(seed + bytes([j, i])).digest(
+        length=1344))
 
 def PRF(seed, nonce):
     # TODO #5 proper streaming SHAKE256
@@ -192,8 +193,9 @@ class Vec:
         return Vec(p.InvNTT() for p in self.ps)
 
     def DotNTT(self, other):
-        """ Computes the dot product <self, other> in the NTT domain. """
-        return sum((a.MulNTT(b) for a, b in zip(self.ps, other.ps)), Poly())
+        """ Computes the dot product <self, other> in NTT domain. """
+        return sum((a.MulNTT(b) for a, b in zip(self.ps, other.ps)),
+                   Poly())
 
     def __add__(self, other):
         return Vec(a+b for a,b in zip(self.ps, other.ps))
@@ -230,19 +232,22 @@ class Matrix:
     def T(self):
         """ Returns transpose of matrix """
         k = len(self.cs)
-        return Matrix((self.cs[j][i] for j in range(k)) for i in range(k))
+        return Matrix((self.cs[j][i] for j in range(k))
+                      for i in range(k))
 
 def sampleMatrix(rho, k):
     return Matrix([[sampleUniform(XOF(rho, j, i))
             for j in range(k)] for i in range(k)])
 
 def sampleNoise(sigma, eta, offset, k):
-    return Vec(CBD(PRF(sigma, i+offset).read(64*eta), eta) for i in range(k))
+    return Vec(CBD(PRF(sigma, i+offset).read(64*eta), eta)
+               for i in range(k))
 
 def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
-    # WARNING! In production code this must be done in a data-independent
-    # constant-time manner, which this implementation is not. In fact,
-    # many more lines of code in this file are not constant-time.
+    # WARNING! In production code this must be done in a
+    # data-independent constant-time manner, which this implementation
+    # is not. In fact, many more lines of code in this
+    # file are not constant-time.
     return ifEq if a == b else ifNew
 
 def CPAPKE_KeyGen(seed, params):
@@ -268,7 +273,8 @@ def CPAPKE_Enc(pk, msg, seed, params):
     e2 = sampleNoise(seed, eta2, 2*params.k, 1).ps[0]
     rHat = r.NTT()
     u = A.T().MulNTT(rHat).InvNTT() + e1
-    v = tHat.DotNTT(rHat).InvNTT() + e2 + Poly(Decode(msg, 1)).Decompress(1)
+    m = Poly(Decode(msg, 1)).Decompress(1)
+    v = tHat.DotNTT(rHat).InvNTT() + e2 + m
     c1 = u.Compress(params.du).Encode(params.du)
     c2 = v.Compress(params.dv).Encode(params.dv)
     return c1 + c2
