@@ -61,6 +61,15 @@ informative:
     date: 2021
     format:
       PDF: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
+  SecEst:
+    target: https://github.com/pq-crystals/security-estimates
+    title: CRYSTALS security estimate scripts
+    author:
+      -
+        ins: L. Ducas
+      -
+        ins: J. Schanck
+
 --- abstract
 
 This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
