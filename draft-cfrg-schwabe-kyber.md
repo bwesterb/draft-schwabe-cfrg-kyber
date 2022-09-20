@@ -32,6 +32,12 @@ author:
     email: bas@cloudflare.com
 
 normative:
+  fips202:
+    target: https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf
+    title: 'FIPS PUB 202: SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions'
+    author:
+      -
+        ins: 'National Institute of Standards and Technology'
 
 informative:
   KyberV302:
@@ -450,7 +456,7 @@ in the NTT. Concretely:
 
 # Symmetric cryptographic primitives
 
-Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
+Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
 
     XOF(seed) = SHAKE-128(seed)
     PRF(seed, counter) = SHAKE-256(seed || counter)
@@ -458,8 +464,23 @@ Kyber makes use of cryptographic primitives PRF, XOF, KDF, H and G, where
     H(msg) = SHA3-256(msg)
     G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
 
-TODO Elaborate on types and usage
-TODO Stick to one?
+On the surface, they look different, but they are all based on
+the same flexible Keccak XOF that uses the f1600 permutation,
+see {{fips202}}:
+
+    XOF(seed)      =  Keccak[256](seed || 1111, .)
+    PRF(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
+    KDF(msg)       =  Keccak[512](msg || 1111, 256)
+    H(msg)         =  Keccak[512](msg || 01, 256)
+    G(msg)         = (Keccak[1024](msg || 01, 512)[:32],
+                      Keccak[1024](msg || 01, 512)[32:])
+
+    Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
+
+The reason five different primitives are used is to ensure domain
+separation, which is crucial for security. Additionally, a smaller sponge
+capacity is used for performance where permissable by the
+security requirements.
 
 # Operations on vectors
 
