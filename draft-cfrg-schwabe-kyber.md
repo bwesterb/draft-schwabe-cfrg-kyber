@@ -70,6 +70,13 @@ informative:
       -
         ins: J. Schanck
   RFC9180:
+  nistr3:
+    target: https://csrc.nist.gov/News/2022/pqc-candidates-to-be-standardized-and-round-4
+    title: 'PQC Standardization Process: Announcing Four Candidates to be Standardized, Plus Fourth Round Candidates'
+    author:
+      -
+        ins: The NIST PQC Team
+  hybrid: I-D.stebila-tls-hybrid-design
 
 --- abstract
 
@@ -79,15 +86,21 @@ This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 # Introduction
 
-Kyber is NIST's pick for a post-quantum key agreement.
+Kyber is NIST's pick for a post-quantum key agreement {{nistr3}}.
 
-TODO #7
+Kyber is not a Diffie-Hellman (DH) style non-interactive key agreement,
+but instead, Kyber is a Key Encapsulation Method (KEM).
+In essence, a KEM is a Public-Key Encryption (PKE) scheme where the
+plaintext cannot be specified, but is generated as a random key as
+part of the encryption. A KEM can be transformed into an unrestricted
+PKE using HPKE {{RFC9180}}. On its own, a KEM can be used as a key agreement
+method in TLS {{hybrid}}.
 
 ## Warning on stability
 
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process. {{KyberV302}}
+to round 3 of the NIST PQC process {{KyberV302}}.
 
 # Conventions and Definitions
 
