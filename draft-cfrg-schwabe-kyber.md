@@ -464,8 +464,6 @@ We define Decompress(-, d) for vectors and polynomials in the same way.
 
 # Serialization
 
-TODO #20
-
 ## OctetsToBits
 For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
 is a list of bits of length 8s, defined by
@@ -474,7 +472,7 @@ is a list of bits of length 8s, defined by
 
 Example:
 
-    OctetsToBits(12,34) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
+    OctetsToBits(12,45) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
 
 ## Encode and Decode
 For an integer 0 < w <= 12, we define Decode(a, w), which converts
