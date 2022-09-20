@@ -250,7 +250,7 @@ def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
     # file are not constant-time.
     return ifEq if a == b else ifNew
 
-def CPAPKE_KeyGen(seed, params):
+def InnerKeyGen(seed, params):
     assert len(seed) == 32
     rho, sigma = G(seed)
     A = sampleMatrix(rho, params.k)
@@ -263,7 +263,7 @@ def CPAPKE_KeyGen(seed, params):
     sk = EncodeVec(sHat, 12)
     return (pk, sk)
 
-def CPAPKE_Enc(pk, msg, seed, params):
+def InnerEnc(pk, msg, seed, params):
     assert len(msg) == 32
     tHat = DecodeVec(pk[:-32], params.k, 12)
     rho = pk[-32:]
@@ -279,7 +279,7 @@ def CPAPKE_Enc(pk, msg, seed, params):
     c2 = v.Compress(params.dv).Encode(params.dv)
     return c1 + c2
 
-def CPAPKE_Dec(sk, ct, params):
+def InnerDec(sk, ct, params):
     split = params.du * params.k * n // 8
     c1, c2 = ct[:split], ct[split:]
     u = DecodeVec(c1, params.k, params.du).Decompress(params.du)
@@ -290,7 +290,7 @@ def CPAPKE_Dec(sk, ct, params):
 def KeyGen(seed, params):
     assert len(seed) == 64
     z = seed[32:]
-    pk, sk2 = CPAPKE_KeyGen(seed[:32], params)
+    pk, sk2 = InnerKeyGen(seed[:32], params)
     h = H(pk)
     return (pk, sk2 + pk + h + z)
 
@@ -299,7 +299,7 @@ def Enc(pk, seed, params):
 
     m = H(seed)
     Kbar, r = G(m + H(pk))
-    ct = CPAPKE_Enc(pk, m, r, params)
+    ct = InnerEnc(pk, m, r, params)
     K = KDF(Kbar + H(ct))
     return (ct, K)
 
@@ -308,9 +308,9 @@ def Dec(sk, ct, params):
     pk = sk[12 * params.k * n//8 : 24 * params.k * n//8 + 32]
     h = sk[24 * params.k * n//8 + 32 : 24 * params.k * n//8 + 64]
     z = sk[24 * params.k * n//8 + 64 : 24 * params.k * n//8 + 96]
-    m2 = CPAPKE_Dec(sk, ct, params)
+    m2 = InnerDec(sk, ct, params)
     Kbar2, r2 = G(m2 + h)
-    ct2 = CPAPKE_Enc(pk, m2, r2, params)
+    ct2 = InnerEnc(pk, m2, r2, params)
     return constantTimeSelectOnEquality(
         ct2, ct,
         KDF(Kbar2 + H(ct)),  # if ct == ct2

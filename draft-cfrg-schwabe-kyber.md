@@ -69,6 +69,7 @@ informative:
         ins: L. Ducas
       -
         ins: J. Schanck
+  RFC9180:
 
 --- abstract
 
@@ -95,21 +96,21 @@ to round 3 of the NIST PQC process. {{KyberV302}}
 # Overview
 
 Kyber is an IND-CCA2 secure KEM. It is constructed by applying a
-Fujisaki--Okamato style transformation on Kyber.CPAPKE, which is
+Fujisaki--Okamato style transformation on InnerPKE, which is
 the underlying IND-CPA secure Public Key Encryption scheme.
-We cannot use Kyber.CPAPKE directly, as its ciphertexts are malleable.
+We cannot use InnerPKE directly, as its ciphertexts are malleable.
 
                        F.O. transform
-    Kyber.CPAPKE   ---------------------->   Kyber
+       InnerPKE   ---------------------->   Kyber
        IND-CPA                              IND-CCA2
 
-Kyber.CPAPKE is a lattice-based scheme. More precisely, its security
+Kyber is a lattice-based scheme. More precisely, its security
 is based on the learning-with-errors problem in module lattices (MLWE).
 The underlying polynomial ring R (defined in {{S-ring}}) is chosen such that
 multiplication is very fast using the number theoretic transform
 (NTT, see {{S-NTT}}).
 
-A Kyber.CPAPKE private key is a vector *s* over R of length k which is
+An InnerPKE private key is a vector *s* over R of length k which is
 _small_ in a particular way. Here `k` is a security parameter akin to the
 size of a prime modulus. For Kyber512, which targets AES-128's security level,
 the value of k is 2.
@@ -148,7 +149,7 @@ To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
 and how to compress. Then we define the polynomial ring R; its operations
 and in particular the NTT. We continue with the different methods of
-sampling and (de)serialization. Then, we define first Kyber.CPAPKE
+sampling and (de)serialization. Then, we first define InnerPKE
 and finally Kyber proper.
 
 # The field GF(q)
@@ -571,12 +572,12 @@ an offset *offset* and size *eta* as follows:
 
 Recall that we start counting vector indices at zero.
 
-# Kyber.CPAPKE
+# Inner malleable public-key encryption scheme
 
 We are ready to define the IND-CPA secure Public-Key Encryption scheme that
-underlies Kyber.
-
-TODO warning about using Kyber.CPAPKE directly (#21)
+underlies Kyber. It is unsafe to use this underlying scheme directly as
+its ciphertexts are malleable. Instead, a Public-Key Encryption scheme
+can be constructed on top of Kyber by using HPKE {{RFC9180}}.
 
 ## Parameters
 We have already been introduced to the following parameters:
@@ -608,7 +609,7 @@ of the ciphertext.
 The values of these parameters are given in {{S-params}}.
 
 ## Key generation
-Kyber.CPAPKE.KeyGen(seed) takes a 32 octet **seed** and deterministically
+InnerKeyGen(seed) takes a 32 octet **seed** and deterministically
 produces a keypair as follows.
 
 1. Set (rho, sigma) = G(seed).
@@ -626,8 +627,8 @@ produces a keypair as follows.
 Note that in essence we're simply computing t = A s + e.
 
 ## Encryption
-Kyber.CPAPKE.Enc(msg, publicKey, seed) takes a 32-octet seed,
-and deterministically encrypts the 32-octet msg for the Kyber.CPAPKE public
+InnerEnc(msg, publicKey, seed) takes a 32-octet seed,
+and deterministically encrypts the 32-octet msg for the InnerPKE public
 key publicKey as follows.
 
 1. Split publicKey into
@@ -649,7 +650,7 @@ key publicKey as follows.
     1. cipherText = c\_1 \|\| c\_2
 
 ## Decryption
-Kyber.CPAPKE.Dec(cipherText, privateKey) takes a Kyber.CPAPKE private key
+InnerDec(cipherText, privateKey) takes an InnerPKE private key
 privateKey and decrypts a cipher text cipherText as follows.
 
 1. Split cipherText into
@@ -676,7 +677,7 @@ A Kyber keypair is derived deterministically from a 64-octet seed as follows.
     2. A 32-octet cpaSeed
     1. A 32-octet z
 2. Compute
-    1. (cpaPublicKey, cpaPrivateKey) = Kyber.CPAPKE.KeyGen(cpaSeed)
+    1. (cpaPublicKey, cpaPrivateKey) = InnerKeyGen(cpaSeed)
     2. h = H(cpaPublicKey)
 3. Return
     1. publicKey = cpaPublicKey
@@ -690,7 +691,7 @@ generates a shared secret and ciphertext for the public key as follows.
 1. Compute
     1. m = H(seed)
     2. (Kbar, cpaSeed) = G(m \|\| H(pk))
-    3. cpaCipherText = Kyber.CPAPKE.Enc(m, publicKey, cpaSeed)
+    3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
 2. Return
     1. cipherText = cpaCipherText
     2. sharedSecret = KDF(KBar \|\| H(cpaCipherText))
@@ -705,9 +706,9 @@ returns a shared secret as follows.
     3. A 32-octet h
     4. A 32-octet z
 2. Compute
-    1. m2 = Kyber.CPAPKE.Dec(cipherText, cpaPrivateKey)
+    1. m2 = InnerDec(cipherText, cpaPrivateKey)
     2. (KBar2, cpaSeed2) = G(m2 \|\| h)
-    3. cipherText2 = Kyber.CPAPKE.Enc(m2, cpaPublicKey, cpaSeed2)
+    3. cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)
     4. K1 = KDF(KBar2 \|\| H(cipherText))
     5. K2 = KDF(z \|\| H(cipherText))
 3. In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.
