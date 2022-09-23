@@ -90,6 +90,8 @@ This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 --- middle
 
+{:bas: source="Bas"}
+
 # Introduction
 
 Kyber is NIST's pick for a post-quantum key agreement {{nistr3}}.
@@ -124,7 +126,8 @@ We cannot use InnerPKE directly, as its ciphertexts are malleable.
        IND-CPA                              IND-CCA2
 
 Kyber is a lattice-based scheme. More precisely, its security
-is based on the learning-with-errors problem in module lattices (MLWE).
+is based on the learning-with-errors-and-rounding problem in module
+lattices (MLWER).
 The underlying polynomial ring R (defined in {{S-ring}}) is chosen such that
 multiplication is very fast using the number theoretic transform
 (NTT, see {{S-NTT}}).
@@ -140,7 +143,9 @@ The public key consists of two values:
 - _t = A s + e_, where `e` is a suitably small masking vector.
 
 Distinguishing between such A s + e and a uniformly sampled t is the
-MLWE problem.
+module learning-with-errors (MLWE) problem. If that is hard, then
+it is also hard to recover the private key from the public key
+as that would allow you to distinguish between those two.
 
 To save space in the public key, A is recomputed deterministically from
 a seed *rho*.
@@ -158,11 +163,18 @@ where
   and Decompress is such that Compress after Decompress does nothing and
 - d\_u, d\_v are scheme parameters.
 
-TODO add a quick rationale.
+Distinguishing such a ciphertext and uniformly sampled (c\_1, c\_2)
+is an example of the full MLWER problem, see section 4.4 of {{KyberV302}}.
 
 To decrypt the ciphertext, one computes
 
     m = Compress(Decompress(c_2, d_v) - s^T Decompress(c_1, d_u), 1).
+
+It it not straight-forward to see that this formula is correct.
+In fact, there is negligable but non-zero probability that a ciphertext
+does not decrypt correctly given by the DFP column in {{params}}.
+This failure probability can be computed by a careful automated
+analysis of the probabilities involved, see `kyber_failure.py` of {{SecEst}}.
 
 To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
@@ -211,7 +223,8 @@ For any positive integer d, integer x and integer 0 <= y < 2^d, we define
 
 where Round(x) rounds any fraction to the nearest integer going up with ties.
 
-Note that in TODO we define Compress and Decompress for polynomials and vectors.
+Note that in {{S-VectorOps}} we extend Compress and Decompress
+to polynomials and vectors.
 
 These two operations have the following properties:
 
@@ -226,10 +239,11 @@ For implementation efficiency, these can be computed as follows.
       Compress(x, d) = Div( (x << d) + q/2), d ) & ((1 << d) - 1)
     Decompress(y, d) = (q*y + (1 << (d-1))) >> d
 
-where Div(x, a) = Floor(x / a).
+where Div(x, a) = Floor(x / a). [^1]
 
-TODO Do we want to include the proof that this is correct?
-TODO Do we need to define >> and <<?
+[^1]: TODO Do we want to include the proof that this is correct?
+    Do we need to define >> and <<?
+{:bas}
 
 # The ring R {#S-ring}
 
@@ -278,9 +292,6 @@ For a polynomial a = (a\_0, ..., a\_255) in R, we write:
 Thus a polynomial is considered large if one of its components is large.
 
 ### Background on the Number Theoretic Transform (NTT) {#S-NTT}
-
-TODO (#8) This section gives background not necessary for the implementation.
-     Should we keep it?
 
 The modulus q was chosen such that 256 divides into q-1. This means that
 there are zeta with
@@ -395,7 +406,11 @@ by the Gentleman-Sande butterfly:
     GS_i: (a, b) |-> ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
 
 The inverse NTT can be computed by replacing CS\_i by GS\_i and flipping
-the diagram horizontally.
+the diagram horizontally. [^2]
+
+[^2]: TODO (#8) This section gives background not necessary for the implementation.
+    Should we keep it?
+{:bas}
 
 #### Optimization notes
 The modular divisions by two in the InvNTT can be collected into a
@@ -404,8 +419,11 @@ single modular division by 128.
 zeta^-i can be computed as -zeta^(128-i), which allows one to use the same
 precomputed table of powers of zeta for both the NTT and InvNTT.
 
-TODO Montgomery, Barrett and https://eprint.iacr.org/2020/1377.pdf
-TODO perhaps move this elsewhere?
+[^3]
+
+[^3]: TODO Add hints on lazy Montgomery reduction? Including
+    https://eprint.iacr.org/2020/1377.pdf
+{:bas}
 
 # NTT and InvNTT
 
@@ -482,7 +500,7 @@ separation, which is crucial for security. Additionally, a smaller sponge
 capacity is used for performance where permissable by the
 security requirements.
 
-# Operations on vectors
+# Operations on vectors {#S-VectorOps}
 
 Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
 In Kyber always d <= 11 and so we can interpret Compress(x, d) as a field
@@ -776,12 +794,12 @@ returns a shared secret as follows.
 | d\_v       |How many bits to retain per coefficient of `v`, the private-key dependent part of the ciphertext.  |
 {: #params-desc title="Description of kyber parameters" }
 
-|Parameter set | k |eta1|eta2|d\_u|d\_v|sec|
-|-------------:|:-:|:--:|:--:|:--:|:--:|:-:|
-|Kyber512      | 2 |  3 | 2  |10  |4   |I  |
-|Kyber768      | 3 |  2 | 2  |10  |4   |III|
-|Kyber1024     | 4 |  2 | 2  |11  |5   |V  |
-{: #params title="Kyber parameter sets" }
+|Parameter set | k |eta1|eta2|d\_u|d\_v|sec|DFP     |
+|-------------:|:-:|:--:|:--:|:--:|:--:|:-:|:------:|
+|Kyber512      | 2 |  3 | 2  |10  |4   |I  |2^-139  |
+|Kyber768      | 3 |  2 | 2  |10  |4   |III|2^-164  |
+|Kyber1024     | 4 |  2 | 2  |11  |5   |V  |2^-174  |
+{: #params title="Kyber parameter sets with NIST security level (sec) and decryption failure probability (DFP)" }
 
 # Machine-readable specification {#S-spec}
 
