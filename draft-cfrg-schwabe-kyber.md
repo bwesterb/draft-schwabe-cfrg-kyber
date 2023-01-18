@@ -194,7 +194,7 @@ we write
 
     a smod m
 
-for the unique integer b with (m-1)/2 < b <= (m-1)/2 and b = a modulo m.
+for the unique integer b with -(m-1)/2 < b <= (m-1)/2 and b = a modulo m.
 
 To avoid confusion, for the more familiar modulo we write umod; that is
 
@@ -503,7 +503,7 @@ security requirements.
 # Operations on vectors {#S-VectorOps}
 
 Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
-In Kyber always d <= 11 and so we can interpret Compress(x, d) as a field
+In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
 element again.
 
 In this way, we can extend Compress(-, d) to polynomials by applying
@@ -742,7 +742,7 @@ generates a shared secret and ciphertext for the public key as follows.
 
 1. Compute
     1. m = H(seed)
-    2. (Kbar, cpaSeed) = G(m \|\| H(pk))
+    2. (Kbar, cpaSeed) = G(m \|\| H(publicKey))
     3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
 2. Return
     1. cipherText = cpaCipherText
