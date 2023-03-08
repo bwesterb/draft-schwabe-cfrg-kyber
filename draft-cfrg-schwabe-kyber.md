@@ -236,7 +236,7 @@ These two operations have the following properties:
 
 For implementation efficiency, these can be computed as follows.
 
-      Compress(x, d) = Div( (x << d) + q/2), d ) & ((1 << d) - 1)
+      Compress(x, d) = Div( (x << d) + q/2), q ) & ((1 << d) - 1)
     Decompress(y, d) = (q*y + (1 << (d-1))) >> d
 
 where Div(x, a) = Floor(x / a). [^1]
@@ -541,7 +541,7 @@ Encode(-, w) is the unique inverse of Decode(-, w)
 ### Polynomials
 A polynomial p is encoded by passing its coefficients to Encode:
 
-    EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1})
+    EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1}, w)
 
 DecodePoly(-, w) is the unique inverse of EncodePoly(-, w).
 
@@ -551,7 +551,7 @@ in the obvious way:
 
     EncodeVec(v, w) = Encode((v_0)_0, ..., (v_0)_{n-1},
                              (v_1)_{0}, ..., (v_1)_{n-1},
-                                    ..., (v_{k-1})_{n-1})
+                                    ..., (v_{k-1})_{n-1}, w)
 
 DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
 
@@ -715,7 +715,7 @@ privateKey and decrypts a cipher text cipherText as follows.
 3. Compute
     1. m = v - InvNTT(sHat o NTT(u))
 4. Return
-    1. plainText = EncodePoly(Compress(m))
+    1. plainText = EncodePoly(Compress(m, 1), 1)
 
 # Kyber
 
