@@ -117,7 +117,7 @@ to round 3 of the NIST PQC process {{KyberV302}}.
 # Overview
 
 Kyber is an IND-CCA2 secure KEM. It is constructed by applying a
-Fujisaki--Okamato style transformation on InnerPKE, which is
+Fujisaki-Okamato style transformation on InnerPKE, which is
 the underlying IND-CPA secure Public Key Encryption scheme.
 We cannot use InnerPKE directly, as its ciphertexts are malleable.
 
