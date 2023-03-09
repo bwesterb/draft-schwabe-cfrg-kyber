@@ -160,8 +160,11 @@ where
 
 - e\_1, e\_2 and r are small blinds;
 - Compress(-, d) removes some information, leaving d bits per coefficient
-  and Decompress is such that Compress after Decompress does nothing and
-- d\_u, d\_v are scheme parameters.
+  and Decompress is such that Compress after Decompress does nothing;
+- d\_u, d\_v are scheme parameters and
+- superscript T denotes transposition, so _A^T_ is the transpose of A,
+  see {{transpose}} and _t^T r_ is the dot product
+  of t and r, see {{dot-prod}}.
 
 Distinguishing such a ciphertext and uniformly sampled (c\_1, c\_2)
 is an example of the full MLWER problem, see section 4.4 of {{KyberV302}}.
@@ -210,6 +213,12 @@ Examples:
 
      3325 smod q = -4        ||  3325 || = 4
     -3320 smod q =  9        || -3320 || = 9
+
+[^4]
+
+[^4]: TODO (#23) Should we define smod and umod at all, since we don't
+    use it.
+{:bas}
 
 ## Compression
 
@@ -349,8 +358,8 @@ can be computed efficiently as follows (all modulo q):
      zeta^127 =  zeta^brv(127) = -zeta^{1 + 2 brv(127)}
 
 To compute a multiplication in R efficiently, one can first use the
-NTT, to go to the rigth; compute the multiplication there and move
-back with the inverse NTT.
+NTT, to go to the right "into the NTT domain"; compute the multiplication
+there and move back with the inverse NTT.
 
 The NTT can be computed efficiently by performing each binary split
 of the polynomial separately as follows:
@@ -434,11 +443,11 @@ and brv(91)=109.
 
 The NTT is a linear bijection R -> R given by the matrix:
 
-                 [ zeta^{ (2 brv(i >> 1) + 1) j }     if i=j modulo 2
+                 [ zeta^{ (2 brv(i >> 1) + 1) (j >> 1) }     if i=j modulo 2
     (NTT)_{ij} = [
-                 [ 0                                  otherwise
+                 [ 0                                         otherwise
 
-Its inverse is called the InvNTT.
+Its inverse is called the InvNTT. [^5]
 
 It can be computed more efficiently as described in section {{S-NTT}}.
 
@@ -447,6 +456,9 @@ Examples:
     NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
     NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 
+[^5]: TODO (#33) Add explicit definition of InvNTT.
+{:bas}
+
 ## Multiplication in NTT domain {#S-NTT-mul}
 
 For elements a, b in R, we write a o b for multiplication in the NTT domain.
@@ -454,9 +466,9 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
 
                 [ a_i b_i + zeta^{2 brv(i >> 1) + 1} a_{i+1} b_{i+1}   if i even
     (a o b)_i = [
-                [ a_{i+1} b_i + a_i b_{i+1}                            otherwise
+                [ a_{i-1} b_i + a_i b_{i-1}                            otherwise
 
-### Dot product and matrix multiplication
+### Dot product and matrix multiplication {#dot-prod}
 
 We will also use "o" to denote the dot product and matrix multiplication
 in the NTT. Concretely:
@@ -471,6 +483,12 @@ in the NTT. Concretely:
 
    where A\_i denotes the (i+1)th row of the matrix A as we start
    counting at zero.
+
+### Transpose {#transpose}
+
+For a matrix A, we denote by A^T the tranposed matrix. To wit:
+
+    A^T_ij = A_ji.
 
 # Symmetric cryptographic primitives
 
@@ -604,7 +622,7 @@ For efficiency, we do interpret the sampled matrix in the NTT domain.
 Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
 deterministically  as follows.
 
-An octet array a of length 2\*eta is converted to a polynomial CBD(a, eta)
+An octet array a of length 64\*eta is converted to a polynomial CBD(a, eta)
 
     CBD(a, eta)_i = b_{2i eta} + b_{2i eta + 1} + ... + b_{2i eta + eta-1}
                   - b_{2i eta + eta} + ... + b_{2i eta + 2eta - 1},
@@ -684,9 +702,9 @@ and deterministically encrypts the 32-octet msg for the InnerPKE public
 key publicKey as follows.
 
 1. Split publicKey into
-    1. n/8\*12-octet tHatPacked
+    1. k\*(n/8)\*12-octet tHatPacked
     2. 32-octet rho
-2. Parse tHat = DecodeVec(tHat, 12)
+2. Parse tHat = DecodeVec(tHatPacked, 12)
 3. Derive
     1. AHat = sampleMatrix(rho)
     2. r = sampleNoise(seed, eta1, 0)
@@ -695,7 +713,7 @@ key publicKey as follows.
 4. Compute
     1. rHat = NTT(r)
     2. u = InvNTT(AHat^T o rHat) + e\_1
-    3. v = InvNTT(tHat o rHat) + e\_2 + Decompress(Decode(msg, 1), 1)
+    3. v = InvNTT(tHat o rHat) + e\_2 + Decompress(DecodePoly(msg, 1), 1)
     4. c\_1 = EncodeVec(Compress(u, d\_u), d\_u)
     5. c\_2 = EncodePoly(Compress(v, d\_v), d\_v)
 5. Return
