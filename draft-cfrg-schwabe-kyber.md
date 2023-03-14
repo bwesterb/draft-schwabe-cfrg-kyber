@@ -26,6 +26,7 @@ author:
     fullname: Peter Schwabe
     organization: MPI-SPI & Radboud University
     email: peter@cryptojedi.org
+
  -
     fullname: Bas Westerbaan
     organization: Cloudflare
@@ -111,7 +112,7 @@ protocol, for example in TLS {{hybrid}}.
 However, unlike DH, a KEM-based key agreement is *interactive*,
 because the party executing Encapsulate can compute its protocol
 message (the ciphertext) only after having received the input
-(public key) from the party running *Keygen* and *Decapsulate*.
+(public key) from the party running *KeyGen* and *Decapsulate*.
 
 A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}.
 
