@@ -42,7 +42,7 @@ normative:
 informative:
   KyberV302:
     target: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
-    title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.03)
+    title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.02)
     author:
       -
         ins: R. Avanzi
