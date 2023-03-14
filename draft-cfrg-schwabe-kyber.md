@@ -586,9 +586,9 @@ in the obvious way:
 
 DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
 
-## Sampling of polynomials
+# Sampling of polynomials
 
-### Uniformly
+## Uniformly
 The polynomials in the matrix A are sampled uniformly and deterministically
 from an octet stream (XOF) using rejection sampling as follows.
 
@@ -616,7 +616,7 @@ Example:
 
     sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
 
-#### sampleMatrix
+### sampleMatrix
 Now, the *k* by *k* matrix *A* over *R* is derived deterministically
 from a 32-octet seed *rho* using sampleUniform as follows.
 
@@ -631,7 +631,7 @@ As the NTT is a bijection, it does not matter whether we interpret
 the polynomials of the sampled matrix in the NTT domain or not.
 For efficiency, we do interpret the sampled matrix in the NTT domain.
 
-### From a binomial distribution
+## From a binomial distribution
 Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
 deterministically  as follows.
 
@@ -647,7 +647,7 @@ Examples:
     CBD((0, 1, 2, ..., 127), 2) = (0, 0, 1, 0, 1, 0, ..., 3328, 1, 0, 1)
     CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
 
-#### sampleNoise
+### sampleNoise
 A *k* component small vector *v* is derived from a seed 32-octet seed *sigma*,
 an offset *offset* and size *eta* as follows:
 
