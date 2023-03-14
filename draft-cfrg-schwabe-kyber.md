@@ -353,7 +353,7 @@ the Chinese Remainder Theorem for commutative rings, we know
 
 given by a |-> ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
 This is the Number Theoretic Transform (NTT). Multiplication on the right is
-much easier: it's almost componentwise, see {{S-NTT-mul}}.
+much easier: it's almost componentwise, see {{#S-NTT-mul}}.
 
 A propos, the the constant factors that appear in the moduli in order
 can be computed efficiently as follows (all modulo q):
