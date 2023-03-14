@@ -298,7 +298,7 @@ Addition and subtraction of elements is componentwise. Thus
     (a_0, ..., a_255) + (b_0, ..., b_255) = (a_0 + b_0, ..., a_255 + b_255),
 
 and
-    
+
     (a_0, ..., a_255) - (b_0, ..., b_255) = (a_0 - b_0, ..., a_255 - b_255),
 
 where addition/subtractoin in each component is computed modulo q.
