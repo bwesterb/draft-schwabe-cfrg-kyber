@@ -247,7 +247,7 @@ For any positive integer d, integer x and integer 0 <= y < 2^d, we define
 where Round(x) rounds any fraction to the nearest integer going up with ties.
 
 Note that in {{S-VectorOps}} we extend Compress and Decompress
-to polynomials and vectors.
+to polynomials and vectors of polynomials.
 
 These two operations have the following properties:
 
@@ -268,10 +268,10 @@ where Div(x, a) = Floor(x / a). [^1]
     Do we need to define >> and <<?
 {:bas}
 
-# The ring R {#S-ring}
+# The ring Rq {#S-ring}
 
-Kyber is defined over a polynomial ring R = GF(q)[x]/(x^n+1)
-where n=256 (and q=3329). Elements of R are tuples of 256 integers modulo q.
+Kyber is defined over a polynomial ring Rq = GF(q)[x]/(x^n+1)
+where n=256 (and q=3329). Elements of Rq are tuples of 256 integers modulo q.
 We will call them polynomials or elements interchangeably.
 
 A tuple a = (a\_0, ..., a\_255) represents the polynomial
@@ -283,13 +283,27 @@ counting at zero.
 
 ## Operations
 
-### Addition and multiplication
+### Size of polynomials
 
-Addition of elements is componentwise. Thus
+For a polynomial a = (a\_0, ..., a\_255) in R, we write:
 
-    (a_0, ..., a_255) +  (b_0, ..., b_255) = (a_0 + b_0, ..., a_255 + b_255)
+    || a || = max_i || a_i ||
 
-where addition in each component is computed modulo q.
+Thus a polynomial is considered large if one of its components is large.
+
+### Addition and subtraction
+
+Addition and subtraction of elements is componentwise. Thus
+
+    (a_0, ..., a_255) + (b_0, ..., b_255) = (a_0 + b_0, ..., a_255 + b_255),
+
+and
+    
+    (a_0, ..., a_255) - (b_0, ..., b_255) = (a_0 - b_0, ..., a_255 - b_255),
+
+where addition/subtractoin in each component is computed modulo q.
+
+### Multiplication
 
 Multiplication is that of polynomials (convolution) with the additional rule
 that x^256=-1. To wit
@@ -306,15 +320,7 @@ We will not use this schoolbook multiplication to compute the product.
 Instead we will use the more efficient, number theoretic transform (NTT),
 see {{S-NTT}}.
 
-### Size of polynomials
-
-For a polynomial a = (a\_0, ..., a\_255) in R, we write:
-
-    || a || = max_i || a_i ||
-
-Thus a polynomial is considered large if one of its components is large.
-
-### Background on the Number Theoretic Transform (NTT) {#S-NTT}
+#### Background on the Number Theoretic Transform (NTT) {#S-NTT}
 
 The modulus q was chosen such that 256 divides into q-1. This means that
 there are zeta with
@@ -435,7 +441,7 @@ the diagram horizontally. [^2]
     Should we keep it?
 {:bas}
 
-#### Optimization notes
+##### Optimization notes
 The modular divisions by two in the InvNTT can be collected into a
 single modular division by 128.
 
@@ -448,7 +454,7 @@ precomputed table of powers of zeta for both the NTT and InvNTT.
     https://eprint.iacr.org/2020/1377.pdf
 {:bas}
 
-## NTT and InvNTT
+#### NTT and InvNTT
 
 As primitive 256th root of unity we use zeta=17.
 
@@ -473,7 +479,7 @@ Examples:
 [^5]: TODO (#33) Add explicit definition of InvNTT.
 {:bas}
 
-### Multiplication in NTT domain {#S-NTT-mul}
+#### Multiplication in NTT domain {#S-NTT-mul}
 
 For elements a, b in R, we write a o b for multiplication in the NTT domain.
 That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
@@ -481,6 +487,7 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
                 [ a_i b_i + zeta^{2 brv(i >> 1) + 1} a_{i+1} b_{i+1}   if i even
     (a o b)_i = [
                 [ a_{i-1} b_i + a_i b_{i-1}                            otherwise
+
 
 
 # Vector and matrices
