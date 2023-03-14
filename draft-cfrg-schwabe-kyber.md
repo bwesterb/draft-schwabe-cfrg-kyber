@@ -42,7 +42,7 @@ normative:
 informative:
   KyberV302:
     target: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
-    title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.02)
+    title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.03)
     author:
       -
         ins: R. Avanzi
@@ -98,11 +98,16 @@ Kyber is NIST's pick for a post-quantum key agreement {{nistr3}}.
 
 Kyber is not a Diffie-Hellman (DH) style non-interactive key agreement,
 but instead, Kyber is a Key Encapsulation Method (KEM).
-In essence, a KEM is a Public-Key Encryption (PKE) scheme where the
-plaintext cannot be specified, but is generated as a random key as
-part of the encryption. A KEM can be transformed into an unrestricted
-PKE using HPKE {{RFC9180}}. On its own, a KEM can be used as a key agreement
-method in TLS {{hybrid}}.
+A KEM is a three-tuple of algorithms (KEYGEN, ENCAPSULATE, DECAPSULATE),
+where KEYGEN takes no inputs and generates a secret key and a public key;
+ENCAPSULATE takes as input a public key and produces as ouput a ciphertext and a shared key; 
+and DECAPSULATE takes as input a ciphertext and a secret key and produces a shared key. 
+Like DH, a KEM can be seen as an unauthenticated key-agreement protocol,
+for example in TLS {{hybrid}}.
+However, unlike DH, a KEM-based key agreement is *interactive*, 
+because the party executing ENCAPSULATE can compute its protocol message (the ciphertext) 
+only after having received the input (public key) from the party running KEYGEN and DECAPSULATE.
+A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}. 
 
 ## Warning on stability
 
@@ -135,15 +140,16 @@ multiplication is very fast using the number theoretic transform
 An InnerPKE private key is a vector *s* over R of length k which is
 _small_ in a particular way. Here `k` is a security parameter akin to the
 size of a prime modulus. For Kyber512, which targets AES-128's security level,
-the value of k is 2.
+the value of k is 2, for Kyber768 (AES-192 security level) k is 3,
+and for Kyber1024 (AES-256 security level) k is 4.
 
 The public key consists of two values:
 
-- _A_ a uniformly sampled  k by k matrix over R _and_
+- _A_ a k-by-k matrix over R that looks uniformly random _and_
 - _t = A s + e_, where `e` is a suitably small masking vector.
 
 Distinguishing between such A s + e and a uniformly sampled t is the
-module learning-with-errors (MLWE) problem. If that is hard, then
+decision module learning-with-errors (MLWE) problem. If that is hard, then
 it is also hard to recover the private key from the public key
 as that would allow you to distinguish between those two.
 
@@ -160,14 +166,14 @@ where
 
 - e\_1, e\_2 and r are small blinds;
 - Compress(-, d) removes some information, leaving d bits per coefficient
-  and Decompress is such that Compress after Decompress does nothing;
-- d\_u, d\_v are scheme parameters and
+  and Decompress is an "approximate inverse" of Compress;
+- d\_u, d\_v are scheme parameters; and
 - superscript T denotes transposition, so _A^T_ is the transpose of A,
   see {{transpose}} and _t^T r_ is the dot product
   of t and r, see {{dot-prod}}.
 
 Distinguishing such a ciphertext and uniformly sampled (c\_1, c\_2)
-is an example of the full MLWER problem, see section 4.4 of {{KyberV302}}.
+is an example of the full MLWER problem, see Section 4.4 of {{KyberV302}}.
 
 To decrypt the ciphertext, one computes
 
