@@ -503,6 +503,21 @@ For a matrix A, we denote by A^T the tranposed matrix. To wit:
 
     A^T_ij = A_ji.
 
+# Operations on vectors {#S-VectorOps}
+
+Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
+In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
+element again.
+
+In this way, we can extend Compress(-, d) to polynomials by applying
+to each coefficient separately and in turn to vectors by applying
+to each polynomial. That is, for a vector v and polynomial p:
+
+    Compress(p, d)_i = Compress(p_i, d)
+    Compress(v, d)_i = Compress(v_i, d)
+
+We define Decompress(-, d) for vectors and polynomials in the same way.
+
 # Symmetric cryptographic primitives
 
 Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
@@ -531,20 +546,6 @@ separation, which is crucial for security. Additionally, a smaller sponge
 capacity is used for performance where permissable by the
 security requirements.
 
-# Operations on vectors {#S-VectorOps}
-
-Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
-In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
-element again.
-
-In this way, we can extend Compress(-, d) to polynomials by applying
-to each coefficient separately and in turn to vectors by applying
-to each polynomial. That is, for a vector v and polynomial p:
-
-    Compress(p, d)_i = Compress(p_i, d)
-    Compress(v, d)_i = Compress(v_i, d)
-
-We define Decompress(-, d) for vectors and polynomials in the same way.
 
 # Serialization
 
