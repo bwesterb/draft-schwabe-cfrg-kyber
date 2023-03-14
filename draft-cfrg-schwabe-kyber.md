@@ -353,7 +353,7 @@ the Chinese Remainder Theorem for commutative rings, we know
 
 given by a |-> ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
 This is the Number Theoretic Transform (NTT). Multiplication on the right is
-much easier: it's almost componentwise, see {{#S-NTT-mul}}.
+much easier: it's almost componentwise, see {{S-NTT-mul}}.
 
 A propos, the the constant factors that appear in the moduli in order
 can be computed efficiently as follows (all modulo q):
@@ -499,7 +499,7 @@ to each polynomial. That is, for a vector v and polynomial p:
 
 ## Dot product and matrix multiplication {#dot-prod}
 
-We will also use "o", from section {{#S-NTT-mul}},
+We will also use "o", from section {{S-NTT-mul}},
 to denote the dot product and matrix multiplication
 in the NTT domain. Concretely:
 
