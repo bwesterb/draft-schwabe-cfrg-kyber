@@ -537,9 +537,12 @@ Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
 
     XOF(seed) = SHAKE-128(seed)
     PRF(seed, counter) = SHAKE-256(seed || counter)
-    KDF(msg) = SHAKE-256(msg)[:32]
+    KDF(prekey) = SHAKE-256(msg)[:32]
     H(msg) = SHA3-256(msg)
     G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
+
+Here `counter` is an octet; `seed` is 32 octets; `prekey` is 64 octets;
+and the length of `msg` varies.
 
 On the surface, they look different, but they are all based on
 the same flexible Keccak XOF that uses the f1600 permutation,
@@ -547,7 +550,7 @@ see {{fips202}}:
 
     XOF(seed)      =  Keccak[256](seed || 1111, .)
     PRF(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
-    KDF(msg)       =  Keccak[512](msg || 1111, 256)
+    KDF(prekey)    =  Keccak[512](prekey || 1111, 256)
     H(msg)         =  Keccak[512](msg || 01, 256)
     G(msg)         = (Keccak[1024](msg || 01, 512)[:32],
                       Keccak[1024](msg || 01, 512)[32:])
@@ -651,7 +654,7 @@ deterministically  as follows.
 An octet array a of length 64\*eta is converted to a polynomial CBD(a, eta)
 
     CBD(a, eta)_i = b_{2i eta} + b_{2i eta + 1} + ... + b_{2i eta + eta-1}
-                  - b_{2i eta + eta} + ... + b_{2i eta + 2eta - 1},
+                  - b_{2i eta + eta} - ... - b_{2i eta + 2eta - 1},
 
 where b = OctetsToBits(a).
 
@@ -664,7 +667,7 @@ Examples:
 A *k* component small vector *v* is derived from a seed 32-octet seed *sigma*,
 an offset *offset* and size *eta* as follows:
 
-    sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, i+offset), eta)
+    sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, octet(i+offset)), eta)
 
 Recall that we start counting vector indices at zero.
 
