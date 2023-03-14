@@ -98,15 +98,21 @@ Kyber is NIST's pick for a post-quantum key agreement {{nistr3}}.
 
 Kyber is not a Diffie-Hellman (DH) style non-interactive key agreement,
 but instead, Kyber is a Key Encapsulation Method (KEM).
-A KEM is a three-tuple of algorithms (KEYGEN, ENCAPSULATE, DECAPSULATE),
-where KEYGEN takes no inputs and generates a secret key and a public key;
-ENCAPSULATE takes as input a public key and produces as ouput a ciphertext and a shared key; 
-and DECAPSULATE takes as input a ciphertext and a secret key and produces a shared key. 
-Like DH, a KEM can be seen as an unauthenticated key-agreement protocol,
-for example in TLS {{hybrid}}.
+A KEM is a three-tuple of algorithms (*KeyGen*, *Encapsulate*, *Decapsulate*):
+
+ - *KeyGen* takes no inputs and generates a private key and a public key;
+ - *Encapsulate* takes as input a public key and produces as ouput
+   a ciphertext and a shared secret;
+ - *Decapsulate* takes as input a ciphertext and a private key and
+   produces a shared secret.
+
+Like DH, a KEM can be used as an unauthenticated key-agreement
+protocol, for example in TLS {{hybrid}}.
 However, unlike DH, a KEM-based key agreement is *interactive*, 
-because the party executing ENCAPSULATE can compute its protocol message (the ciphertext) 
-only after having received the input (public key) from the party running KEYGEN and DECAPSULATE.
+because the party executing Encapsulate can compute its protocol
+message (the ciphertext) only after having received the input
+(public key) from the party running *Keygen* and *Decapsulate*.
+
 A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}. 
 
 ## Warning on stability
