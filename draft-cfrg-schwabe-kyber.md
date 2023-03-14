@@ -108,12 +108,12 @@ A KEM is a three-tuple of algorithms (*KeyGen*, *Encapsulate*, *Decapsulate*):
 
 Like DH, a KEM can be used as an unauthenticated key-agreement
 protocol, for example in TLS {{hybrid}}.
-However, unlike DH, a KEM-based key agreement is *interactive*, 
+However, unlike DH, a KEM-based key agreement is *interactive*,
 because the party executing Encapsulate can compute its protocol
 message (the ciphertext) only after having received the input
 (public key) from the party running *Keygen* and *Decapsulate*.
 
-A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}. 
+A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}.
 
 ## Warning on stability
 
