@@ -447,7 +447,7 @@ precomputed table of powers of zeta for both the NTT and InvNTT.
     https://eprint.iacr.org/2020/1377.pdf
 {:bas}
 
-# NTT and InvNTT
+## NTT and InvNTT
 
 As primitive 256th root of unity we use zeta=17.
 
@@ -472,7 +472,7 @@ Examples:
 [^5]: TODO (#33) Add explicit definition of InvNTT.
 {:bas}
 
-## Multiplication in NTT domain {#S-NTT-mul}
+### Multiplication in NTT domain {#S-NTT-mul}
 
 For elements a, b in R, we write a o b for multiplication in the NTT domain.
 That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
@@ -481,10 +481,27 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
     (a o b)_i = [
                 [ a_{i-1} b_i + a_i b_{i-1}                            otherwise
 
-### Dot product and matrix multiplication {#dot-prod}
 
-We will also use "o" to denote the dot product and matrix multiplication
-in the NTT. Concretely:
+# Vector and matrices
+
+## Operations on vectors {#S-VectorOps}
+
+Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
+In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
+element again.
+
+In this way, we can extend Compress(-, d) to polynomials by applying
+to each coefficient separately and in turn to vectors by applying
+to each polynomial. That is, for a vector v and polynomial p:
+
+    Compress(p, d)_i = Compress(p_i, d)
+    Compress(v, d)_i = Compress(v_i, d)
+
+## Dot product and matrix multiplication {#dot-prod}
+
+We will also use "o", from section {{#S-NTT-mul}},
+to denote the dot product and matrix multiplication
+in the NTT domain. Concretely:
 
 1. For two length k vector v and w, we write
 
@@ -497,24 +514,11 @@ in the NTT. Concretely:
    where A\_i denotes the (i+1)th row of the matrix A as we start
    counting at zero.
 
-### Transpose {#transpose}
+## Transpose {#transpose}
 
 For a matrix A, we denote by A^T the tranposed matrix. To wit:
 
     A^T_ij = A_ji.
-
-# Operations on vectors {#S-VectorOps}
-
-Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
-In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
-element again.
-
-In this way, we can extend Compress(-, d) to polynomials by applying
-to each coefficient separately and in turn to vectors by applying
-to each polynomial. That is, for a vector v and polynomial p:
-
-    Compress(p, d)_i = Compress(p_i, d)
-    Compress(v, d)_i = Compress(v_i, d)
 
 We define Decompress(-, d) for vectors and polynomials in the same way.
 
