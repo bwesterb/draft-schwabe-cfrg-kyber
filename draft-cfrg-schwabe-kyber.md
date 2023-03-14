@@ -151,7 +151,7 @@ and for Kyber1024 (AES-256 security level) k is 4.
 
 The public key consists of two values:
 
-- _A_ a k-by-k matrix over R that looks uniformly random _and_
+- _A_ a k-by-k matrix over R sampled uniformly at random _and_
 - _t = A s + e_, where `e` is a suitably small masking vector.
 
 Distinguishing between such A s + e and a uniformly sampled t is the
@@ -160,7 +160,8 @@ it is also hard to recover the private key from the public key
 as that would allow you to distinguish between those two.
 
 To save space in the public key, A is recomputed deterministically from
-a seed *rho*.
+a 256bit seed *rho*. Strictly speaking, A is not uniformly random anymore,
+but it's computationally indistuinguishable from it.
 
 A ciphertext for a message m under this public key is a pair (c\_1, c\_2)
 computed roughly as follows:
