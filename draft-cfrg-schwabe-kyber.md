@@ -84,6 +84,7 @@ informative:
       -
         ins: The NIST PQC Team
   hybrid: I-D.stebila-tls-hybrid-design
+  hashToCurve: I-D.irtf-cfrg-hash-to-curve
 
 --- abstract
 
@@ -554,10 +555,9 @@ see {{fips202}}:
     Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
 
 The reason five different primitives are used is to ensure domain
-separation, which is crucial for security. Additionally, a smaller sponge
-capacity is used for performance where permissable by the
-security requirements.
-
+separation, which is crucial for security, cf. {{hashToCurve}} §2.2.5.
+Additionally, a smaller sponge capacity is used for performance
+where permissable by the security requirements.
 
 # Serialization
 
