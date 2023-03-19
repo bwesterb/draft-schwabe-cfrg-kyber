@@ -871,4 +871,12 @@ TODO (#17)
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge. (#16)
+The authors would like to thank
+C. Wood,
+Florence D.,
+I. Liusvaara,
+J. Crawford,
+J. Schanck,
+M. Thomson, and
+N. Sullivan
+for their input and assistance.
