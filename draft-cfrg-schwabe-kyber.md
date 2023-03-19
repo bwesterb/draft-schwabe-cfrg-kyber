@@ -464,21 +464,23 @@ and brv(91)=109.
 
 The NTT is a linear bijection R -> R given by the matrix:
 
-                 [ zeta^{ (2 brv(i >> 1) + 1) (j >> 1) }     if i=j modulo 2
+                 [ zeta^{ (2 brv(i>>1) + 1) (j>>1) }               if i=j mod 2
     (NTT)_{ij} = [
-                 [ 0                                         otherwise
+                 [ 0                                               otherwise
 
-Its inverse is called the InvNTT. [^5]
+Recall that we start counting rows and columns at zero.  The NTT can be
+computed more efficiently as described in section {{S-NTT}}.
 
-It can be computed more efficiently as described in section {{S-NTT}}.
+The inverse of the NTT is called InvNTT. It is given by the matrix:
+
+                        [ zeta^{ 256 - (2 brv(j>>1) + 1) (i>>1) }  if i=j mod 2
+    128 (InvNTT)_{ij} = [
+                        [ 0                                        otherwise
 
 Examples:
 
     NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
-    NTT(1, 2, 3, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
-
-[^5]: TODO (#33) Add explicit definition of InvNTT.
-{:bas}
+    NTT(0, 1, 2, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
 
 #### Multiplication in NTT domain {#S-NTT-mul}
 
