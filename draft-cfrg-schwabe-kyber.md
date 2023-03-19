@@ -88,7 +88,8 @@ informative:
 
 --- abstract
 
-This memo specifies Kyber, an IND-CCA2 secure Key Encapsulation Method.
+This memo specifies a preliminary version ("draft00", "v3.02")
+    of Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 --- middle
 
