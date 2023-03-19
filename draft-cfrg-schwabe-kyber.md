@@ -869,7 +869,6 @@ TODO (#17)
 --- back
 
 # Acknowledgments
-{:numbered="false"}
 
 The authors would like to thank
 C. Wood,
@@ -880,3 +879,34 @@ J. Schanck,
 M. Thomson, and
 N. Sullivan
 for their input and assistance.
+
+# Change Log
+
+> **RFC Editor's Note:** Please remove this section prior to publication of a
+> final version of this document.
+
+## Since draft-schwabe-cfrg-kyber-01
+
+- Fix various typos.
+
+- Move sections around.
+
+- Elaborate domain separation and encoding of nonces
+  in symmetric primitives.
+
+- Add explicit formula for InvNTT.
+
+- Add acknowledgements.
+
+## Since draft-schwabe-cfrg-kyber-00
+
+- Test specification against NIST test vectors.
+
+- Fix two unintentional mismatches between this document
+  and the reference implementation:
+
+  1. KDF uses SHAKE-256 instead of SHAKE-128.
+
+  2. Reverse order of seed. (`z` comes at the end.)
+
+- Elaborate text in particular introduction, and symmetric key section.
