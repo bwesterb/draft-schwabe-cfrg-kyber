@@ -851,6 +851,13 @@ returns a shared secret as follows.
 |Kyber1024     | 4 |  2 | 2  |11  |5   |V  |2^-174  |
 {: #params title="Kyber parameter sets with NIST security level (sec) and decryption failure probability (DFP)" }
 
+|Parameter set | ss |  pk  |  ct  |  sk  |
+|-------------:|:--:|:----:|:----:|:----:|
+|Kyber512      | 32 | 800  | 768  | 1632 |
+|Kyber768      | 32 | 1184 | 1088 | 2400 |
+|Kyber1024     | 32 | 1568 | 1568 | 3168 |
+{: #sizes title="Kyber parameter sets with sizes of shared secret (ss), public key (pk), cipher text (ct) and private key (sk)" }
+
 # Machine-readable specification {#S-spec}
 
 ~~~~~~~~
@@ -885,6 +892,10 @@ for their input and assistance.
 
 > **RFC Editor's Note:** Please remove this section prior to publication of a
 > final version of this document.
+
+## Since draft-schwabe-cfrg-kyber-02
+
+- Add table with sizes.
 
 ## Since draft-schwabe-cfrg-kyber-01
 

@@ -187,3 +187,17 @@ def test_nist_kat(name, params, want):
         f.update(b"ss = %s\n\n" % binascii.hexlify(ss).upper())
 
     assert f.hexdigest() == want
+
+def test_sizes():
+    for params, sss, pks, cts, sks in (
+            (params512, 32, 800, 768, 1632),
+            (params768, 32, 1184, 1088, 2400),
+            (params1024, 32, 1568, 1568, 3168),
+        ):
+
+        pk, sk = KeyGen(b'\0'*64, params)
+        assert len(pk) == pks
+        assert len(sk) == sks
+        ct, ss = Enc(pk, b'\0'*32, params)
+        assert len(ct) == cts
+        assert len(ss) == sss
