@@ -24,7 +24,7 @@ venue:
 author:
  -
     fullname: Peter Schwabe
-    organization: MPI-SPI & Radboud University
+    organization: MPI-SP & Radboud University
     email: peter@cryptojedi.org
 
  -
@@ -105,7 +105,7 @@ but instead, Kyber is a Key Encapsulation Method (KEM).
 A KEM is a three-tuple of algorithms (*KeyGen*, *Encapsulate*, *Decapsulate*):
 
  - *KeyGen* takes no inputs and generates a private key and a public key;
- - *Encapsulate* takes as input a public key and produces as ouput
+ - *Encapsulate* takes as input a public key and produces as output
    a ciphertext and a shared secret;
  - *Decapsulate* takes as input a ciphertext and a private key and
    produces a shared secret.
@@ -493,48 +493,6 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
     (a o b)_i = [
                 [ a_{i-1} b_i + a_i b_{i-1}                            otherwise
 
-
-
-# Vector and matrices
-
-## Operations on vectors {#S-VectorOps}
-
-Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
-In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
-element again.
-
-In this way, we can extend Compress(-, d) to polynomials by applying
-to each coefficient separately and in turn to vectors by applying
-to each polynomial. That is, for a vector v and polynomial p:
-
-    Compress(p, d)_i = Compress(p_i, d)
-    Compress(v, d)_i = Compress(v_i, d)
-
-## Dot product and matrix multiplication {#dot-prod}
-
-We will also use "o", from section {{S-NTT-mul}},
-to denote the dot product and matrix multiplication
-in the NTT domain. Concretely:
-
-1. For two length k vector v and w, we write
-
-        v o w = v_0 o w_0 + ... + v_{k-1} o w_{k-1}
-
-2. For a k by k matrix A and a length k vector v, we have
-
-        (A o v)_i = A_i o v,
-
-   where A\_i denotes the (i+1)th row of the matrix A as we start
-   counting at zero.
-
-## Transpose {#transpose}
-
-For a matrix A, we denote by A^T the tranposed matrix. To wit:
-
-    A^T_ij = A_ji.
-
-We define Decompress(-, d) for vectors and polynomials in the same way.
-
 # Symmetric cryptographic primitives
 
 Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
@@ -565,46 +523,6 @@ The reason five different primitives are used is to ensure domain
 separation, which is crucial for security, cf. {{hashToCurve}} §2.2.5.
 Additionally, a smaller sponge capacity is used for performance
 where permissable by the security requirements.
-
-# Serialization
-
-## OctetsToBits
-For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
-is a list of bits of length 8s, defined by
-
-    OctetsToBits(a)_i = ((a_(i>>3)) >> (i umod 8)) umod 2.
-
-Example:
-
-    OctetsToBits(12,45) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
-
-## Encode and Decode
-For an integer 0 < w <= 12, we define Decode(a, w), which converts
-any  list a of w\*l/8 octets into a list of length l with
-values in {0, ..., 2^w-1} as follows.
-
-    Decode(a, w)_i = b_{wi} + b_{wi+1} 2 + b_{wi+2} 2^2 + ... + b_{wi+w-1} 2^{w-1},
-
-where b = OctetsToBits(a).
-
-Encode(-, w) is the unique inverse of Decode(-, w)
-
-### Polynomials
-A polynomial p is encoded by passing its coefficients to Encode:
-
-    EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1}, w)
-
-DecodePoly(-, w) is the unique inverse of EncodePoly(-, w).
-
-### Vectors
-A vector v of length k over R is encoded by concatenating the coefficients
-in the obvious way:
-
-    EncodeVec(v, w) = Encode((v_0)_0, ..., (v_0)_{n-1},
-                             (v_1)_{0}, ..., (v_1)_{n-1},
-                                    ..., (v_{k-1})_{n-1}, w)
-
-DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
 
 # Sampling of polynomials
 
@@ -674,6 +592,89 @@ an offset *offset* and size *eta* as follows:
     sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, octet(i+offset)), eta)
 
 Recall that we start counting vector indices at zero.
+
+
+# Vector and matrices
+
+## Operations on vectors {#S-VectorOps}
+
+Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
+In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
+element again.
+
+In this way, we can extend Compress(-, d) to polynomials by applying
+to each coefficient separately and in turn to vectors by applying
+to each polynomial. That is, for a vector v and polynomial p:
+
+    Compress(p, d)_i = Compress(p_i, d)
+    Compress(v, d)_i = Compress(v_i, d)
+
+## Dot product and matrix multiplication {#dot-prod}
+
+We will also use "o", from section {{S-NTT-mul}},
+to denote the dot product and matrix multiplication
+in the NTT domain. Concretely:
+
+1. For two length k vector v and w, we write
+
+        v o w = v_0 o w_0 + ... + v_{k-1} o w_{k-1}
+
+2. For a k by k matrix A and a length k vector v, we have
+
+        (A o v)_i = A_i o v,
+
+   where A\_i denotes the (i+1)th row of the matrix A as we start
+   counting at zero.
+
+## Transpose {#transpose}
+
+For a matrix A, we denote by A^T the tranposed matrix. To wit:
+
+    A^T_ij = A_ji.
+
+We define Decompress(-, d) for vectors and polynomials in the same way.
+
+
+# Serialization
+
+## OctetsToBits
+For any list of octets a\_0, ..., a\_{s-1}, we define OctetsToBits(a), which
+is a list of bits of length 8s, defined by
+
+    OctetsToBits(a)_i = ((a_(i>>3)) >> (i umod 8)) umod 2.
+
+Example:
+
+    OctetsToBits(12,45) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
+
+## Encode and Decode
+For an integer 0 < w <= 12, we define Decode(a, w), which converts
+any  list a of w\*l/8 octets into a list of length l with
+values in {0, ..., 2^w-1} as follows.
+
+    Decode(a, w)_i = b_{wi} + b_{wi+1} 2 + b_{wi+2} 2^2 + ... + b_{wi+w-1} 2^{w-1},
+
+where b = OctetsToBits(a).
+
+Encode(-, w) is the unique inverse of Decode(-, w)
+
+### Polynomials
+A polynomial p is encoded by passing its coefficients to Encode:
+
+    EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1}, w)
+
+DecodePoly(-, w) is the unique inverse of EncodePoly(-, w).
+
+### Vectors
+A vector v of length k over R is encoded by concatenating the coefficients
+in the obvious way:
+
+    EncodeVec(v, w) = Encode((v_0)_0, ..., (v_0)_{n-1},
+                             (v_1)_{0}, ..., (v_1)_{n-1},
+                                    ..., (v_{k-1})_{n-1}, w)
+
+DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
+
 
 # Inner malleable public-key encryption scheme
 
@@ -767,6 +768,7 @@ privateKey and decrypts a cipher text cipherText as follows.
     1. m = v - InvNTT(sHat o NTT(u))
 4. Return
     1. plainText = EncodePoly(Compress(m, 1), 1)
+
 
 # Kyber
 
