@@ -87,6 +87,7 @@ informative:
   HYBRID: I-D.stebila-tls-hybrid-design
   H2CURVE: I-D.irtf-cfrg-hash-to-curve
   XYBERHPKE: I-D.westerbaan-cfrg-hpke-xyber768d00
+  XYBERTLS: I-D.tls-westerbaan-xyber768d00
 
 --- abstract
 
@@ -112,7 +113,7 @@ A KEM is a three-tuple of algorithms (*KeyGen*, *Encapsulate*, *Decapsulate*):
    produces a shared secret.
 
 Like DH, a KEM can be used as an unauthenticated key-agreement
-protocol, for example in TLS {{HYBRID}}.
+protocol, for example in TLS {{HYBRID}} {{XYBERTLS}}.
 However, unlike DH, a KEM-based key agreement is *interactive*,
 because the party executing Encapsulate can compute its protocol
 message (the ciphertext) only after having received the input
