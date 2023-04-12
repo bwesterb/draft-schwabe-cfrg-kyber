@@ -874,11 +874,6 @@ returns a shared secret as follows.
 TODO Security (#18)
 
 
-# IANA Considerations
-
-TODO (#17)
-
-
 --- back
 
 # Acknowledgments
