@@ -792,18 +792,19 @@ A Kyber keypair is derived deterministically from a 64-octet seed as follows.
 
 ## Encapsulation
 
-Kyber encapsulation takes a public key and a 32-octet seed and deterministically
-generates a shared secret and ciphertext for the public key as follows.
+Kyber encapsulation takes a public key and generates a shared secret
+and ciphertext for the public key as follows.
 
-1. Compute
+1. Sample secret cryptographically-secure random 32-octet seed.
+2. Compute
     1. m = H(seed)
     2. (Kbar, cpaSeed) = G(m \|\| H(publicKey))
     3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
-2. Return
+3. Return
     1. cipherText = cpaCipherText
     2. sharedSecret = KDF(KBar \|\| H(cpaCipherText))
 
-## Decapsulation
+## Decapsulation {#S-decaps}
 Kyber decapsulation takes a private key and a cipher text and
 returns a shared secret as follows.
 
@@ -821,6 +822,10 @@ returns a shared secret as follows.
 3. In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.
 4. Return
     1. sharedSecret = K
+
+For security, the implementation MUST NOT explicitly return
+or otherwise leak via a side-channel, decapsulation succeeded,
+viz `cipherText == cipherText2`.
 
 # Parameter sets {#S-params}
 
@@ -871,8 +876,16 @@ returns a shared secret as follows.
 
 # Security Considerations
 
-TODO Security (#18)
+Kyber512, Kyber768 and Kyber1024 are designed to be post-quantum
+IND-CCA2 secure KEMs, at the security levels of AES-128, AES-192 and AES-256.
 
+The designers of Kyber recommend Kyber768.
+
+The inner public key encryption SHOULD NOT be used directly,
+as its ciphertexts are malleable.  Instead, for public key encryption,
+HPKE can be used to turn Kyber into IND-CCA2 secure PKE {{RFC9180}} {{XYBERHPKE}}.
+
+Any implementation MUST use implicit rejection as specified in {{S-decaps}}.
 
 --- back
 
@@ -902,6 +915,11 @@ for their input and assistance.
 - Add reference to Kyber in HPKE.
 
 - Miscellaneous editorial changes.
+
+- Remove encapsulation seed as an explicit parameter in the written
+  specification.
+
+- Write security recommendations. #18
 
 ## Since draft-schwabe-cfrg-kyber-01
 
