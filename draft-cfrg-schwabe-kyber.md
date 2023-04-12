@@ -900,6 +900,8 @@ for their input and assistance.
 
 - Add table with sizes.
 
+- Reordered sections.
+
 ## Since draft-schwabe-cfrg-kyber-01
 
 - Fix various typos.
