@@ -86,6 +86,7 @@ informative:
         ins: The NIST PQC Team
   hybrid: I-D.stebila-tls-hybrid-design
   hashToCurve: I-D.irtf-cfrg-hash-to-curve
+  XYBERHPKE: I-D.westerbaan-cfrg-hpke-xyber768d00
 
 --- abstract
 
@@ -117,7 +118,7 @@ because the party executing Encapsulate can compute its protocol
 message (the ciphertext) only after having received the input
 (public key) from the party running *KeyGen* and *Decapsulate*.
 
-A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}}.
+A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 
 ## Warning on stability
 
@@ -681,7 +682,7 @@ DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).
 We are ready to define the IND-CPA secure Public-Key Encryption scheme that
 underlies Kyber. It is unsafe to use this underlying scheme directly as
 its ciphertexts are malleable. Instead, a Public-Key Encryption scheme
-can be constructed on top of Kyber by using HPKE {{RFC9180}}.
+can be constructed on top of Kyber by using HPKE {{RFC9180}} {{XYBERHPKE}}.
 
 ## Parameters
 We have already been introduced to the following parameters:
@@ -901,6 +902,8 @@ for their input and assistance.
 - Add table with sizes.
 
 - Reordered sections.
+
+- Add reference to Kyber in HPKE.
 
 ## Since draft-schwabe-cfrg-kyber-01
 
