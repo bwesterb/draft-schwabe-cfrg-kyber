@@ -34,7 +34,7 @@ author:
     email: bas@cloudflare.com
 
 normative:
-  fips202:
+  FIPS202:
     target: https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf
     title: 'FIPS PUB 202: SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions'
     author:
@@ -42,7 +42,7 @@ normative:
         ins: 'National Institute of Standards and Technology'
 
 informative:
-  KyberV302:
+  KYBERV302:
     target: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
     title: CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.02)
     author:
@@ -69,7 +69,7 @@ informative:
     date: 2021
     format:
       PDF: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
-  SecEst:
+  SECEST:
     target: https://github.com/pq-crystals/security-estimates
     title: CRYSTALS security estimate scripts
     author:
@@ -78,14 +78,14 @@ informative:
       -
         ins: J. Schanck
   RFC9180:
-  nistr3:
+  NISTR3:
     target: https://csrc.nist.gov/News/2022/pqc-candidates-to-be-standardized-and-round-4
     title: 'PQC Standardization Process: Announcing Four Candidates to be Standardized, Plus Fourth Round Candidates'
     author:
       -
         ins: The NIST PQC Team
-  hybrid: I-D.stebila-tls-hybrid-design
-  hashToCurve: I-D.irtf-cfrg-hash-to-curve
+  HYBRID: I-D.stebila-tls-hybrid-design
+  H2CURVE: I-D.irtf-cfrg-hash-to-curve
   XYBERHPKE: I-D.westerbaan-cfrg-hpke-xyber768d00
 
 --- abstract
@@ -99,7 +99,7 @@ This memo specifies a preliminary version ("draft00", "v3.02")
 
 # Introduction
 
-Kyber is NIST's pick for a post-quantum key agreement {{nistr3}}.
+Kyber is NIST's pick for a post-quantum key agreement {{NISTR3}}.
 
 Kyber is not a Diffie-Hellman (DH) style non-interactive key agreement,
 but instead, Kyber is a Key Encapsulation Method (KEM).
@@ -112,7 +112,7 @@ A KEM is a three-tuple of algorithms (*KeyGen*, *Encapsulate*, *Decapsulate*):
    produces a shared secret.
 
 Like DH, a KEM can be used as an unauthenticated key-agreement
-protocol, for example in TLS {{hybrid}}.
+protocol, for example in TLS {{HYBRID}}.
 However, unlike DH, a KEM-based key agreement is *interactive*,
 because the party executing Encapsulate can compute its protocol
 message (the ciphertext) only after having received the input
@@ -124,7 +124,7 @@ A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 
 **NOTE** This draft is not stable and does not (yet) match the final
 NIST standard expected in 2024. Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process {{KyberV302}}.
+to round 3 of the NIST PQC process {{KYBERV302}}.
 
 # Conventions and Definitions
 
@@ -185,7 +185,7 @@ where
   of t and r, see {{dot-prod}}.
 
 Distinguishing such a ciphertext and uniformly sampled (c\_1, c\_2)
-is an example of the full MLWER problem, see Section 4.4 of {{KyberV302}}.
+is an example of the full MLWER problem, see Section 4.4 of {{KYBERV302}}.
 
 To decrypt the ciphertext, one computes
 
@@ -195,7 +195,7 @@ It it not straight-forward to see that this formula is correct.
 In fact, there is negligable but non-zero probability that a ciphertext
 does not decrypt correctly given by the DFP column in {{params}}.
 This failure probability can be computed by a careful automated
-analysis of the probabilities involved, see `kyber_failure.py` of {{SecEst}}.
+analysis of the probabilities involved, see `kyber_failure.py` of {{SECEST}}.
 
 To define all these operations precisely, we first define the field
 of coefficients for our polynomial ring; what it means to be small;
@@ -509,7 +509,7 @@ and the length of `msg` varies.
 
 On the surface, they look different, but they are all based on
 the same flexible Keccak XOF that uses the f1600 permutation,
-see {{fips202}}:
+see {{FIPS202}}:
 
     XOF(seed)      =  Keccak[256](seed || 1111, .)
     PRF(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
@@ -521,7 +521,7 @@ see {{fips202}}:
     Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
 
 The reason five different primitives are used is to ensure domain
-separation, which is crucial for security, cf. {{hashToCurve}} §2.2.5.
+separation, which is crucial for security, cf. {{H2CURVE}} §2.2.5.
 Additionally, a smaller sponge capacity is used for performance
 where permissable by the security requirements.
 
@@ -904,6 +904,8 @@ for their input and assistance.
 - Reordered sections.
 
 - Add reference to Kyber in HPKE.
+
+- Miscellaneous editorial changes.
 
 ## Since draft-schwabe-cfrg-kyber-01
 
