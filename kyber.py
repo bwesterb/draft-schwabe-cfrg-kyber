@@ -253,7 +253,7 @@ def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
     # data-independent constant-time manner, which this implementation
     # is not. In fact, many more lines of code in this
     # file are not constant-time.
-    return ifEq if a == b else ifNew
+    return ifEq if a == b else ifNeq
 
 def InnerKeyGen(seed, params):
     assert len(seed) == 32

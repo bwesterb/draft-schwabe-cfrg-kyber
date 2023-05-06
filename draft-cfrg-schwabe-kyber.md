@@ -908,7 +908,8 @@ for their input and assistance.
 
 ## Since draft-schwabe-cfrg-kyber-02
 
-- For the specification, use a proper incremental SHAKE implementation.
+- Fix a typo in the machine-readable specification, and use a proper
+  SHAKE implementation. #5
 
 - Add table with sizes.
 
