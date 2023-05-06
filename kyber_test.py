@@ -15,6 +15,7 @@ import hashlib
 
 import Crypto
 from Crypto.Cipher import AES
+from Crypto.Hash import SHAKE128
 
 #
 # Assertions used in the draft.
@@ -159,9 +160,9 @@ class NistDRBG:
         return ret[:length]
 
 @pytest.mark.parametrize("name,params,want", [
-            (b"Kyber512", params512, "e9c2bd37133fcb40772f81559f14b1f58dccd1c816701be9ba6214d43baf4547"),
-            (b"Kyber768", params768, "a1e122cad3c24bc51622e4c242d8b8acbcd3f618fee4220400605ca8f9ea02c2"),
-            (b"Kyber1024", params1024, "89248f2f33f7f4f7051729111f3049c409a933ec904aedadf035f30fa5646cd5"),
+            (b"Kyber512", params512, "1717803847308c66415874aa7f84a9c7854bb55b632043895b6448f569341dd5"),
+            (b"Kyber768", params768, "cbee30e334ec7d346dcf94c4fbdf803bf82c0ce591bba336f48ba8ae527e8a9f"),
+            (b"Kyber1024", params1024, "35c1dca71b07c657e2c41c49b4797ec29ecd8a15559103068bcccc5ddeb2fe55"),
         ])
 def test_nist_kat(name, params, want):
     seed = bytes(range(48))
@@ -207,3 +208,27 @@ def test_compress():
         mask = (1 << d) - 1
         for x in range(q):
             assert (20642679 * ((x << d) + q//2)) >> 36 & mask == Compress(x, d)
+
+# Check against test/test_vectors{512,768,1024} from the reference
+# implementation, truncated to 10 cases.
+@pytest.mark.parametrize("params,want", [
+            (params512, "e0ec92de62ac0bee8afc325c6fc52ea6842499451eaec122eb6bfacdc1384590"),
+            (params768, "a8c35cecf2a8a0951635ee74be1217a40e8caa1c53aafa21851b88b979da2706"),
+            (params1024, "52b90fe483f19a0bea0022e999f6f457a351d01905a51cd000d6036fe891f874"),
+        ])
+def test_vectors(params, want):
+    h = SHAKE128.new()
+    f = hashlib.sha256()
+    for i in range(10):
+        pk, sk = KeyGen(h.read(64), params)
+        f.update(b'Public Key: ' + binascii.hexlify(pk) + b'\n')
+        f.update(b'Secret Key: ' + binascii.hexlify(sk) + b'\n')
+        ct, ss = Enc(pk, h.read(32), params)
+        f.update(b'Ciphertext: ' + binascii.hexlify(ct) + b'\n')
+        f.update(b'Shared Secret B: ' + binascii.hexlify(ss) + b'\n')
+        ss2 = Dec(sk, ct, params)
+        f.update(b'Shared Secret A: ' + binascii.hexlify(ss2) + b'\n')
+        ct2 = h.read(len(ct))
+        ss3 = Dec(sk, ct2, params)
+        f.update(b'Pseudorandom shared Secret A: ' + binascii.hexlify(ss3) + b'\n')
+    assert f.hexdigest() == want

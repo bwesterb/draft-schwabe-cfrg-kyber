@@ -303,9 +303,8 @@ def Enc(pk, seed, params):
     assert len(seed) == 32
 
     m = H(seed)
-    Kbar, r = G(m + H(pk))
+    K, r = G(m + H(pk))
     ct = InnerEnc(pk, m, r, params)
-    K = KDF(Kbar + H(ct))
     return (ct, K)
 
 def Dec(sk, ct, params):
@@ -314,10 +313,10 @@ def Dec(sk, ct, params):
     h = sk[24 * params.k * n//8 + 32 : 24 * params.k * n//8 + 64]
     z = sk[24 * params.k * n//8 + 64 : 24 * params.k * n//8 + 96]
     m2 = InnerDec(sk, ct, params)
-    Kbar2, r2 = G(m2 + h)
+    K2, r2 = G(m2 + h)
     ct2 = InnerEnc(pk, m2, r2, params)
     return constantTimeSelectOnEquality(
         ct2, ct,
-        KDF(Kbar2 + H(ct)),  # if ct == ct2
-        KDF(z + H(ct)),      # if ct != ct2
+        K2,                  # if ct == ct2
+        G(z + ct)[0],        # if ct != ct2
     )
