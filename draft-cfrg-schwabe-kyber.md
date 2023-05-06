@@ -91,7 +91,7 @@ informative:
 
 --- abstract
 
-This memo specifies a preliminary version ("draft00", "v3.02")
+This memo specifies a preliminary version (XXX)
     of Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 --- middle
@@ -124,8 +124,7 @@ A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 ## Warning on stability
 
 **NOTE** This draft is not stable and does not (yet) match the final
-NIST standard expected in 2024. Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process {{KYBERV302}}.
+NIST standard expected in 2024. XXX
 
 # Conventions and Definitions
 
@@ -798,11 +797,11 @@ and ciphertext for the public key as follows.
 1. Sample secret cryptographically-secure random 32-octet seed.
 2. Compute
     1. m = H(seed)
-    2. (Kbar, cpaSeed) = G(m \|\| H(publicKey))
+    2. (K, cpaSeed) = G(m \|\| H(publicKey))
     3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
 3. Return
     1. cipherText = cpaCipherText
-    2. sharedSecret = KDF(KBar \|\| H(cpaCipherText))
+    2. sharedSecret = K
 
 ## Decapsulation {#S-decaps}
 Kyber decapsulation takes a private key and a cipher text and
@@ -815,13 +814,12 @@ returns a shared secret as follows.
     4. A 32-octet z
 2. Compute
     1. m2 = InnerDec(cipherText, cpaPrivateKey)
-    2. (KBar2, cpaSeed2) = G(m2 \|\| h)
+    2. (ss1, cpaSeed2) = G(m2 \|\| h)
     3. cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)
-    4. K1 = KDF(KBar2 \|\| H(cipherText))
-    5. K2 = KDF(z \|\| H(cipherText))
-3. In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.
+    5. ss2 = KDF(z \|\| H(cipherText))
+3. In constant-time, set ss = ss1 if cipherText == cipherText2 else set ss = ss2.
 4. Return
-    1. sharedSecret = K
+    1. sharedSecret = ss
 
 For security, the implementation MUST NOT explicitly return
 or otherwise leak via a side-channel, decapsulation succeeded,
