@@ -908,6 +908,8 @@ for their input and assistance.
 
 ## Since draft-schwabe-cfrg-kyber-02
 
+- For the specification, use a proper incremental SHAKE implementation.
+
 - Add table with sizes.
 
 - Reordered sections.

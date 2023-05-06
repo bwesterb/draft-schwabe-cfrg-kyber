@@ -1,6 +1,11 @@
 # WARNING This is a specification of Kyber; not a production ready
 # implementation. It is slow and does not run in constant time.
 
+# Requires the CryptoDome for SHAKE. To install, run
+#
+#   pip install pycryptodome pytest
+from Crypto.Hash import SHAKE128, SHAKE256
+
 import io
 import hashlib
 import functools
@@ -165,15 +170,15 @@ def CBD(a, eta):
     return Poly(cs)
 
 def XOF(seed, j, i):
-    # TODO #5 proper streaming SHAKE128
-    return io.BytesIO(hashlib.shake_128(seed + bytes([j, i])).digest(
-        length=1344))
+    h = SHAKE128.new()
+    h.update(seed + bytes([j, i]))
+    return h
 
 def PRF(seed, nonce):
-    # TODO #5 proper streaming SHAKE256
     assert len(seed) == 32
-    return io.BytesIO(hashlib.shake_256(seed + bytes([nonce])
-        ).digest(length=2000))
+    h = SHAKE256.new()
+    h.update(seed + bytes([nonce]))
+    return h
 
 def G(seed):
     h = hashlib.sha3_512(seed).digest()
