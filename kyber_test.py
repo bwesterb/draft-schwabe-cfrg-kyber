@@ -105,7 +105,7 @@ def test_sampling():
         1, -1, 0, 1, -1, 2, 2, 0, 0, -1, 1, 1, 1, 1, 0, 0, -2, 0,
         -1, 1, 2, 0, 0, 1, 1, -1, 1, 0, 1
     ])
-    assert noise3Test == CBD(PRF(bytes(range(32)), 37).read(3*64), 3)
+    assert noise3Test == CBD(PRF1(bytes(range(32)), 37).read(3*64), 3)
     noise2Test = Poly(x%q for x in [
         1, 0, 1, -1, -1, -2, -1, -1, 2, 0, -1, 0, 0, -1,
         1, 1, -1, 1, 0, 2, -2, 0, 1, 2, 0, 0, -1, 1, 0, -1,
@@ -125,7 +125,7 @@ def test_sampling():
         0, 0, 0, 1, 0, -1, 1, 1, 0, 0, 0, 0, 1, 0, 1, -1,
         0, 1, -1, -1, 2, 0, 0, 1, -1, 0, 1, -1, 0,
     ])
-    assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
+    assert noise2Test == CBD(PRF1(bytes(range(32)), 37).read(2*64), 2)
 
 #
 # NIST Known Answer Test (KAT) test vectors
@@ -212,9 +212,9 @@ def test_compress():
 # Check against test/test_vectors{512,768,1024} from the reference
 # implementation, truncated to 10 cases.
 @pytest.mark.parametrize("params,want", [
-            (params512, "e0ec92de62ac0bee8afc325c6fc52ea6842499451eaec122eb6bfacdc1384590"),
-            (params768, "a8c35cecf2a8a0951635ee74be1217a40e8caa1c53aafa21851b88b979da2706"),
-            (params1024, "52b90fe483f19a0bea0022e999f6f457a351d01905a51cd000d6036fe891f874"),
+            (params512,  "9006eb8020e3dc802df1fe60f26d0b51009fad373b9dcbece595c82b941ebf9a"),
+            (params768,  "9f210734f803ba8bcc95ab0ce774e14f53978593d9a2000c6d69f59e5d740b1b"),
+            (params1024, "6118511cb40f262e8e176fd7cbfa1ee487664568563b9b45191e643a09c8e965"),
         ])
 def test_vectors(params, want):
     h = SHAKE128.new()

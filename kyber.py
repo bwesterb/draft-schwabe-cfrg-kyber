@@ -174,18 +174,23 @@ def XOF(seed, j, i):
     h.update(seed + bytes([j, i]))
     return h
 
-def PRF(seed, nonce):
+def PRF1(seed, nonce):
     assert len(seed) == 32
     h = SHAKE256.new()
     h.update(seed + bytes([nonce]))
     return h
+
+def PRF2(seed, msg):
+    assert len(seed) == 32
+    h = SHAKE256.new()
+    h.update(seed + msg)
+    return h.read(32)
 
 def G(seed):
     h = hashlib.sha3_512(seed).digest()
     return h[:32], h[32:]
 
 def H(msg): return hashlib.sha3_256(msg).digest()
-def KDF(msg): return hashlib.shake_256(msg).digest(length=32)
 
 class Vec:
     def __init__(self, ps):
@@ -245,7 +250,7 @@ def sampleMatrix(rho, k):
             for j in range(k)] for i in range(k)])
 
 def sampleNoise(sigma, eta, offset, k):
-    return Vec(CBD(PRF(sigma, i+offset).read(64*eta), eta)
+    return Vec(CBD(PRF1(sigma, i+offset).read(64*eta), eta)
                for i in range(k))
 
 def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
@@ -317,6 +322,6 @@ def Dec(sk, ct, params):
     ct2 = InnerEnc(pk, m2, r2, params)
     return constantTimeSelectOnEquality(
         ct2, ct,
-        K2,                  # if ct == ct2
-        G(z + ct)[0],        # if ct != ct2
+        K2,                 # if ct == ct2
+        PRF2(z, ct),        # if ct != ct2
     )

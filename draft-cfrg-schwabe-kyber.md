@@ -516,11 +516,12 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
 
 # Symmetric cryptographic primitives
 
-Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
+Kyber makes use of various symmertic primitives XOF, PRF1, PRF2, H,
+and G, where
 
     XOF(seed) = SHAKE-128(seed)
-    PRF(seed, counter) = SHAKE-256(seed || counter)
-    KDF(prekey) = SHAKE-256(msg)[:32]
+    PRF1(seed, counter) = SHAKE-256(seed || counter)
+    PRF2(seed, msg) = SHAKE-256(seed || msg)[:32]
     H(msg) = SHA3-256(msg)
     G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
 
@@ -531,12 +532,12 @@ On the surface, they look different, but they are all based on
 the same flexible Keccak XOF that uses the f1600 permutation,
 see {{FIPS202}}:
 
-    XOF(seed)      =  Keccak[256](seed || 1111, .)
-    PRF(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
-    KDF(prekey)    =  Keccak[512](prekey || 1111, 256)
-    H(msg)         =  Keccak[512](msg || 01, 256)
-    G(msg)         = (Keccak[1024](msg || 01, 512)[:32],
-                      Keccak[1024](msg || 01, 512)[32:])
+    XOF(seed)       =  Keccak[256](seed || 1111, .)
+    PRF1(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
+    PRF2(seed, msg) =  Keccak[512](seed || msg || 1111, 256)
+    H(msg)          =  Keccak[512](msg || 01, 256)
+    G(msg)          = (Keccak[1024](msg || 01, 512)[:32],
+                       Keccak[1024](msg || 01, 512)[32:])
 
     Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
 
@@ -610,7 +611,7 @@ Examples:
 A *k* component small vector *v* is derived from a seed 32-octet seed *sigma*,
 an offset *offset* and size *eta* as follows:
 
-    sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, octet(i+offset)), eta)
+    sampleNoise(sigma, eta, offset)_i = CBD(PRF1(sigma, octet(i+offset)), eta)
 
 Recall that we start counting vector indices at zero.
 
@@ -716,7 +717,7 @@ We have already been introduced to the following parameters:
 *zeta*
 : Primitive root of unity in GF(q), used for NTT in R.
 
-*XOF*, *H*, *G*, *PRF*, *KDF*
+*XOF*, *H*, *G*, *PRF1*, *PRF2*
 : Various symmetric primitives.
 
 *k*
@@ -836,7 +837,7 @@ returns a shared secret as follows.
     1. m2 = InnerDec(cipherText, cpaPrivateKey)
     2. (ss1, cpaSeed2) = G(m2 \|\| h)
     3. cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)
-    5. ss2 = KDF(z \|\| H(cipherText))
+    5. ss2 = PRF2(z, cipherText)
 3. In constant-time, set ss = ss1 if cipherText == cipherText2 else set ss = ss2.
 4. Return
     1. sharedSecret = ss
@@ -855,13 +856,13 @@ viz `cipherText == cipherText2`.
 {: #params-comm title="Common parameters to all versions of Kyber" }
 
 
-|Primitive| Instantiation        |
-|--------:|:---------------------|
-|XOF      | SHAKE-128            |
-|H        | SHA3-256             |
-|G        | SHA3-512             |
-|PRF(s,b) | SHAKE-256(s \|\| b)  |
-|KDF      | SHAKE-256            |
+|Primitive  | Instantiation        |
+|----------:|:---------------------|
+|XOF        | SHAKE-128            |
+|H          | SHA3-256             |
+|G          | SHA3-512             |
+|PRF1(s,b)  | SHAKE-256(s \|\| b)  |
+|PRF2(s,m)  | SHAKE-256(s \|\| m)  |
 {: #params-symm title="Instantiation of symmetric primitives in Kyber" }
 
 | Name       |Description                                                                                        |
@@ -925,6 +926,12 @@ for their input and assistance.
 > final version of this document.
 
 ## Since draft-schwabe-cfrg-kyber-03
+
+- Adopt tweak to FO transform.
+
+- Rename PRF to PRF1 and KDF to PRF2.
+
+- Use KDF/PRF2 to compute rejection shared secret instead of G.
 
 - Add note on KyberSlash.
 
