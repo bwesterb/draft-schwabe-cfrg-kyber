@@ -516,7 +516,7 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
 
 # Symmetric cryptographic primitives
 
-Kyber makes use of various symmertic primitives XOF, PRF1, PRF2, H,
+Kyber makes use of various symmetric primitives XOF, PRF1, PRF2, H,
 and G, where
 
     XOF(seed) = SHAKE-128(seed)
