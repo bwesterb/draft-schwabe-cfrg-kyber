@@ -25,7 +25,7 @@ author:
  -
     fullname: Peter Schwabe
     organization: MPI-SP & Radboud University
-    email: peter@cryptojedi.org
+    #email: peter@cryptojedi.org
 
  -
     ins: B.E. Westerbaan
