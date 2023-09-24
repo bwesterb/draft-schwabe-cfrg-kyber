@@ -69,6 +69,12 @@ informative:
     date: 2021
     format:
       PDF: https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf
+  MLKEM:
+    target: https://csrc.nist.gov/pubs/fips/203/ipd
+    title: 'FIPS 203 (Initial Draft): Module-Lattice-Based Key-Encapsulation Mechanism Standard'
+    author:
+      -
+        ins: National Institute of Standards and Technology
   SECEST:
     target: https://github.com/pq-crystals/security-estimates
     title: CRYSTALS security estimate scripts
@@ -121,11 +127,15 @@ message (the ciphertext) only after having received the input
 
 A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 
-## Warning on stability
+## Warning on stability and relation to ML-KEM
 
 **NOTE** This draft is not stable and does not (yet) match the final
-NIST standard expected in 2024. Currently it matches Kyber as submitted
+NIST standard ML-KEM (FIPS 203) expected in 2024. It also does not
+match the draft for ML-KEM published by NIST August 2023. {{MLKEM}}
+
+Currently it matches Kyber as submitted
 to round 3 of the NIST PQC process {{KYBERV302}}.
+
 
 # Conventions and Definitions
 
@@ -923,6 +933,8 @@ for their input and assistance.
   specification.
 
 - Write security recommendations. #18
+
+- Explain relation with ML-KEM.
 
 ## Since draft-schwabe-cfrg-kyber-01
 
