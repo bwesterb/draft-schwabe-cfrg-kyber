@@ -1,0 +1,728 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-09-22T00:59:51.219402+00:00",
+  "repo": "bwesterb/draft-schwabe-cfrg-kyber",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOHnJoss5OgHsn",
+      "title": "Fails to build",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/2",
+      "state": "OPEN",
+      "author": "mouse07410",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "MacOS 12.5, Python-3.10.5\r\n\r\n```\r\n$ make\r\ngit clone -q --depth 10  \\\r\n    -b main https://github.com/martinthomson/i-d-template lib\r\npython3 -m venv /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/python -m pip install --upgrade pip setuptools wheel\r\nRequirement already satisfied: pip in ./lib/.venv/lib/python3.10/site-packages (22.0.4)\r\nCollecting pip\r\n  Downloading pip-22.2-py3-none-any.whl (2.0 MB)\r\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 2.0/2.0 MB 21.0 MB/s eta 0:00:00\r\nRequirement already satisfied: setuptools in ./lib/.venv/lib/python3.10/site-packages (58.1.0)\r\nCollecting setuptools\r\n  Using cached setuptools-63.2.0-py3-none-any.whl (1.2 MB)\r\nCollecting wheel\r\n  Using cached wheel-0.37.1-py2.py3-none-any.whl (35 kB)\r\nInstalling collected packages: wheel, setuptools, pip\r\n  Attempting uninstall: setuptools\r\n    Found existing installation: setuptools 58.1.0\r\n    Uninstalling setuptools-58.1.0:\r\n      Successfully uninstalled setuptools-58.1.0\r\n  Attempting uninstall: pip\r\n    Found existing installation: pip 22.0.4\r\n    Uninstalling pip-22.0.4:\r\n      Successfully uninstalled pip-22.0.4\r\nSuccessfully installed pip-22.2 setuptools-63.2.0 wheel-0.37.1\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/pip install -r lib/requirements.txt\r\nCollecting archive-repo\r\n  Using cached archive_repo-0.0.2-py3-none-any.whl (10 kB)\r\n.  .  .\r\nInstalling kramdown-rfc 1.6.14\r\nFetching net-http-persistent 4.0.1\r\nInstalling net-http-persistent 4.0.1\r\nBundle complete! 2 Gemfile dependencies, 10 gems now installed.\r\nBundled gems are installed into `./lib/.gems`\r\nPost-install message from certified:\r\nIMPORTANT: Remember to use the included executable `certifed-update` regularly to keep your certificate bundle up to date.\r\ncat draft-cfrg-schwabe-kyber.md  | kramdown-rfc --v3 | lib/trace.sh draft-cfrg-schwabe-kyber.xml -s venue /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/python lib/add-note.py | lib/trace.sh draft-cfrg-schwabe-kyber.xml -s v2v3 /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.venv/bin/xml2rfc -q -s 'Setting consensus=\"true\" for IETF STD document' --rfc-base-url https://www.rfc-editor.org/rfc/ --id-base-url https://datatracker.ietf.org/doc/html/ --cache=/Users/ur20980/.cache/xml2rfc --v2v3 /dev/stdin -o /dev/stdout >draft-cfrg-schwabe-kyber.xml\r\n---\r\n- No link definition for link ID 'x' found on line 233\r\n/Users/ur20980/.cache/xml2rfc/reference.RFC.2119.xml: fetching from https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml\r\n*** execution expired while fetching https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml\r\n/Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1069:in `read': execution expired (Net::OpenTimeout)\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1069:in `get_and_cache_resource'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1157:in `block in convert_img'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1143:in `scan'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1143:in `convert_img'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:335:in `block in inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `map'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:340:in `inner'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:353:in `convert_p'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:335:in `block in inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `map'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:333:in `inner_a'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:340:in `inner'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:1395:in `convert_root'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:328:in `convert1'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc2629.rb:323:in `convert'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-2.4.0/lib/kramdown/converter/base.rb:107:in `convert'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-2.4.0/lib/kramdown/document.rb:116:in `method_missing'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/lib/kramdown-rfc/command.rb:575:in `<top (required)>'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/bin/kramdown-rfc:8:in `require'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/gems/kramdown-rfc2629-1.6.14/bin/kramdown-rfc:8:in `<top (required)>'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/bin/kramdown-rfc:29:in `load'\r\n\tfrom /Users/ur20980/src/draft-schwabe-cfrg-kyber/lib/.gems/bin/kramdown-rfc:29:in `<main>'\r\nError: Unable to parse the XML document: /dev/stdin\r\nmake: *** [lib/main.mk:72: draft-cfrg-schwabe-kyber.xml] Error 1\r\nmake: *** Deleting file 'draft-cfrg-schwabe-kyber.xml'\r\n```",
+      "createdAt": "2022-07-25T15:54:07Z",
+      "updatedAt": "2022-07-26T11:38:00Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "This might be it?\r\n\r\n`*** execution expired while fetching https://www.rfc-editor.org/refs/bibxml/reference.RFC.2119.xml`",
+          "createdAt": "2022-07-25T16:52:01Z",
+          "updatedAt": "2022-07-25T16:52:01Z"
+        },
+        {
+          "author": "mouse07410",
+          "authorAssociation": "NONE",
+          "body": "> This might be it?\n\nI've no idea. \n\nDoes this ton of stuff that the `make` gets involved, understand web proxy?\n\nIf not, may I suggest that the build process is flawed for corporate users? And, more importantly, how to fix it?",
+          "createdAt": "2022-07-25T23:44:48Z",
+          "updatedAt": "2022-07-26T01:59:23Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "> And, more importantly, how to fix it?\r\n\r\nNo clue. I\u2019m new to this tooling as well, and I cannot reproduce your error myself.\r\n",
+          "createdAt": "2022-07-26T09:45:41Z",
+          "updatedAt": "2022-07-26T09:45:41Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Note that you can read the draft already [here](https://bwesterb.github.io/draft-schwabe-cfrg-kyber/draft-cfrg-schwabe-kyber.html) as CI builds it for us.",
+          "createdAt": "2022-07-26T09:47:50Z",
+          "updatedAt": "2022-07-26T09:47:50Z"
+        },
+        {
+          "author": "mouse07410",
+          "authorAssociation": "NONE",
+          "body": "> Note that you can read the draft already here as CI builds it for us.\n\nExcellent, thanks!\n\nI assume you tried to reproduce the error **not** from behind a firewall?\n\nIf you're new to this tooling - you probably got it from somewhere? Would it be possible to report this problem there?",
+          "createdAt": "2022-07-26T10:57:30Z",
+          "updatedAt": "2022-07-26T10:57:30Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "> I assume you tried to reproduce the error **not** from behind a firewall?\r\n\r\nExactly.\r\n\r\n> If you're new to this tooling - you probably got it from somewhere? Would it be possible to report this problem there?\r\n\r\nIt\u2019s [Martin\u2019s template](https://github.com/martinthomson/internet-draft-template).\r\n",
+          "createdAt": "2022-07-26T11:38:00Z",
+          "updatedAt": "2022-07-26T11:38:00Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOHnJoss5Og82P",
+      "title": "Check if we can use unicode math symbols",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/3",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:18:44Z",
+      "updatedAt": "2022-08-08T10:39:46Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "_draft-ietf-tcpm-rfc8312bis_ uses \u03b2.",
+          "createdAt": "2022-07-26T10:08:31Z",
+          "updatedAt": "2022-07-26T10:08:31Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "[rfc7997](https://www.rfc-editor.org/rfc/rfc7997.txt) doesn't seem to allow it.",
+          "createdAt": "2022-08-08T10:39:46Z",
+          "updatedAt": "2022-08-08T10:39:46Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOHnJoss5Og8-z",
+      "title": "Check NIST test vectors against Python specification",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/4",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:19:19Z",
+      "updatedAt": "2022-08-30T13:06:29Z",
+      "closedAt": "2022-08-30T13:06:29Z",
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOHnJoss5Og9LM",
+      "title": "Use proper streaming SHAKE implementation in Python specification",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/5",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:20:09Z",
+      "updatedAt": "2022-07-25T19:20:09Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOHnJoss5Og9b6",
+      "title": "Set values in YAML header properly",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/6",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:21:12Z",
+      "updatedAt": "2022-07-25T19:21:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOHnJoss5Og9ha",
+      "title": "Finish introduction",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/7",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:21:34Z",
+      "updatedAt": "2022-09-20T13:55:19Z",
+      "closedAt": "2022-09-20T13:55:19Z",
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOHnJoss5Og90Z",
+      "title": "How much background to give?",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/8",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "We give background on NTT. Is this necessary? Should we give more background on why Kyber works?",
+      "createdAt": "2022-07-25T19:22:47Z",
+      "updatedAt": "2022-07-25T19:22:47Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOHnJoss5Og-Gw",
+      "title": "Give implementation hints",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/9",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "No one is going to run Kyber without at least some optimisations such as Montgomery multiplication. Should we add some suggestions/tests in the rfc?",
+      "createdAt": "2022-07-25T19:23:59Z",
+      "updatedAt": "2022-07-25T19:24:08Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOHnJoss5Og-Ln",
+      "title": "Add test vectors",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/10",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:24:20Z",
+      "updatedAt": "2022-08-30T13:07:58Z",
+      "closedAt": "2022-08-30T13:07:58Z",
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOHnJoss5Og-R7",
+      "title": "Figure out how to link within rfc",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/11",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:24:45Z",
+      "updatedAt": "2022-09-07T13:40:29Z",
+      "closedAt": "2022-09-07T13:40:29Z",
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOHnJoss5Og-VI",
+      "title": "Add references to related work/existing standards",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/12",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:24:59Z",
+      "updatedAt": "2022-07-25T19:24:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOHnJoss5Og-aP",
+      "title": "Clean up \"Symmetric cryptographic primitives\" section",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/13",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:25:19Z",
+      "updatedAt": "2022-09-20T14:13:55Z",
+      "closedAt": "2022-09-20T14:13:55Z",
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Also mention that all these primitives are essentially the same.",
+          "createdAt": "2022-08-29T15:35:22Z",
+          "updatedAt": "2022-08-29T15:35:22Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOHnJoss5Og-ek",
+      "title": "Insert kyber.py into rfc automatically",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/14",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:25:36Z",
+      "updatedAt": "2022-09-07T13:25:11Z",
+      "closedAt": "2022-09-07T13:25:11Z",
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOHnJoss5Og-kl",
+      "title": "Consider other languages for machine-readable specification",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/15",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:25:59Z",
+      "updatedAt": "2022-07-25T19:25:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOHnJoss5Og-ns",
+      "title": "Add acknowledgements",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/16",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:26:13Z",
+      "updatedAt": "2022-07-25T19:26:13Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOHnJoss5Og-7N",
+      "title": "Write IANA considerations section",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/17",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:27:19Z",
+      "updatedAt": "2022-07-25T19:27:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOHnJoss5Og-_G",
+      "title": "Write security considerations section",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/18",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:27:34Z",
+      "updatedAt": "2022-07-25T19:27:34Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOHnJoss5Og_Fs",
+      "title": "Finish specification of Kyber.CPAPKE and Kyber itself",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/19",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-07-25T19:28:00Z",
+      "updatedAt": "2022-08-08T13:21:43Z",
+      "closedAt": "2022-08-08T13:21:43Z",
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOHnJoss5Og_SK",
+      "title": "Reconsider method of defining OctetsToBits, BitsToOctets, Encode/Decode",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/20",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "I think we could do this with a single Rebase primitive.",
+      "createdAt": "2022-07-25T19:28:49Z",
+      "updatedAt": "2022-07-25T19:28:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOHnJoss5PYjRE",
+      "title": "Add warnings about using Kyber.CPAPKE directly",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/21",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-08T12:58:21Z",
+      "updatedAt": "2022-09-20T12:54:27Z",
+      "closedAt": "2022-09-20T12:54:27Z",
+      "comments": [
+        {
+          "author": "jschanck",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I would avoid defining the CPA PKE at all in this document. Specifically, I would inline `CPAPKE_KeyGen` and `CPAPKE_Dec` into `KeyGen` and `Dec`. I would then rename `CPAPKE_Enc` to something like `InnerEnc` and describe it as a helper function for code that is shared between `Enc` and `Dec`.",
+          "createdAt": "2022-08-30T17:52:56Z",
+          "updatedAt": "2022-08-30T17:52:56Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "On the other hand, I think it's easier to implement something if you understand what it's doing. Specifically: it's helpful if an implementor can first implement and test the CPAPKE before moving on to Kyber proper.",
+          "createdAt": "2022-09-07T13:44:10Z",
+          "updatedAt": "2022-09-07T13:44:10Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOHnJoss5PYjdu",
+      "title": "Remove superfluous slashes",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/22",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "In displays we do not need to escape `_` as `\\_`.",
+      "createdAt": "2022-08-08T12:59:02Z",
+      "updatedAt": "2022-08-08T13:32:51Z",
+      "closedAt": "2022-08-08T13:32:51Z",
+      "comments": []
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOHnJoss5PgVWn",
+      "title": "Should we define the norm?",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/23",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "We don't really use the norm in describing the algorithm.",
+      "createdAt": "2022-08-09T23:08:59Z",
+      "updatedAt": "2022-08-09T23:08:59Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOHnJoss5QzwJ_",
+      "title": "Run Python tests in CI",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/25",
+      "state": "CLOSED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T13:06:49Z",
+      "updatedAt": "2022-08-30T13:28:48Z",
+      "closedAt": "2022-08-30T13:28:48Z",
+      "comments": []
+    },
+    {
+      "number": 27,
+      "id": "I_kwDOHnJoss5Q1KaR",
+      "title": "Give a reference implementation of `cmov` and use it in `Dec`",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/27",
+      "state": "OPEN",
+      "author": "jschanck",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T17:54:35Z",
+      "updatedAt": "2022-09-01T12:54:07Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "It is very hard to ensure data-independent constant-time operations in Python. It can be done, but it will make the specification less readable. To begin, we can't use the plain `int` type.\r\n\r\nMy preference is not to bother with it in `kyber.py`: if we'd use a `cmov` then we would be suggesting that the rest is constant-time as well, which it most definitely is not.",
+          "createdAt": "2022-08-31T08:57:44Z",
+          "updatedAt": "2022-08-31T08:58:59Z"
+        },
+        {
+          "author": "jschanck",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah I wouldn't expect it to be constant time in python. My issue is that\r\n```python\r\n    if ct == ct2: # NOTE <- in production this must be done in constant time!\r\n        return KDF(Kbar2 + H(ct))\r\n    return KDF(z + H(ct))\r\n```\r\nonly says that the comparison must be constant time. An implementer might skip the computation of `KDF(Kbar2 + H(ct))` when the branch is not taken. (The wording in the spec is fine.) \r\n\r\nSo I would write something like\r\n```python\r\n    return constant_time_select(ct, ct2, KDF(Kbar2 + H(ct)), KDF(z + H(ct)))\r\n\r\ndef constant_time_select(a, b, x, y):\r\n    # WARNING! This implementation is insecure.\r\n    # Examples of safer implementations in several languages can be found in [XXX].\r\n    return x if a == b else y\r\n```\r\n\r\n",
+          "createdAt": "2022-08-31T19:42:32Z",
+          "updatedAt": "2022-08-31T19:42:32Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "I like your suggestion.",
+          "createdAt": "2022-09-01T12:45:31Z",
+          "updatedAt": "2022-09-01T12:45:31Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Still needs a reference.",
+          "createdAt": "2022-09-01T12:54:07Z",
+          "updatedAt": "2022-09-01T12:54:07Z"
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "I_kwDOHnJoss5Q1VPp",
+      "title": "Remove the `seed` inputs to `KeyGen` and `Enc`",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/28",
+      "state": "OPEN",
+      "author": "jschanck",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T18:39:05Z",
+      "updatedAt": "2022-09-01T12:44:33Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "There are two reasons why I like having the seeds explicit:\r\n\r\n1. First, it makes it easy to use kyber.py to test other implementations. In the end, it's a specification, not an implementation.\r\n\r\n2. If KEMTLS gets traction, it's convenient to be able to store the short seed instead of the full private key.\r\nWhy do you prefer the randombytes() style?\r\n\r\n(Note that the explicit seeds are used both in kyber.py and the specification itself.)",
+          "createdAt": "2022-08-31T08:55:43Z",
+          "updatedAt": "2022-08-31T08:55:43Z"
+        },
+        {
+          "author": "jschanck",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> having the seeds explicit [...] makes it easy to use kyber.py to test other implementations.\r\n\r\nOther implementations are likely to use NIST's API, which will not use explicit seeds. So I'm not sure I see a benefit.\r\n\r\nAll implementations are likely to test against the NIST KATs. So they will need to know how various values of \"seed\" are related to the `RandomBytes` calls in NIST's standard. The current spec does not make that obvious. E.g. the phrasing\r\n>    Split seed into 2.\r\n>       - A 32-octet cpaSeed\r\n>       - A 32-octet z\r\n\r\nobscures the fact that `seed` must be the concatenation of two sequential `RandomBytes(32)` calls for the purpose of checking the KATs.\r\n\r\n>  Why do you prefer the randombytes() style?\r\n\r\nThere's a risk that explicit seeds will be misused. We can add warnings to the text (which readers might miss...), or we can simply write `RandomBytes(32)` when we mean 32 random bytes. After all, it's a spec, not an implementation ;).",
+          "createdAt": "2022-08-31T19:24:37Z",
+          "updatedAt": "2022-08-31T19:24:37Z"
+        },
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "> Other implementations are likely to use NIST's API\r\n\r\nThose that copy the C reference definitely, but the NIST API is very unnatural. In Go, for instance, the idiomatic equivalent would be to pass a `rand io.Reader` parameter which can't emulate the annoying behaviour that RandomBytes(32) + RandomBytes(32) \u2260 RandomBytes(64).\r\n\r\n> obscures the fact that seed must be the concatenation of two sequential RandomBytes(32) calls for the purpose of checking the KATs.\r\n\r\nThat this distinction exists is an argument against using the NIST randombytes API. I think it's better to make checking against the NIST test vectors a bit more difficult. We can also have a separate set of test vectors which are easier to check against (and are tailored with specific corner-cases as far as they exist.)\r\n\r\n> There's a risk that explicit seeds will be misused. \r\n\r\nPeople will use deterministic key generation, which is inconvenient with a RandomBytes style API. I admit I don't see a good reason to pass the seed to encapsulation.",
+          "createdAt": "2022-09-01T12:44:33Z",
+          "updatedAt": "2022-09-01T12:44:33Z"
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOHnJoss5Q_aSh",
+      "title": "Improve readability of kyber.py",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/issues/30",
+      "state": "OPEN",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-09-01T12:52:26Z",
+      "updatedAt": "2022-09-01T12:52:26Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOHnJoss48C0o6",
+      "title": "Fix draft so that it compiles",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/pull/1",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The tool was detecting a table in a list, which isn't allowed.  Mostly\r\nbecause you are using `||` operators.\r\n\r\nThis should unblock the setup process.",
+      "createdAt": "2022-07-25T14:17:20Z",
+      "updatedAt": "2022-07-25T17:46:30Z",
+      "baseRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "baseRefName": "main",
+      "baseRefOid": "1bda17e3b62185a8d883170aef2254fd5313f4d7",
+      "headRepository": "martinthomson/kyber",
+      "headRefName": "fixup",
+      "headRefOid": "42a99e37c657a32661cffabcff1ff0e05f66b5fd",
+      "closedAt": "2022-07-25T14:53:39Z",
+      "mergedAt": "2022-07-25T14:53:39Z",
+      "mergedBy": "bwesterb",
+      "mergeCommit": {
+        "oid": "5722a4dcf83401b7e577b4c7c4a5047a4a65f4be"
+      },
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Thank you!",
+          "createdAt": "2022-07-25T14:53:50Z",
+          "updatedAt": "2022-07-25T14:53:50Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOHnJoss49_tsz",
+      "title": "Add NIST KAT tests",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/pull/24",
+      "state": "CLOSED",
+      "author": "jschanck",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This adds KAT tests to kyber_test.py. I found that the tests failed because kyber.py uses shake128 for `KDF`. So this PR also aligns kyber.py with the spec's use of shake256.\r\n\r\nThe contents of `nistkat.py` were produced by applying the following patch to [PQCgenKAT_kem.c](https://github.com/pq-crystals/kyber/blob/master/ref/PQCgenKAT_kem.c).\r\n\r\n```\r\ndiff --git a/ref/PQCgenKAT_kem.c b/ref/PQCgenKAT_kem.c\r\nindex d24fa50..edc87fc 100644\r\n--- a/ref/PQCgenKAT_kem.c\r\n+++ b/ref/PQCgenKAT_kem.c\r\n@@ -21,6 +21,7 @@\r\n int\t\tFindMarker(FILE *infile, const char *marker);\r\n int\t\tReadHex(FILE *infile, unsigned char *A, int Length, char *str);\r\n void\tfprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L);\r\n+void\tfprintBstr2(FILE *fp, char *S, unsigned char *A, unsigned long long L);\r\n \r\n int\r\n main()\r\n@@ -29,6 +30,7 @@ main()\r\n     FILE                *fp_req, *fp_rsp;\r\n     unsigned char       seed[48];\r\n     unsigned char       entropy_input[48];\r\n+    unsigned char       drbg_output[64];\r\n     unsigned char       ct[CRYPTO_CIPHERTEXTBYTES], ss[CRYPTO_BYTES], ss1[CRYPTO_BYTES];\r\n     int                 count;\r\n     int                 done;\r\n@@ -68,7 +70,7 @@ main()\r\n         return KAT_FILE_OPEN_ERROR;\r\n     }\r\n \r\n-    fprintf(fp_rsp, \"# %s\\n\\n\", CRYPTO_ALGNAME);\r\n+    fprintf(fp_rsp, \"%s_nistkats = [\\n\", CRYPTO_ALGNAME);\r\n     done = 0;\r\n     do {\r\n         if ( FindMarker(fp_req, \"count = \") )\r\n@@ -77,13 +79,21 @@ main()\r\n             done = 1;\r\n             break;\r\n         }\r\n-        fprintf(fp_rsp, \"count = %d\\n\", count);\r\n+        fprintf(fp_rsp, \"nistkat(\\n\");\r\n+        fprintf(fp_rsp, \"count = %d,\\n\", count);\r\n \r\n         if ( !ReadHex(fp_req, seed, 48, \"seed = \") ) {\r\n             printf(\"ERROR: unable to read 'seed' from <%s>\\n\", fn_req);\r\n             return KAT_DATA_ERROR;\r\n         }\r\n-        fprintBstr(fp_rsp, \"seed = \", seed, 48);\r\n+        fprintBstr2(fp_rsp, \"seed = \", seed, 48);\r\n+\r\n+        randombytes_init(seed, NULL, 256);\r\n+        randombytes(drbg_output, 32);\r\n+        randombytes(drbg_output+32, 32);\r\n+        fprintBstr2(fp_rsp, \"rand1 = \", drbg_output, 64);\r\n+        randombytes(drbg_output, 32);\r\n+        fprintBstr2(fp_rsp, \"rand2 = \", drbg_output, 32);\r\n \r\n         randombytes_init(seed, NULL, 256);\r\n \r\n@@ -92,17 +102,17 @@ main()\r\n             printf(\"crypto_kem_keypair returned <%d>\\n\", ret_val);\r\n             return KAT_CRYPTO_FAILURE;\r\n         }\r\n-        fprintBstr(fp_rsp, \"pk = \", pk, CRYPTO_PUBLICKEYBYTES);\r\n-        fprintBstr(fp_rsp, \"sk = \", sk, CRYPTO_SECRETKEYBYTES);\r\n+        fprintBstr2(fp_rsp, \"pk = \", pk, CRYPTO_PUBLICKEYBYTES);\r\n+        fprintBstr2(fp_rsp, \"sk = \", sk, CRYPTO_SECRETKEYBYTES);\r\n \r\n         if ( (ret_val = crypto_kem_enc(ct, ss, pk)) != 0) {\r\n             printf(\"crypto_kem_enc returned <%d>\\n\", ret_val);\r\n             return KAT_CRYPTO_FAILURE;\r\n         }\r\n-        fprintBstr(fp_rsp, \"ct = \", ct, CRYPTO_CIPHERTEXTBYTES);\r\n-        fprintBstr(fp_rsp, \"ss = \", ss, CRYPTO_BYTES);\r\n+        fprintBstr2(fp_rsp, \"ct = \", ct, CRYPTO_CIPHERTEXTBYTES);\r\n+        fprintBstr2(fp_rsp, \"ss = \", ss, CRYPTO_BYTES);\r\n \r\n-        fprintf(fp_rsp, \"\\n\");\r\n+        fprintf(fp_rsp, \"),\\n\");\r\n \r\n         if ( (ret_val = crypto_kem_dec(ss1, ct, sk)) != 0) {\r\n             printf(\"crypto_kem_dec returned <%d>\\n\", ret_val);\r\n@@ -115,6 +125,7 @@ main()\r\n         }\r\n \r\n     } while ( !done );\r\n+    fprintf(fp_rsp, \"]\\n\");\r\n \r\n     fclose(fp_req);\r\n     fclose(fp_rsp);\r\n@@ -230,3 +241,20 @@ fprintBstr(FILE *fp, char *S, unsigned char *A, unsigned long long L)\r\n \tfprintf(fp, \"\\n\");\r\n }\r\n \r\n+void\r\n+fprintBstr2(FILE *fp, char *S, unsigned char *A, unsigned long long L)\r\n+{\r\n+\tunsigned long long  i;\r\n+\r\n+\tfprintf(fp, \"%s\", S);\r\n+\tfprintf(fp, \"b\\\"\", S);\r\n+\r\n+\tfor ( i=0; i<L; i++ )\r\n+\t\tfprintf(fp, \"\\\\x%02X\", A[i]);\r\n+\r\n+\tif ( L == 0 )\r\n+\t\tfprintf(fp, \"\\\\x00\");\r\n+\r\n+\tfprintf(fp, \"\\\",\\n\");\r\n+}\r\n+\r\n```",
+      "createdAt": "2022-08-29T19:26:34Z",
+      "updatedAt": "2022-08-30T13:07:21Z",
+      "baseRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "baseRefName": "main",
+      "baseRefOid": "04180dc05ab6568fa1668ec23c9b163e2cafed58",
+      "headRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "headRefName": "nistkat",
+      "headRefOid": "06bcbb6e12b352f275c00393079faa12b1a248a4",
+      "closedAt": "2022-08-30T13:07:21Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "bwesterb",
+          "authorAssociation": "OWNER",
+          "body": "Thanks for spotting this. I wrote the NIST DRBG in Python so that we don't have to include the big KAT files.\r\n\r\nhttps://github.com/bwesterb/draft-schwabe-cfrg-kyber/commit/a302ee805a17dd0f24770add109ee6b41fdb3c8a",
+          "createdAt": "2022-08-30T13:04:47Z",
+          "updatedAt": "2022-08-30T13:07:18Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOHnJoss4-DBUE",
+      "title": "Test CI tests",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/pull/26",
+      "state": "MERGED",
+      "author": "bwesterb",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-08-30T13:15:38Z",
+      "updatedAt": "2022-08-30T13:28:51Z",
+      "baseRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "baseRefName": "main",
+      "baseRefOid": "81c5f8580f4749ea568e183073f91b1ca64398a0",
+      "headRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "headRefName": "tests",
+      "headRefOid": "030453ed51d9b775849ac91a86a2724e9b9fc54d",
+      "closedAt": "2022-08-30T13:28:46Z",
+      "mergedAt": "2022-08-30T13:28:46Z",
+      "mergedBy": "bwesterb",
+      "mergeCommit": {
+        "oid": "4580f0b5f0a47b50a10349a0b783cfd57a0ec9dd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOHnJoss4-EX-3",
+      "title": "Remove the seed inputs to KeyGen and Enc",
+      "url": "https://github.com/bwesterb/draft-schwabe-cfrg-kyber/pull/29",
+      "state": "OPEN",
+      "author": "jschanck",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Resolves #28 ",
+      "createdAt": "2022-08-30T18:39:54Z",
+      "updatedAt": "2022-09-20T14:13:55Z",
+      "baseRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "baseRefName": "main",
+      "baseRefOid": "1911ebfdfc41c2a74c3c2f5fd2ec7938d15e255b",
+      "headRepository": "bwesterb/draft-schwabe-cfrg-kyber",
+      "headRefName": "remove-seed-params",
+      "headRefOid": "d7a8688c7e5565e6a022ed59041544c4a5883200",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
