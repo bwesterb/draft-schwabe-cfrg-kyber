@@ -11,26 +11,26 @@
        This memo specifies a preliminary version ("draft00", "v3.02")
     of Kyber, an IND-CCA2 secure Key Encapsulation Method. 
     ' name="description">
-<meta content="xml2rfc 3.18.0" name="generator">
+<meta content="xml2rfc 3.19.0" name="generator">
 <meta content="kyber" name="keyword">
 <meta content="kem" name="keyword">
 <meta content="post-quantum" name="keyword">
 <meta content="draft-cfrg-schwabe-kyber-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.0
-    Python 3.11.5
-    ConfigArgParse 1.5.3
+  xml2rfc 3.19.0
+    Python 3.11.6
+    ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.10.0
+    platformdirs 4.1.0
     pycountry 22.3.5
-    PyYAML 6.0
+    PyYAML 6.0.1
     requests 2.31.0
-    setuptools 67.7.2
+    setuptools 68.2.2
     six 1.16.0
-    wcwidth 0.2.6
+    wcwidth 0.2.12
 -->
 <link href="draft-cfrg-schwabe-kyber.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1029,11 +1029,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">kyber</td>
-<td class="right">September 2023</td>
+<td class="right">January 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Schwabe &amp; Westerbaan</td>
-<td class="center">Expires 28 March 2024</td>
+<td class="center">Expires 5 July 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1046,12 +1046,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-cfrg-schwabe-kyber-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-09-25" class="published">25 September 2023</time>
+<time datetime="2024-01-02" class="published">2 January 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-03-28">28 March 2024</time></dd>
+<dd class="expires"><time datetime="2024-07-05">5 July 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1101,7 +1101,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 March 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1110,7 +1110,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1289,13 +1289,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.17.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-change-log" class="internal xref">Change Log</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.1">
-                <p id="section-toc.1-1.17.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-since-draft-schwabe-cfrg-ky" class="internal xref">Since draft-schwabe-cfrg-kyber-02</a></p>
+                <p id="section-toc.1-1.17.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-since-draft-schwabe-cfrg-ky" class="internal xref">Since draft-schwabe-cfrg-kyber-03</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.2">
-                <p id="section-toc.1-1.17.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-since-draft-schwabe-cfrg-kyb" class="internal xref">Since draft-schwabe-cfrg-kyber-01</a></p>
+                <p id="section-toc.1-1.17.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-since-draft-schwabe-cfrg-kyb" class="internal xref">Since draft-schwabe-cfrg-kyber-02</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.3">
-                <p id="section-toc.1-1.17.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-since-draft-schwabe-cfrg-kybe" class="internal xref">Since draft-schwabe-cfrg-kyber-00</a></p>
+                <p id="section-toc.1-1.17.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-since-draft-schwabe-cfrg-kybe" class="internal xref">Since draft-schwabe-cfrg-kyber-01</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.4">
+                <p id="section-toc.1-1.17.2.4.1"><a href="#appendix-B.4" class="auto internal xref">B.4</a>.  <a href="#name-since-draft-schwabe-cfrg-kyber" class="internal xref">Since draft-schwabe-cfrg-kyber-00</a></p>
 </li>
             </ul>
 </li>
@@ -1317,15 +1320,15 @@ but instead, Kyber is a Key Encapsulation Method (KEM).
 A KEM is a three-tuple of algorithms (<em>KeyGen</em>, <em>Encapsulate</em>, <em>Decapsulate</em>):<a href="#section-1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-3.1">
-          <em>KeyGen</em> takes no inputs and generates a private key and a public key;<a href="#section-1-3.1" class="pilcrow">¶</a>
+          <p id="section-1-3.1.1"><em>KeyGen</em> takes no inputs and generates a private key and a public key;<a href="#section-1-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-3.2">
-          <em>Encapsulate</em> takes as input a public key and produces as output
-a ciphertext and a shared secret;<a href="#section-1-3.2" class="pilcrow">¶</a>
+          <p id="section-1-3.2.1"><em>Encapsulate</em> takes as input a public key and produces as output
+a ciphertext and a shared secret;<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-3.3">
-          <em>Decapsulate</em> takes as input a ciphertext and a private key and
-produces a shared secret.<a href="#section-1-3.3" class="pilcrow">¶</a>
+          <p id="section-1-3.3.1"><em>Decapsulate</em> takes as input a ciphertext and a private key and
+produces a shared secret.<a href="#section-1-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-1-4">Like DH, a KEM can be used as an unauthenticated key-agreement
@@ -1390,10 +1393,10 @@ and for Kyber1024 (AES-256 security level) k is 4.<a href="#section-3-4" class="
 <p id="section-3-5">The public key consists of two values:<a href="#section-3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-6.1">
-          <em>A</em> a k-by-k matrix over R sampled uniformly at random <em>and</em><a href="#section-3-6.1" class="pilcrow">¶</a>
+          <p id="section-3-6.1.1"><em>A</em> a k-by-k matrix over R sampled uniformly at random <em>and</em><a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-6.2">
-          <em>t = A s + e</em>, where <code>e</code> is a suitably small masking vector.<a href="#section-3-6.2" class="pilcrow">¶</a>
+          <p id="section-3-6.2.1"><em>t = A s + e</em>, where <code>e</code> is a suitably small masking vector.<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-3-7">Distinguishing between such A s + e and a uniformly sampled t is the
@@ -1413,16 +1416,20 @@ c_2 = Compress(t^T r + e_2 + Decompress(m, 1), d_v)
 </div>
 <p id="section-3-11">where<a href="#section-3-11" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-12.1">e_1, e_2 and r are small blinds;<a href="#section-3-12.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3-12.1">
+          <p id="section-3-12.1.1">e_1, e_2 and r are small blinds;<a href="#section-3-12.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-12.2">Compress(-, d) removes some information, leaving d bits per coefficient
-and Decompress is an "approximate inverse" of Compress;<a href="#section-3-12.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-12.2">
+          <p id="section-3-12.2.1">Compress(-, d) removes some information, leaving d bits per coefficient
+and Decompress is an "approximate inverse" of Compress;<a href="#section-3-12.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-12.3">d_u, d_v are scheme parameters; and<a href="#section-3-12.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-12.3">
+          <p id="section-3-12.3.1">d_u, d_v are scheme parameters; and<a href="#section-3-12.3.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-12.4">superscript T denotes transposition, so <em>A^T</em> is the transpose of A,
+        <li class="normal" id="section-3-12.4">
+          <p id="section-3-12.4.1">superscript T denotes transposition, so <em>A^T</em> is the transpose of A,
 see <a href="#transpose" class="auto internal xref">Section 8.3</a> and <em>t^T r</em> is the dot product
-of t and r, see <a href="#dot-prod" class="auto internal xref">Section 8.2</a>.<a href="#section-3-12.4" class="pilcrow">¶</a>
+of t and r, see <a href="#dot-prod" class="auto internal xref">Section 8.2</a>.<a href="#section-3-12.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-3-13">Distinguishing such a ciphertext and uniformly sampled (c_1, c_2)
@@ -1509,17 +1516,19 @@ to polynomials and vectors of polynomials.<a href="#section-4.2-5" class="pilcro
 <p id="section-4.2-6">These two operations have the following properties:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.2-7.1">
-            <code>0 &lt;= Compress(x, d) &lt; 2^d</code><a href="#section-4.2-7.1" class="pilcrow">¶</a>
+            <p id="section-4.2-7.1.1"><code>0 &lt;= Compress(x, d) &lt; 2^d</code><a href="#section-4.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-7.2">
-            <code>0 &lt;= Decompress(y, d) &lt; q</code><a href="#section-4.2-7.2" class="pilcrow">¶</a>
+            <p id="section-4.2-7.2.1"><code>0 &lt;= Decompress(y, d) &lt; q</code><a href="#section-4.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-4.2-7.3">
-            <code>Compress(Decompress(y, d), d) = y</code><a href="#section-4.2-7.3" class="pilcrow">¶</a>
+            <p id="section-4.2-7.3.1"><code>Compress(Decompress(y, d), d) = y</code><a href="#section-4.2-7.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-4.2-7.4">If <code>Decompress(Compress(x, d), d) = x'</code>, then <code>|| x' - x || &lt;= Round(q/2^(d+1))</code><a href="#section-4.2-7.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.4">
+            <p id="section-4.2-7.4.1">If <code>Decompress(Compress(x, d), d) = x'</code>, then <code>|| x' - x || &lt;= Round(q/2^(d+1))</code><a href="#section-4.2-7.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-4.2-7.5">If <code>x = x' modulo q</code>, then <code>Compress(x, d) = Compress(x', d)</code><a href="#section-4.2-7.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-4.2-7.5">
+            <p id="section-4.2-7.5.1">If <code>x = x' modulo q</code>, then <code>Compress(x, d) = Compress(x', d)</code><a href="#section-4.2-7.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-4.2-8">For implementation efficiency, these can be computed as follows.<a href="#section-4.2-8" class="pilcrow">¶</a></p>
@@ -1529,8 +1538,18 @@ to polynomials and vectors of polynomials.<a href="#section-4.2-5" class="pilcro
 Decompress(y, d) = (q*y + (1 &lt;&lt; (d-1))) &gt;&gt; d
 </pre><a href="#section-4.2-9" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-10">where Div(x, a) = Floor(x / a). <span class="cref" id="_1">TODO Do we want to include the proof that this is correct?
-Do we need to define &gt;&gt; and &lt;&lt;?<span class="crefSource">Bas</span></span><a href="#section-4.2-10" class="pilcrow">¶</a></p>
+<p id="section-4.2-10">where Div(x, q) = Floor(x / q). <span class="cref" id="_1">TODO Do we want to include the proof that this is correct?
+Do we need to define &gt;&gt; and &lt;&lt;?<span class="crefSource">Bas</span></span>
+To prevent leaking the secret key,
+    this must be computed in constant time <span>[<a href="#KYBERSLASH" class="cite xref">KYBERSLASH</a>]</span>.
+On platforms where Div is not constant-time, the following
+    equation is useful, which holds for those x
+    that appear in the previous formula for 0 &lt; d &lt; 12.<a href="#section-4.2-10" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-11">
+<pre>
+Div(x, q) = (20642679 * x) &gt;&gt; 36
+</pre><a href="#section-4.2-11" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 </section>
@@ -2182,34 +2201,42 @@ of the ciphertext.<a href="#section-10.1-4.4.1" class="pilcrow">¶</a></p>
 <p id="section-10.2-1">InnerKeyGen(seed) takes a 32 octet <strong>seed</strong> and deterministically
 produces a keypair as follows.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.2-2">
-<li id="section-10.2-2.1">Set (rho, sigma) = G(seed).<a href="#section-10.2-2.1" class="pilcrow">¶</a>
+<li id="section-10.2-2.1">
+            <p id="section-10.2-2.1.1">Set (rho, sigma) = G(seed).<a href="#section-10.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-10.2-2.2">
             <p id="section-10.2-2.2.1">Derive<a href="#section-10.2-2.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.2-2.2.2">
-<li id="section-10.2-2.2.2.1">AHat = sampleMatrix(rho).<a href="#section-10.2-2.2.2.1" class="pilcrow">¶</a>
+<li id="section-10.2-2.2.2.1">
+                <p id="section-10.2-2.2.2.1.1">AHat = sampleMatrix(rho).<a href="#section-10.2-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.2-2.2.2.2">s = sampleNoise(sigma, eta1, 0)<a href="#section-10.2-2.2.2.2" class="pilcrow">¶</a>
+              <li id="section-10.2-2.2.2.2">
+                <p id="section-10.2-2.2.2.2.1">s = sampleNoise(sigma, eta1, 0)<a href="#section-10.2-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.2-2.2.2.3">e = sampleNoise(sigma, eta1, k)<a href="#section-10.2-2.2.2.3" class="pilcrow">¶</a>
+              <li id="section-10.2-2.2.2.3">
+                <p id="section-10.2-2.2.2.3.1">e = sampleNoise(sigma, eta1, k)<a href="#section-10.2-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.2-2.3">
             <p id="section-10.2-2.3.1">Compute<a href="#section-10.2-2.3.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.2-2.3.2">
-<li id="section-10.2-2.3.2.1">sHat = NTT(s)<a href="#section-10.2-2.3.2.1" class="pilcrow">¶</a>
+<li id="section-10.2-2.3.2.1">
+                <p id="section-10.2-2.3.2.1.1">sHat = NTT(s)<a href="#section-10.2-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.2-2.3.2.2">tHat = AHat o sHat + NTT(e)<a href="#section-10.2-2.3.2.2" class="pilcrow">¶</a>
+              <li id="section-10.2-2.3.2.2">
+                <p id="section-10.2-2.3.2.2.1">tHat = AHat o sHat + NTT(e)<a href="#section-10.2-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.2-2.4">
             <p id="section-10.2-2.4.1">Return<a href="#section-10.2-2.4.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.2-2.4.2">
-<li id="section-10.2-2.4.2.1">publicKey = EncodeVec(tHat, 12) || rho<a href="#section-10.2-2.4.2.1" class="pilcrow">¶</a>
+<li id="section-10.2-2.4.2.1">
+                <p id="section-10.2-2.4.2.1.1">publicKey = EncodeVec(tHat, 12) || rho<a href="#section-10.2-2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.2-2.4.2.2">privateKey = EncodeVec(sHat, 12)<a href="#section-10.2-2.4.2.2" class="pilcrow">¶</a>
+              <li id="section-10.2-2.4.2.2">
+                <p id="section-10.2-2.4.2.2.1">privateKey = EncodeVec(sHat, 12)<a href="#section-10.2-2.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -2229,46 +2256,59 @@ key publicKey as follows.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
 <li id="section-10.3-2.1">
             <p id="section-10.3-2.1.1">Split publicKey into<a href="#section-10.3-2.1.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.3-2.1.2">
-<li id="section-10.3-2.1.2.1">k*(n/8)*12-octet tHatPacked<a href="#section-10.3-2.1.2.1" class="pilcrow">¶</a>
+<li id="section-10.3-2.1.2.1">
+                <p id="section-10.3-2.1.2.1.1">k*(n/8)*12-octet tHatPacked<a href="#section-10.3-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.1.2.2">32-octet rho<a href="#section-10.3-2.1.2.2" class="pilcrow">¶</a>
+              <li id="section-10.3-2.1.2.2">
+                <p id="section-10.3-2.1.2.2.1">32-octet rho<a href="#section-10.3-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
-          <li id="section-10.3-2.2">Parse tHat = DecodeVec(tHatPacked, 12)<a href="#section-10.3-2.2" class="pilcrow">¶</a>
+          <li id="section-10.3-2.2">
+            <p id="section-10.3-2.2.1">Parse tHat = DecodeVec(tHatPacked, 12)<a href="#section-10.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-10.3-2.3">
             <p id="section-10.3-2.3.1">Derive<a href="#section-10.3-2.3.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.3-2.3.2">
-<li id="section-10.3-2.3.2.1">AHat = sampleMatrix(rho)<a href="#section-10.3-2.3.2.1" class="pilcrow">¶</a>
+<li id="section-10.3-2.3.2.1">
+                <p id="section-10.3-2.3.2.1.1">AHat = sampleMatrix(rho)<a href="#section-10.3-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.3.2.2">r = sampleNoise(seed, eta1, 0)<a href="#section-10.3-2.3.2.2" class="pilcrow">¶</a>
+              <li id="section-10.3-2.3.2.2">
+                <p id="section-10.3-2.3.2.2.1">r = sampleNoise(seed, eta1, 0)<a href="#section-10.3-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.3.2.3">e_1 = sampleNoise(seed, eta2, k)<a href="#section-10.3-2.3.2.3" class="pilcrow">¶</a>
+              <li id="section-10.3-2.3.2.3">
+                <p id="section-10.3-2.3.2.3.1">e_1 = sampleNoise(seed, eta2, k)<a href="#section-10.3-2.3.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.3.2.4">e_2 = sampleNoise(seed, eta2, 2k)_0<a href="#section-10.3-2.3.2.4" class="pilcrow">¶</a>
+              <li id="section-10.3-2.3.2.4">
+                <p id="section-10.3-2.3.2.4.1">e_2 = sampleNoise(seed, eta2, 2k)_0<a href="#section-10.3-2.3.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.3-2.4">
             <p id="section-10.3-2.4.1">Compute<a href="#section-10.3-2.4.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.3-2.4.2">
-<li id="section-10.3-2.4.2.1">rHat = NTT(r)<a href="#section-10.3-2.4.2.1" class="pilcrow">¶</a>
+<li id="section-10.3-2.4.2.1">
+                <p id="section-10.3-2.4.2.1.1">rHat = NTT(r)<a href="#section-10.3-2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.4.2.2">u = InvNTT(AHat^T o rHat) + e_1<a href="#section-10.3-2.4.2.2" class="pilcrow">¶</a>
+              <li id="section-10.3-2.4.2.2">
+                <p id="section-10.3-2.4.2.2.1">u = InvNTT(AHat^T o rHat) + e_1<a href="#section-10.3-2.4.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.4.2.3">v = InvNTT(tHat o rHat) + e_2 + Decompress(DecodePoly(msg, 1), 1)<a href="#section-10.3-2.4.2.3" class="pilcrow">¶</a>
+              <li id="section-10.3-2.4.2.3">
+                <p id="section-10.3-2.4.2.3.1">v = InvNTT(tHat o rHat) + e_2 + Decompress(DecodePoly(msg, 1), 1)<a href="#section-10.3-2.4.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.4.2.4">c_1 = EncodeVec(Compress(u, d_u), d_u)<a href="#section-10.3-2.4.2.4" class="pilcrow">¶</a>
+              <li id="section-10.3-2.4.2.4">
+                <p id="section-10.3-2.4.2.4.1">c_1 = EncodeVec(Compress(u, d_u), d_u)<a href="#section-10.3-2.4.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.3-2.4.2.5">c_2 = EncodePoly(Compress(v, d_v), d_v)<a href="#section-10.3-2.4.2.5" class="pilcrow">¶</a>
+              <li id="section-10.3-2.4.2.5">
+                <p id="section-10.3-2.4.2.5.1">c_2 = EncodePoly(Compress(v, d_v), d_v)<a href="#section-10.3-2.4.2.5.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.3-2.5">
             <p id="section-10.3-2.5.1">Return<a href="#section-10.3-2.5.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.3-2.5.2">
-<li id="section-10.3-2.5.2.1">cipherText = c_1 || c_2<a href="#section-10.3-2.5.2.1" class="pilcrow">¶</a>
+<li id="section-10.3-2.5.2.1">
+                <p id="section-10.3-2.5.2.1.1">cipherText = c_1 || c_2<a href="#section-10.3-2.5.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -2286,34 +2326,41 @@ privateKey and decrypts a cipher text cipherText as follows.<a href="#section-10
 <li id="section-10.4-2.1">
             <p id="section-10.4-2.1.1">Split cipherText into<a href="#section-10.4-2.1.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.4-2.1.2">
-<li id="section-10.4-2.1.2.1">d_u*k*n/8-octet c_1<a href="#section-10.4-2.1.2.1" class="pilcrow">¶</a>
+<li id="section-10.4-2.1.2.1">
+                <p id="section-10.4-2.1.2.1.1">d_u*k*n/8-octet c_1<a href="#section-10.4-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.4-2.1.2.2">d_v*n/8-octet c_2<a href="#section-10.4-2.1.2.2" class="pilcrow">¶</a>
+              <li id="section-10.4-2.1.2.2">
+                <p id="section-10.4-2.1.2.2.1">d_v*n/8-octet c_2<a href="#section-10.4-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.4-2.2">
             <p id="section-10.4-2.2.1">Parse<a href="#section-10.4-2.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.4-2.2.2">
-<li id="section-10.4-2.2.2.1">u = Decompress(DecodeVec(c_1, d_u), d_u)<a href="#section-10.4-2.2.2.1" class="pilcrow">¶</a>
+<li id="section-10.4-2.2.2.1">
+                <p id="section-10.4-2.2.2.1.1">u = Decompress(DecodeVec(c_1, d_u), d_u)<a href="#section-10.4-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.4-2.2.2.2">v = Decompress(DecodePoly(c_2, d_v), d_v)<a href="#section-10.4-2.2.2.2" class="pilcrow">¶</a>
+              <li id="section-10.4-2.2.2.2">
+                <p id="section-10.4-2.2.2.2.1">v = Decompress(DecodePoly(c_2, d_v), d_v)<a href="#section-10.4-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-10.4-2.2.2.3">sHat = DecodeVec(privateKey, 12)<a href="#section-10.4-2.2.2.3" class="pilcrow">¶</a>
+              <li id="section-10.4-2.2.2.3">
+                <p id="section-10.4-2.2.2.3.1">sHat = DecodeVec(privateKey, 12)<a href="#section-10.4-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.4-2.3">
             <p id="section-10.4-2.3.1">Compute<a href="#section-10.4-2.3.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.4-2.3.2">
-<li id="section-10.4-2.3.2.1">m = v - InvNTT(sHat o NTT(u))<a href="#section-10.4-2.3.2.1" class="pilcrow">¶</a>
+<li id="section-10.4-2.3.2.1">
+                <p id="section-10.4-2.3.2.1.1">m = v - InvNTT(sHat o NTT(u))<a href="#section-10.4-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-10.4-2.4">
             <p id="section-10.4-2.4.1">Return<a href="#section-10.4-2.4.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-10.4-2.4.2">
-<li id="section-10.4-2.4.2.1">plainText = EncodePoly(Compress(m, 1), 1)<a href="#section-10.4-2.4.2.1" class="pilcrow">¶</a>
+<li id="section-10.4-2.4.2.1">
+                <p id="section-10.4-2.4.2.1.1">plainText = EncodePoly(Compress(m, 1), 1)<a href="#section-10.4-2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -2338,27 +2385,33 @@ privateKey and decrypts a cipher text cipherText as follows.<a href="#section-10
 <li id="section-11.1-2.1">
             <p id="section-11.1-2.1.1">Split seed into<a href="#section-11.1-2.1.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.1-2.1.2">
-<li id="section-11.1-2.1.2.1">A 32-octet cpaSeed<a href="#section-11.1-2.1.2.1" class="pilcrow">¶</a>
+<li id="section-11.1-2.1.2.1">
+                <p id="section-11.1-2.1.2.1.1">A 32-octet cpaSeed<a href="#section-11.1-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.1-2.1.2.2">A 32-octet z<a href="#section-11.1-2.1.2.2" class="pilcrow">¶</a>
+              <li id="section-11.1-2.1.2.2">
+                <p id="section-11.1-2.1.2.2.1">A 32-octet z<a href="#section-11.1-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-11.1-2.2">
             <p id="section-11.1-2.2.1">Compute<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.1-2.2.2">
-<li id="section-11.1-2.2.2.1">(cpaPublicKey, cpaPrivateKey) = InnerKeyGen(cpaSeed)<a href="#section-11.1-2.2.2.1" class="pilcrow">¶</a>
+<li id="section-11.1-2.2.2.1">
+                <p id="section-11.1-2.2.2.1.1">(cpaPublicKey, cpaPrivateKey) = InnerKeyGen(cpaSeed)<a href="#section-11.1-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.1-2.2.2.2">h = H(cpaPublicKey)<a href="#section-11.1-2.2.2.2" class="pilcrow">¶</a>
+              <li id="section-11.1-2.2.2.2">
+                <p id="section-11.1-2.2.2.2.1">h = H(cpaPublicKey)<a href="#section-11.1-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-11.1-2.3">
             <p id="section-11.1-2.3.1">Return<a href="#section-11.1-2.3.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.1-2.3.2">
-<li id="section-11.1-2.3.2.1">publicKey = cpaPublicKey<a href="#section-11.1-2.3.2.1" class="pilcrow">¶</a>
+<li id="section-11.1-2.3.2.1">
+                <p id="section-11.1-2.3.2.1.1">publicKey = cpaPublicKey<a href="#section-11.1-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.1-2.3.2.2">privateKey = cpaPrivateKey || cpaPublicKey || h || z<a href="#section-11.1-2.3.2.2" class="pilcrow">¶</a>
+              <li id="section-11.1-2.3.2.2">
+                <p id="section-11.1-2.3.2.2.1">privateKey = cpaPrivateKey || cpaPublicKey || h || z<a href="#section-11.1-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -2373,25 +2426,31 @@ privateKey and decrypts a cipher text cipherText as follows.<a href="#section-10
 <p id="section-11.2-1">Kyber encapsulation takes a public key and generates a shared secret
 and ciphertext for the public key as follows.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.2-2">
-<li id="section-11.2-2.1">Sample secret cryptographically-secure random 32-octet seed.<a href="#section-11.2-2.1" class="pilcrow">¶</a>
+<li id="section-11.2-2.1">
+            <p id="section-11.2-2.1.1">Sample secret cryptographically-secure random 32-octet seed.<a href="#section-11.2-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-11.2-2.2">
             <p id="section-11.2-2.2.1">Compute<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.2-2.2.2">
-<li id="section-11.2-2.2.2.1">m = H(seed)<a href="#section-11.2-2.2.2.1" class="pilcrow">¶</a>
+<li id="section-11.2-2.2.2.1">
+                <p id="section-11.2-2.2.2.1.1">m = H(seed)<a href="#section-11.2-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.2-2.2.2.2">(Kbar, cpaSeed) = G(m || H(publicKey))<a href="#section-11.2-2.2.2.2" class="pilcrow">¶</a>
+              <li id="section-11.2-2.2.2.2">
+                <p id="section-11.2-2.2.2.2.1">(Kbar, cpaSeed) = G(m || H(publicKey))<a href="#section-11.2-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.2-2.2.2.3">cpaCipherText = InnerEnc(m, publicKey, cpaSeed)<a href="#section-11.2-2.2.2.3" class="pilcrow">¶</a>
+              <li id="section-11.2-2.2.2.3">
+                <p id="section-11.2-2.2.2.3.1">cpaCipherText = InnerEnc(m, publicKey, cpaSeed)<a href="#section-11.2-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-11.2-2.3">
             <p id="section-11.2-2.3.1">Return<a href="#section-11.2-2.3.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.2-2.3.2">
-<li id="section-11.2-2.3.2.1">cipherText = cpaCipherText<a href="#section-11.2-2.3.2.1" class="pilcrow">¶</a>
+<li id="section-11.2-2.3.2.1">
+                <p id="section-11.2-2.3.2.1.1">cipherText = cpaCipherText<a href="#section-11.2-2.3.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.2-2.3.2.2">sharedSecret = KDF(KBar || H(cpaCipherText))<a href="#section-11.2-2.3.2.2" class="pilcrow">¶</a>
+              <li id="section-11.2-2.3.2.2">
+                <p id="section-11.2-2.3.2.2.1">sharedSecret = KDF(KBar || H(cpaCipherText))<a href="#section-11.2-2.3.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -2409,37 +2468,48 @@ returns a shared secret as follows.<a href="#section-11.3-1" class="pilcrow">¶<
 <li id="section-11.3-2.1">
             <p id="section-11.3-2.1.1">Split privateKey into<a href="#section-11.3-2.1.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.3-2.1.2">
-<li id="section-11.3-2.1.2.1">A 12*k*n/8-octet cpaPrivateKey<a href="#section-11.3-2.1.2.1" class="pilcrow">¶</a>
+<li id="section-11.3-2.1.2.1">
+                <p id="section-11.3-2.1.2.1.1">A 12*k*n/8-octet cpaPrivateKey<a href="#section-11.3-2.1.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.1.2.2">A 12*k*n/8+32-octet cpaPublicKey<a href="#section-11.3-2.1.2.2" class="pilcrow">¶</a>
+              <li id="section-11.3-2.1.2.2">
+                <p id="section-11.3-2.1.2.2.1">A 12*k*n/8+32-octet cpaPublicKey<a href="#section-11.3-2.1.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.1.2.3">A 32-octet h<a href="#section-11.3-2.1.2.3" class="pilcrow">¶</a>
+              <li id="section-11.3-2.1.2.3">
+                <p id="section-11.3-2.1.2.3.1">A 32-octet h<a href="#section-11.3-2.1.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.1.2.4">A 32-octet z<a href="#section-11.3-2.1.2.4" class="pilcrow">¶</a>
+              <li id="section-11.3-2.1.2.4">
+                <p id="section-11.3-2.1.2.4.1">A 32-octet z<a href="#section-11.3-2.1.2.4.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
           <li id="section-11.3-2.2">
             <p id="section-11.3-2.2.1">Compute<a href="#section-11.3-2.2.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.3-2.2.2">
-<li id="section-11.3-2.2.2.1">m2 = InnerDec(cipherText, cpaPrivateKey)<a href="#section-11.3-2.2.2.1" class="pilcrow">¶</a>
+<li id="section-11.3-2.2.2.1">
+                <p id="section-11.3-2.2.2.1.1">m2 = InnerDec(cipherText, cpaPrivateKey)<a href="#section-11.3-2.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.2.2.2">(KBar2, cpaSeed2) = G(m2 || h)<a href="#section-11.3-2.2.2.2" class="pilcrow">¶</a>
+              <li id="section-11.3-2.2.2.2">
+                <p id="section-11.3-2.2.2.2.1">(KBar2, cpaSeed2) = G(m2 || h)<a href="#section-11.3-2.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.2.2.3">cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)<a href="#section-11.3-2.2.2.3" class="pilcrow">¶</a>
+              <li id="section-11.3-2.2.2.3">
+                <p id="section-11.3-2.2.2.3.1">cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)<a href="#section-11.3-2.2.2.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.2.2.4">K1 = KDF(KBar2 || H(cipherText))<a href="#section-11.3-2.2.2.4" class="pilcrow">¶</a>
+              <li id="section-11.3-2.2.2.4">
+                <p id="section-11.3-2.2.2.4.1">K1 = KDF(KBar2 || H(cipherText))<a href="#section-11.3-2.2.2.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="section-11.3-2.2.2.5">K2 = KDF(z || H(cipherText))<a href="#section-11.3-2.2.2.5" class="pilcrow">¶</a>
+              <li id="section-11.3-2.2.2.5">
+                <p id="section-11.3-2.2.2.5.1">K2 = KDF(z || H(cipherText))<a href="#section-11.3-2.2.2.5.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
-          <li id="section-11.3-2.3">In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.<a href="#section-11.3-2.3" class="pilcrow">¶</a>
+          <li id="section-11.3-2.3">
+            <p id="section-11.3-2.3.1">In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.<a href="#section-11.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-11.3-2.4">
             <p id="section-11.3-2.4.1">Return<a href="#section-11.3-2.4.1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-11.3-2.4.2">
-<li id="section-11.3-2.4.2.1">sharedSecret = K<a href="#section-11.3-2.4.2.1" class="pilcrow">¶</a>
+<li id="section-11.3-2.4.2.1">
+                <p id="section-11.3-2.4.2.1.1">sharedSecret = K<a href="#section-11.3-2.4.2.1.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
@@ -3002,6 +3072,7 @@ HPKE can be used to turn Kyber into IND-CCA2 secure PKE <span>[<a href="#RFC9180
       <h2 id="name-references">
 <a href="#section-15" class="section-number selfRef">15. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
 <section id="section-15.1">
         <h3 id="name-normative-references">
 <a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
@@ -3021,6 +3092,8 @@ HPKE can be used to turn Kyber into IND-CCA2 secure PKE <span>[<a href="#RFC9180
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
+<div id="sec-informative-references">
 <section id="section-15.2">
         <h3 id="name-informative-references">
 <a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
@@ -3033,6 +3106,10 @@ HPKE can be used to turn Kyber into IND-CCA2 secure PKE <span>[<a href="#RFC9180
 <dt id="HYBRID">[HYBRID]</dt>
         <dd>
 <span class="refAuthor">Stebila, D.</span>, <span class="refAuthor">Fluhrer, S.</span>, and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Hybrid key exchange in TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-stebila-tls-hybrid-design-03</span>, <time datetime="2020-02-12" class="refDate">12 February 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-stebila-tls-hybrid-design-03">https://datatracker.ietf.org/doc/html/draft-stebila-tls-hybrid-design-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="KYBERSLASH">[KYBERSLASH]</dt>
+        <dd>
+<span class="refAuthor">Bernstein, D. J.</span>, <span class="refTitle">"KyberSlash: division timings depending on secrets in Kyber software"</span>, <span>n.d.</span>, <span>&lt;<a href="https://kyberslash.cr.yp.to">https://kyberslash.cr.yp.to</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="KYBERV302">[KYBERV302]</dt>
         <dd>
@@ -3064,6 +3141,7 @@ HPKE can be used to turn Kyber into IND-CCA2 secure PKE <span>[<a href="#RFC9180
 <dd class="break"></dd>
 </dl>
 </section>
+</div>
 </section>
 <div id="acknowledgments">
 <section id="appendix-A">
@@ -3092,72 +3170,101 @@ for their input and assistance.<a href="#appendix-A-1" class="pilcrow">¶</a></p
 final version of this document.<a href="#appendix-B-1.1.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<div id="since-draft-schwabe-cfrg-kyber-02">
+<div id="since-draft-schwabe-cfrg-kyber-03">
 <section id="appendix-B.1">
         <h3 id="name-since-draft-schwabe-cfrg-ky">
-<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-since-draft-schwabe-cfrg-ky" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-02</a>
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-since-draft-schwabe-cfrg-ky" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-03</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.1-1.1">Fix a typo in the machine-readable specification, and use a proper
-SHAKE implementation. #5<a href="#appendix-B.1-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.1-1.1">
+            <p id="appendix-B.1-1.1.1">Add note on KyberSlash.<a href="#appendix-B.1-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.2">Add table with sizes.<a href="#appendix-B.1-1.2" class="pilcrow">¶</a>
+        </ul>
+</section>
+</div>
+<div id="since-draft-schwabe-cfrg-kyber-02">
+<section id="appendix-B.2">
+        <h3 id="name-since-draft-schwabe-cfrg-kyb">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-since-draft-schwabe-cfrg-kyb" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-02</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.2-1.1">
+            <p id="appendix-B.2-1.1.1">Fix a typo in the machine-readable specification, and use a proper
+SHAKE implementation. #5<a href="#appendix-B.2-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.3">Reordered sections.<a href="#appendix-B.1-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.2">
+            <p id="appendix-B.2-1.2.1">Add table with sizes.<a href="#appendix-B.2-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.4">Add reference to Kyber in HPKE.<a href="#appendix-B.1-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.3">
+            <p id="appendix-B.2-1.3.1">Reordered sections.<a href="#appendix-B.2-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.5">Miscellaneous editorial changes.<a href="#appendix-B.1-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.4">
+            <p id="appendix-B.2-1.4.1">Add reference to Kyber in HPKE.<a href="#appendix-B.2-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.6">Remove encapsulation seed as an explicit parameter in the written
-specification.<a href="#appendix-B.1-1.6" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.5">
+            <p id="appendix-B.2-1.5.1">Miscellaneous editorial changes.<a href="#appendix-B.2-1.5.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.7">Write security recommendations. #18<a href="#appendix-B.1-1.7" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.6">
+            <p id="appendix-B.2-1.6.1">Remove encapsulation seed as an explicit parameter in the written
+specification.<a href="#appendix-B.2-1.6.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.1-1.8">Explain relation with ML-KEM.<a href="#appendix-B.1-1.8" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.2-1.7">
+            <p id="appendix-B.2-1.7.1">Write security recommendations. #18<a href="#appendix-B.2-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.8">
+            <p id="appendix-B.2-1.8.1">Explain relation with ML-KEM.<a href="#appendix-B.2-1.8.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-schwabe-cfrg-kyber-01">
-<section id="appendix-B.2">
-        <h3 id="name-since-draft-schwabe-cfrg-kyb">
-<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-since-draft-schwabe-cfrg-kyb" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-01</a>
+<section id="appendix-B.3">
+        <h3 id="name-since-draft-schwabe-cfrg-kybe">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-since-draft-schwabe-cfrg-kybe" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-01</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.2-1.1">Fix various typos.<a href="#appendix-B.2-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.3-1.1">
+            <p id="appendix-B.3-1.1.1">Fix various typos.<a href="#appendix-B.3-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.2-1.2">Move sections around.<a href="#appendix-B.2-1.2" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.2">
+            <p id="appendix-B.3-1.2.1">Move sections around.<a href="#appendix-B.3-1.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.2-1.3">Elaborate domain separation and encoding of nonces
-in symmetric primitives.<a href="#appendix-B.2-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.3">
+            <p id="appendix-B.3-1.3.1">Elaborate domain separation and encoding of nonces
+in symmetric primitives.<a href="#appendix-B.3-1.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.2-1.4">Add explicit formula for InvNTT.<a href="#appendix-B.2-1.4" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.4">
+            <p id="appendix-B.3-1.4.1">Add explicit formula for InvNTT.<a href="#appendix-B.3-1.4.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.2-1.5">Add acknowledgements.<a href="#appendix-B.2-1.5" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.3-1.5">
+            <p id="appendix-B.3-1.5.1">Add acknowledgements.<a href="#appendix-B.3-1.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
 </div>
 <div id="since-draft-schwabe-cfrg-kyber-00">
-<section id="appendix-B.3">
-        <h3 id="name-since-draft-schwabe-cfrg-kybe">
-<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-since-draft-schwabe-cfrg-kybe" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-00</a>
+<section id="appendix-B.4">
+        <h3 id="name-since-draft-schwabe-cfrg-kyber">
+<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-since-draft-schwabe-cfrg-kyber" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-00</a>
         </h3>
 <ul class="normal">
-<li class="normal" id="appendix-B.3-1.1">Test specification against NIST test vectors.<a href="#appendix-B.3-1.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-B.4-1.1">
+            <p id="appendix-B.4-1.1.1">Test specification against NIST test vectors.<a href="#appendix-B.4-1.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="appendix-B.3-1.2">
-            <p id="appendix-B.3-1.2.1">Fix two unintentional mismatches between this document
-and the reference implementation:<a href="#appendix-B.3-1.2.1" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="appendix-B.3-1.2.2">
-<li id="appendix-B.3-1.2.2.1">KDF uses SHAKE-256 instead of SHAKE-128.<a href="#appendix-B.3-1.2.2.1" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.4-1.2">
+            <p id="appendix-B.4-1.2.1">Fix two unintentional mismatches between this document
+and the reference implementation:<a href="#appendix-B.4-1.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-B.4-1.2.2">
+<li id="appendix-B.4-1.2.2.1">
+                <p id="appendix-B.4-1.2.2.1.1">KDF uses SHAKE-256 instead of SHAKE-128.<a href="#appendix-B.4-1.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li id="appendix-B.3-1.2.2.2">Reverse order of seed. (<code>z</code> comes at the end.)<a href="#appendix-B.3-1.2.2.2" class="pilcrow">¶</a>
+              <li id="appendix-B.4-1.2.2.2">
+                <p id="appendix-B.4-1.2.2.2.1">Reverse order of seed. (<code>z</code> comes at the end.)<a href="#appendix-B.4-1.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ol>
 </li>
-          <li class="normal" id="appendix-B.3-1.3">Elaborate text in particular introduction, and symmetric key section.<a href="#appendix-B.3-1.3" class="pilcrow">¶</a>
+          <li class="normal" id="appendix-B.4-1.3">
+            <p id="appendix-B.4-1.3.1">Elaborate text in particular introduction, and symmetric key section.<a href="#appendix-B.4-1.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>

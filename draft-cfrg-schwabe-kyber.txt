@@ -5,8 +5,8 @@
 None                                                          P. Schwabe
 Internet-Draft                               MPI-SP & Radboud University
 Intended status: Informational                          B. E. Westerbaan
-Expires: 28 March 2024                                        Cloudflare
-                                                       25 September 2023
+Expires: 5 July 2024                                          Cloudflare
+                                                          2 January 2024
 
 
                          Kyber Post-Quantum KEM
@@ -44,11 +44,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2024.
+   This Internet-Draft will expire on 5 July 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -106,9 +106,10 @@ Table of Contents
      15.2.  Informative References
    Appendix A.  Acknowledgments
    Appendix B.  Change Log
-     B.1.  Since draft-schwabe-cfrg-kyber-02
-     B.2.  Since draft-schwabe-cfrg-kyber-01
-     B.3.  Since draft-schwabe-cfrg-kyber-00
+     B.1.  Since draft-schwabe-cfrg-kyber-03
+     B.2.  Since draft-schwabe-cfrg-kyber-02
+     B.3.  Since draft-schwabe-cfrg-kyber-01
+     B.4.  Since draft-schwabe-cfrg-kyber-00
    Authors' Addresses
 
 1.  Introduction
@@ -307,11 +308,16 @@ Table of Contents
      Compress(x, d) = Div( (x << d) + q/2), q ) & ((1 << d) - 1)
    Decompress(y, d) = (q*y + (1 << (d-1))) >> d
 
-   where Div(x, a) = Floor(x / a).
+   where Div(x, q) = Floor(x / q).
    // TODO Do we want to include the proof that this is correct?  Do we
    // need to define >> and <<?
    //
-   // -- Bas
+   // -- Bas To prevent leaking the secret key, this must be computed in
+   constant time [KYBERSLASH].  On platforms where Div is not constant-
+   time, the following equation is useful, which holds for those x that
+   appear in the previous formula for 0 < d < 12.
+
+   Div(x, q) = (20642679 * x) >> 36
 
 5.  The ring Rq
 
@@ -1398,6 +1404,11 @@ Decode(a, w)_i = b_{wi} + b_{wi+1} 2 + b_{wi+2} 2^2 + ... + b_{wi+w-1} 2^{w-1},
               <https://datatracker.ietf.org/doc/html/draft-stebila-tls-
               hybrid-design-03>.
 
+   [KYBERSLASH]
+              Bernstein, D. J., "KyberSlash: division timings depending
+              on secrets in Kyber software", n.d.,
+              <https://kyberslash.cr.yp.to>.
+
    [KYBERV302]
               Avanzi, R., Bos, J., Ducas, L., Kiltz, E., Lepoint, T.,
               Lyubashevsky, V., Schanck, J., Schwabe, P., Seiler, G.,
@@ -1448,7 +1459,11 @@ Appendix B.  Change Log
       *RFC Editor's Note:* Please remove this section prior to
       publication of a final version of this document.
 
-B.1.  Since draft-schwabe-cfrg-kyber-02
+B.1.  Since draft-schwabe-cfrg-kyber-03
+
+   *  Add note on KyberSlash.
+
+B.2.  Since draft-schwabe-cfrg-kyber-02
 
    *  Fix a typo in the machine-readable specification, and use a proper
       SHAKE implementation. #5
@@ -1468,7 +1483,7 @@ B.1.  Since draft-schwabe-cfrg-kyber-02
 
    *  Explain relation with ML-KEM.
 
-B.2.  Since draft-schwabe-cfrg-kyber-01
+B.3.  Since draft-schwabe-cfrg-kyber-01
 
    *  Fix various typos.
 
@@ -1481,7 +1496,7 @@ B.2.  Since draft-schwabe-cfrg-kyber-01
 
    *  Add acknowledgements.
 
-B.3.  Since draft-schwabe-cfrg-kyber-00
+B.4.  Since draft-schwabe-cfrg-kyber-00
 
    *  Test specification against NIST test vectors.
 
