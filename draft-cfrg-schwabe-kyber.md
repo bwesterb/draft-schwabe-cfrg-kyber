@@ -94,6 +94,12 @@ informative:
   H2CURVE: I-D.irtf-cfrg-hash-to-curve
   XYBERHPKE: I-D.westerbaan-cfrg-hpke-xyber768d00
   XYBERTLS: I-D.tls-westerbaan-xyber768d00
+  KYBERSLASH:
+    target: https://kyberslash.cr.yp.to
+    title: 'KyberSlash: division timings depending on secrets in Kyber software'
+    author:
+      -
+        ins: D.J. Bernstein
 
 --- abstract
 
@@ -277,7 +283,14 @@ For implementation efficiency, these can be computed as follows.
       Compress(x, d) = Div( (x << d) + q/2), q ) & ((1 << d) - 1)
     Decompress(y, d) = (q*y + (1 << (d-1))) >> d
 
-where Div(x, a) = Floor(x / a). [^1]
+where Div(x, q) = Floor(x / q). [^1]
+To prevent leaking the secret key,
+    this must be computed in constant time {{KYBERSLASH}}.
+On platforms where Div is not constant-time, the following
+    equation is useful, which holds for those x
+    that appear in the previous formula for 0 < d < 12.
+
+    Div(x, q) = (20642679 * x) >> 36
 
 [^1]: TODO Do we want to include the proof that this is correct?
     Do we need to define >> and <<?
@@ -915,6 +928,10 @@ for their input and assistance.
 
 > **RFC Editor's Note:** Please remove this section prior to publication of a
 > final version of this document.
+
+## Since draft-schwabe-cfrg-kyber-03
+
+- Add note on KyberSlash.
 
 ## Since draft-schwabe-cfrg-kyber-02
 

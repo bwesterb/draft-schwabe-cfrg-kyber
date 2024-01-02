@@ -201,3 +201,9 @@ def test_sizes():
         ct, ss = Enc(pk, b'\0'*32, params)
         assert len(ct) == cts
         assert len(ss) == sss
+
+def test_compress():
+    for d in [1, 3, 4, 10, 11]:
+        mask = (1 << d) - 1
+        for x in range(q):
+            assert (20642679 * ((x << d) + q//2)) >> 36 & mask == Compress(x, d)
