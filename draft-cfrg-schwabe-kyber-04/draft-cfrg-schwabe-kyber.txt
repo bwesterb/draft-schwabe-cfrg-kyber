@@ -1514,7 +1514,6 @@ Authors' Addresses
 
    Peter Schwabe
    MPI-SP & Radboud University
-   Email: peter@cryptojedi.org
 
 
    Bas Westerbaan
