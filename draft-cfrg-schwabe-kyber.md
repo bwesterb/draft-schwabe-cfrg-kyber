@@ -103,7 +103,7 @@ informative:
 
 --- abstract
 
-This memo specifies a preliminary version ("draft00", "v3.02")
+This memo specifies a preliminary version (XXX)
     of Kyber, an IND-CCA2 secure Key Encapsulation Method.
 
 --- middle
@@ -136,12 +136,8 @@ A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 ## Warning on stability and relation to ML-KEM
 
 **NOTE** This draft is not stable and does not (yet) match the final
-NIST standard ML-KEM (FIPS 203) expected in 2024. It also does not
-match the draft for ML-KEM published by NIST August 2023. {{MLKEM}}
-
-Currently it matches Kyber as submitted
-to round 3 of the NIST PQC process {{KYBERV302}}.
-
+NIST standard ML-KEM (FIPS 203) expected in 2024. It matches
+the draft for ML-KEM published by NIST August 2023. {{MLKEM}}
 
 # Conventions and Definitions
 
@@ -520,11 +516,12 @@ That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:
 
 # Symmetric cryptographic primitives
 
-Kyber makes use of various symmertic primitives PRF, XOF, KDF, H and G, where
+Kyber makes use of various symmetric primitives XOF, PRF1, PRF2, H,
+and G, where
 
     XOF(seed) = SHAKE-128(seed)
-    PRF(seed, counter) = SHAKE-256(seed || counter)
-    KDF(prekey) = SHAKE-256(msg)[:32]
+    PRF1(seed, counter) = SHAKE-256(seed || counter)
+    PRF2(seed, msg) = SHAKE-256(seed || msg)[:32]
     H(msg) = SHA3-256(msg)
     G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
 
@@ -535,12 +532,12 @@ On the surface, they look different, but they are all based on
 the same flexible Keccak XOF that uses the f1600 permutation,
 see {{FIPS202}}:
 
-    XOF(seed)      =  Keccak[256](seed || 1111, .)
-    PRF(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
-    KDF(prekey)    =  Keccak[512](prekey || 1111, 256)
-    H(msg)         =  Keccak[512](msg || 01, 256)
-    G(msg)         = (Keccak[1024](msg || 01, 512)[:32],
-                      Keccak[1024](msg || 01, 512)[32:])
+    XOF(seed)       =  Keccak[256](seed || 1111, .)
+    PRF1(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
+    PRF2(seed, msg) =  Keccak[512](seed || msg || 1111, 256)
+    H(msg)          =  Keccak[512](msg || 01, 256)
+    G(msg)          = (Keccak[1024](msg || 01, 512)[:32],
+                       Keccak[1024](msg || 01, 512)[32:])
 
     Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
 
@@ -614,7 +611,7 @@ Examples:
 A *k* component small vector *v* is derived from a seed 32-octet seed *sigma*,
 an offset *offset* and size *eta* as follows:
 
-    sampleNoise(sigma, eta, offset)_i = CBD(PRF(sigma, octet(i+offset)), eta)
+    sampleNoise(sigma, eta, offset)_i = CBD(PRF1(sigma, octet(i+offset)), eta)
 
 Recall that we start counting vector indices at zero.
 
@@ -720,7 +717,7 @@ We have already been introduced to the following parameters:
 *zeta*
 : Primitive root of unity in GF(q), used for NTT in R.
 
-*XOF*, *H*, *G*, *PRF*, *KDF*
+*XOF*, *H*, *G*, *PRF1*, *PRF2*
 : Various symmetric primitives.
 
 *k*
@@ -820,12 +817,11 @@ and ciphertext for the public key as follows.
 
 1. Sample secret cryptographically-secure random 32-octet seed.
 2. Compute
-    1. m = H(seed)
-    2. (Kbar, cpaSeed) = G(m \|\| H(publicKey))
-    3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
+    1. (K, cpaSeed) = G(seed \|\| H(publicKey))
+    2. cpaCipherText = InnerEnc(seed, publicKey, cpaSeed)
 3. Return
     1. cipherText = cpaCipherText
-    2. sharedSecret = KDF(KBar \|\| H(cpaCipherText))
+    2. sharedSecret = K
 
 ## Decapsulation {#S-decaps}
 Kyber decapsulation takes a private key and a cipher text and
@@ -838,13 +834,12 @@ returns a shared secret as follows.
     4. A 32-octet z
 2. Compute
     1. m2 = InnerDec(cipherText, cpaPrivateKey)
-    2. (KBar2, cpaSeed2) = G(m2 \|\| h)
+    2. (ss1, cpaSeed2) = G(m2 \|\| h)
     3. cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)
-    4. K1 = KDF(KBar2 \|\| H(cipherText))
-    5. K2 = KDF(z \|\| H(cipherText))
-3. In constant-time, set K = K1 if cipherText == cipherText2 else set K = K2.
+    5. ss2 = PRF2(z, cipherText)
+3. In constant-time, set ss = ss1 if cipherText == cipherText2 else set ss = ss2.
 4. Return
-    1. sharedSecret = K
+    1. sharedSecret = ss
 
 For security, the implementation MUST NOT explicitly return
 or otherwise leak via a side-channel, decapsulation succeeded,
@@ -860,13 +855,13 @@ viz `cipherText == cipherText2`.
 {: #params-comm title="Common parameters to all versions of Kyber" }
 
 
-|Primitive| Instantiation        |
-|--------:|:---------------------|
-|XOF      | SHAKE-128            |
-|H        | SHA3-256             |
-|G        | SHA3-512             |
-|PRF(s,b) | SHAKE-256(s \|\| b)  |
-|KDF      | SHAKE-256            |
+|Primitive  | Instantiation        |
+|----------:|:---------------------|
+|XOF        | SHAKE-128            |
+|H          | SHA3-256             |
+|G          | SHA3-512             |
+|PRF1(s,b)  | SHAKE-256(s \|\| b)  |
+|PRF2(s,m)  | SHAKE-256(s \|\| m)  |
 {: #params-symm title="Instantiation of symmetric primitives in Kyber" }
 
 | Name       |Description                                                                                        |
@@ -931,7 +926,13 @@ for their input and assistance.
 
 ## Since draft-schwabe-cfrg-kyber-03
 
-- Add note on KyberSlash.
+- Adopt tweak to FO transform.
+
+- Rename PRF to PRF1 and KDF to PRF2.
+
+- Use KDF/PRF2 to compute rejection shared secret instead of G.
+
+- Remove hash of shame.
 
 ## Since draft-schwabe-cfrg-kyber-02
 

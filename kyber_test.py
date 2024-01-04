@@ -15,6 +15,7 @@ import hashlib
 
 import Crypto
 from Crypto.Cipher import AES
+from Crypto.Hash import SHAKE128
 
 #
 # Assertions used in the draft.
@@ -104,7 +105,7 @@ def test_sampling():
         1, -1, 0, 1, -1, 2, 2, 0, 0, -1, 1, 1, 1, 1, 0, 0, -2, 0,
         -1, 1, 2, 0, 0, 1, 1, -1, 1, 0, 1
     ])
-    assert noise3Test == CBD(PRF(bytes(range(32)), 37).read(3*64), 3)
+    assert noise3Test == CBD(PRF1(bytes(range(32)), 37).read(3*64), 3)
     noise2Test = Poly(x%q for x in [
         1, 0, 1, -1, -1, -2, -1, -1, 2, 0, -1, 0, 0, -1,
         1, 1, -1, 1, 0, 2, -2, 0, 1, 2, 0, 0, -1, 1, 0, -1,
@@ -124,7 +125,7 @@ def test_sampling():
         0, 0, 0, 1, 0, -1, 1, 1, 0, 0, 0, 0, 1, 0, 1, -1,
         0, 1, -1, -1, 2, 0, 0, 1, -1, 0, 1, -1, 0,
     ])
-    assert noise2Test == CBD(PRF(bytes(range(32)), 37).read(2*64), 2)
+    assert noise2Test == CBD(PRF1(bytes(range(32)), 37).read(2*64), 2)
 
 #
 # NIST Known Answer Test (KAT) test vectors
@@ -159,9 +160,9 @@ class NistDRBG:
         return ret[:length]
 
 @pytest.mark.parametrize("name,params,want", [
-            (b"Kyber512", params512, "e9c2bd37133fcb40772f81559f14b1f58dccd1c816701be9ba6214d43baf4547"),
-            (b"Kyber768", params768, "a1e122cad3c24bc51622e4c242d8b8acbcd3f618fee4220400605ca8f9ea02c2"),
-            (b"Kyber1024", params1024, "89248f2f33f7f4f7051729111f3049c409a933ec904aedadf035f30fa5646cd5"),
+            (b"Kyber512", params512, "4b88ac7643ff60209af1175e025f354272e88df827a0ce1c056e403629b88e04"),
+            (b"Kyber768", params768, "21b4a1e1ea34a13c26a9da5eeb9325afb5ca11596ca6f3704c3f2637e3ea7524"),
+            (b"Kyber1024", params1024, "6471398b0a728ee1ef39e93bb89b526fbf59587a3662edadbcfc6c88a512cd71"),
         ])
 def test_nist_kat(name, params, want):
     seed = bytes(range(48))
@@ -174,7 +175,7 @@ def test_nist_kat(name, params, want):
         f.update(b"seed = %s\n" % binascii.hexlify(seed).upper())
         g2 = NistDRBG(seed)
 
-        kseed = g2.read(32) +  g2.read(32)
+        kseed = g2.read(64)
         eseed = g2.read(32)
 
         pk, sk = KeyGen(kseed, params)
@@ -207,3 +208,27 @@ def test_compress():
         mask = (1 << d) - 1
         for x in range(q):
             assert (20642679 * ((x << d) + q//2)) >> 36 & mask == Compress(x, d)
+
+# Check against test/test_vectors{512,768,1024} from the reference
+# implementation, truncated to 10 cases.
+@pytest.mark.parametrize("params,want", [
+            (params512,  "9f96fb58c54f77e9abc7cc4776af6c9e70ea839348ac4ae39918f94f9c6f4f5d"),
+            (params768,  "0164fa2f44a0116f7544a6935e957f1a9d4f3f81f9a5e3c19f5c42a82f4881d4"),
+            (params1024, "974a2158d2d4b8e72a5d977a67fcb5e094792c49d46d52eb09582bd8b1df3665"),
+        ])
+def test_vectors(params, want):
+    h = SHAKE128.new()
+    f = hashlib.sha256()
+    for i in range(10):
+        pk, sk = KeyGen(h.read(64), params)
+        f.update(b'Public Key: ' + binascii.hexlify(pk) + b'\n')
+        f.update(b'Secret Key: ' + binascii.hexlify(sk) + b'\n')
+        ct, ss = Enc(pk, h.read(32), params)
+        f.update(b'Ciphertext: ' + binascii.hexlify(ct) + b'\n')
+        f.update(b'Shared Secret B: ' + binascii.hexlify(ss) + b'\n')
+        ss2 = Dec(sk, ct, params)
+        f.update(b'Shared Secret A: ' + binascii.hexlify(ss2) + b'\n')
+        ct2 = h.read(len(ct))
+        ss3 = Dec(sk, ct2, params)
+        f.update(b'Pseudorandom shared Secret A: ' + binascii.hexlify(ss3) + b'\n')
+    assert f.hexdigest() == want
