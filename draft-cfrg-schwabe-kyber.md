@@ -817,9 +817,8 @@ and ciphertext for the public key as follows.
 
 1. Sample secret cryptographically-secure random 32-octet seed.
 2. Compute
-    1. m = H(seed)
-    2. (K, cpaSeed) = G(m \|\| H(publicKey))
-    3. cpaCipherText = InnerEnc(m, publicKey, cpaSeed)
+    1. (K, cpaSeed) = G(seed \|\| H(publicKey))
+    2. cpaCipherText = InnerEnc(seed, publicKey, cpaSeed)
 3. Return
     1. cipherText = cpaCipherText
     2. sharedSecret = K
@@ -933,7 +932,7 @@ for their input and assistance.
 
 - Use KDF/PRF2 to compute rejection shared secret instead of G.
 
-- Add note on KyberSlash.
+- Remove hash of shame.
 
 ## Since draft-schwabe-cfrg-kyber-02
 

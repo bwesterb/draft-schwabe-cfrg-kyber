@@ -307,9 +307,8 @@ def KeyGen(seed, params):
 def Enc(pk, seed, params):
     assert len(seed) == 32
 
-    m = H(seed)
-    K, r = G(m + H(pk))
-    ct = InnerEnc(pk, m, r, params)
+    K, r = G(seed + H(pk))
+    ct = InnerEnc(pk, seed, r, params)
     return (ct, K)
 
 def Dec(sk, ct, params):

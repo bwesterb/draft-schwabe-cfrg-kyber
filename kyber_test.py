@@ -160,9 +160,9 @@ class NistDRBG:
         return ret[:length]
 
 @pytest.mark.parametrize("name,params,want", [
-            (b"Kyber512", params512, "1717803847308c66415874aa7f84a9c7854bb55b632043895b6448f569341dd5"),
-            (b"Kyber768", params768, "cbee30e334ec7d346dcf94c4fbdf803bf82c0ce591bba336f48ba8ae527e8a9f"),
-            (b"Kyber1024", params1024, "35c1dca71b07c657e2c41c49b4797ec29ecd8a15559103068bcccc5ddeb2fe55"),
+            (b"Kyber512", params512, "4b88ac7643ff60209af1175e025f354272e88df827a0ce1c056e403629b88e04"),
+            (b"Kyber768", params768, "21b4a1e1ea34a13c26a9da5eeb9325afb5ca11596ca6f3704c3f2637e3ea7524"),
+            (b"Kyber1024", params1024, "6471398b0a728ee1ef39e93bb89b526fbf59587a3662edadbcfc6c88a512cd71"),
         ])
 def test_nist_kat(name, params, want):
     seed = bytes(range(48))
@@ -175,7 +175,7 @@ def test_nist_kat(name, params, want):
         f.update(b"seed = %s\n" % binascii.hexlify(seed).upper())
         g2 = NistDRBG(seed)
 
-        kseed = g2.read(32) +  g2.read(32)
+        kseed = g2.read(64)
         eseed = g2.read(32)
 
         pk, sk = KeyGen(kseed, params)
@@ -212,9 +212,9 @@ def test_compress():
 # Check against test/test_vectors{512,768,1024} from the reference
 # implementation, truncated to 10 cases.
 @pytest.mark.parametrize("params,want", [
-            (params512,  "9006eb8020e3dc802df1fe60f26d0b51009fad373b9dcbece595c82b941ebf9a"),
-            (params768,  "9f210734f803ba8bcc95ab0ce774e14f53978593d9a2000c6d69f59e5d740b1b"),
-            (params1024, "6118511cb40f262e8e176fd7cbfa1ee487664568563b9b45191e643a09c8e965"),
+            (params512,  "9f96fb58c54f77e9abc7cc4776af6c9e70ea839348ac4ae39918f94f9c6f4f5d"),
+            (params768,  "0164fa2f44a0116f7544a6935e957f1a9d4f3f81f9a5e3c19f5c42a82f4881d4"),
+            (params1024, "974a2158d2d4b8e72a5d977a67fcb5e094792c49d46d52eb09582bd8b1df3665"),
         ])
 def test_vectors(params, want):
     h = SHAKE128.new()
