@@ -136,7 +136,7 @@ A KEM can be transformed into a PKE scheme using HPKE {{RFC9180}} {{XYBERHPKE}}.
 ## Warning on stability and relation to ML-KEM
 
 **NOTE** This draft is not stable and does not (yet) match the final
-NIST standard ML-KEM (FIPS 203) expected in 2024. It matches 
+NIST standard ML-KEM (FIPS 203) expected in 2024. It matches
 the draft for ML-KEM published by NIST August 2023. {{MLKEM}}
 
 # Conventions and Definitions
