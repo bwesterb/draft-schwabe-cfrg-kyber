@@ -1,0 +1,3289 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Kyber Post-Quantum KEM</title>
+<meta content="Peter Schwabe" name="author">
+<meta content="Bas Westerbaan" name="author">
+<meta content="
+       This memo specifies a preliminary version (XXX)
+    of Kyber, an IND-CCA2 secure Key Encapsulation Method. 
+    " name="description">
+<meta content="xml2rfc 3.19.0" name="generator">
+<meta content="kyber" name="keyword">
+<meta content="kem" name="keyword">
+<meta content="post-quantum" name="keyword">
+<meta content="draft-cfrg-schwabe-kyber-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.19.0
+    Python 3.11.6
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 4.1.0
+    pycountry 22.3.5
+    PyYAML 6.0.1
+    requests 2.31.0
+    setuptools 68.2.2
+    six 1.16.0
+    wcwidth 0.2.12
+-->
+<link href="draft-cfrg-schwabe-kyber.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 2px 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">kyber</td>
+<td class="right">January 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Schwabe &amp; Westerbaan</td>
+<td class="center">Expires 7 July 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">None</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-cfrg-schwabe-kyber-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-01-04" class="published">4 January 2024</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-07-07">7 July 2024</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">P. Schwabe</div>
+<div class="org">MPI-SP &amp; Radboud University</div>
+</div>
+<div class="author">
+      <div class="author-name">B. E. Westerbaan</div>
+<div class="org">Cloudflare</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Kyber Post-Quantum KEM</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This memo specifies a preliminary version (XXX)
+    of Kyber, an IND-CCA2 secure Key Encapsulation Method.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        The latest revision of this draft can be found at <span><a href="https://bwesterb.github.io/draft-schwabe-cfrg-kyber/draft-cfrg-schwabe-kyber.html">https://bwesterb.github.io/draft-schwabe-cfrg-kyber/draft-cfrg-schwabe-kyber.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-cfrg-schwabe-kyber/">https://datatracker.ietf.org/doc/draft-cfrg-schwabe-kyber/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/bwesterb/draft-schwabe-cfrg-kyber">https://github.com/bwesterb/draft-schwabe-cfrg-kyber</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 7 July 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2024 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-warning-on-stability" class="internal xref">Warning on stability</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-overview" class="internal xref">Overview</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-the-field-gfq" class="internal xref">The field GF(q)</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-size" class="internal xref">Size</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-compression" class="internal xref">Compression</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-the-ring-rq" class="internal xref">The ring Rq</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-operations" class="internal xref">Operations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-size-of-polynomials" class="internal xref">Size of polynomials</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-addition-and-subtraction" class="internal xref">Addition and subtraction</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-multiplication" class="internal xref">Multiplication</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-symmetric-cryptographic-pri" class="internal xref">Symmetric cryptographic primitives</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-sampling-of-polynomials" class="internal xref">Sampling of polynomials</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-uniformly" class="internal xref">Uniformly</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1.2.1">
+                    <p id="section-toc.1-1.7.2.1.2.1.1"><a href="#section-7.1.1" class="auto internal xref">7.1.1</a>.  <a href="#name-samplematrix" class="internal xref">sampleMatrix</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-from-a-binomial-distributio" class="internal xref">From a binomial distribution</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-samplenoise" class="internal xref">sampleNoise</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-vector-and-matrices" class="internal xref">Vector and matrices</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-operations-on-vectors" class="internal xref">Operations on vectors</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-dot-product-and-matrix-mult" class="internal xref">Dot product and matrix multiplication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-transpose" class="internal xref">Transpose</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-serialization" class="internal xref">Serialization</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-octetstobits" class="internal xref">OctetsToBits</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-encode-and-decode" class="internal xref">Encode and Decode</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2.2.1">
+                    <p id="section-toc.1-1.9.2.2.2.1.1"><a href="#section-9.2.1" class="auto internal xref">9.2.1</a>.  <a href="#name-polynomials" class="internal xref">Polynomials</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2.2.2">
+                    <p id="section-toc.1-1.9.2.2.2.2.1"><a href="#section-9.2.2" class="auto internal xref">9.2.2</a>.  <a href="#name-vectors" class="internal xref">Vectors</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-inner-malleable-public-key-" class="internal xref">Inner malleable public-key encryption scheme</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-parameters" class="internal xref">Parameters</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-key-generation" class="internal xref">Key generation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-encryption" class="internal xref">Encryption</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-decryption" class="internal xref">Decryption</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-kyber" class="internal xref">Kyber</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-key-generation-2" class="internal xref">Key generation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-encapsulation" class="internal xref">Encapsulation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
+                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-decapsulation" class="internal xref">Decapsulation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-parameter-sets" class="internal xref">Parameter sets</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-machine-readable-specificat" class="internal xref">Machine-readable specification</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#section-15.1" class="auto internal xref">15.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#section-15.2" class="auto internal xref">15.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-change-log" class="internal xref">Change Log</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.1">
+                <p id="section-toc.1-1.17.2.1.1"><a href="#appendix-B.1" class="auto internal xref">B.1</a>.  <a href="#name-since-xxx" class="internal xref">Since XXX</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.2">
+                <p id="section-toc.1-1.17.2.2.1"><a href="#appendix-B.2" class="auto internal xref">B.2</a>.  <a href="#name-since-draft-schwabe-cfrg-ky" class="internal xref">Since draft-schwabe-cfrg-kyber-02</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.3">
+                <p id="section-toc.1-1.17.2.3.1"><a href="#appendix-B.3" class="auto internal xref">B.3</a>.  <a href="#name-since-draft-schwabe-cfrg-kyb" class="internal xref">Since draft-schwabe-cfrg-kyber-01</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.4">
+                <p id="section-toc.1-1.17.2.4.1"><a href="#appendix-B.4" class="auto internal xref">B.4</a>.  <a href="#name-since-draft-schwabe-cfrg-kybe" class="internal xref">Since draft-schwabe-cfrg-kyber-00</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Kyber is NIST's pick for a post-quantum key agreement <span>[<a href="#NISTR3" class="cite xref">NISTR3</a>]</span>.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Kyber is not a Diffie-Hellman (DH) style non-interactive key agreement,
+but instead, Kyber is a Key Encapsulation Method (KEM).
+A KEM is a three-tuple of algorithms (<em>KeyGen</em>, <em>Encapsulate</em>, <em>Decapsulate</em>):<a href="#section-1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1-3.1">
+          <p id="section-1-3.1.1"><em>KeyGen</em> takes no inputs and generates a private key and a public key;<a href="#section-1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-3.2">
+          <p id="section-1-3.2.1"><em>Encapsulate</em> takes as input a public key and produces as output
+a ciphertext and a shared secret;<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-1-3.3">
+          <p id="section-1-3.3.1"><em>Decapsulate</em> takes as input a ciphertext and a private key and
+produces a shared secret.<a href="#section-1-3.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-1-4">Like DH, a KEM can be used as an unauthenticated key-agreement
+protocol, for example in TLS <span>[<a href="#HYBRID" class="cite xref">HYBRID</a>]</span> <span>[<a href="#XYBERTLS" class="cite xref">XYBERTLS</a>]</span>.
+However, unlike DH, a KEM-based key agreement is <em>interactive</em>,
+because the party executing Encapsulate can compute its protocol
+message (the ciphertext) only after having received the input
+(public key) from the party running <em>KeyGen</em> and <em>Decapsulate</em>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">A KEM can be transformed into a PKE scheme using HPKE <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span> <span>[<a href="#XYBERHPKE" class="cite xref">XYBERHPKE</a>]</span>.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<div id="warning-on-stability">
+<section id="section-1.1">
+        <h3 id="name-warning-on-stability">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-warning-on-stability" class="section-name selfRef">Warning on stability</a>
+        </h3>
+<p id="section-1.1-1"><strong>NOTE</strong> This draft is not stable and does not (yet) match the final
+NIST standard expected in 2024. XXX<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="overview">
+<section id="section-3">
+      <h2 id="name-overview">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
+      </h2>
+<p id="section-3-1">Kyber is an IND-CCA2 secure KEM. It is constructed by applying a
+Fujisaki-Okamato style transformation on InnerPKE, which is
+the underlying IND-CPA secure Public Key Encryption scheme.
+We cannot use InnerPKE directly, as its ciphertexts are malleable.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-2">
+<pre>
+                   F.O. transform
+   InnerPKE   ----------------------&gt;   Kyber
+   IND-CPA                              IND-CCA2
+</pre><a href="#section-3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3-3">Kyber is a lattice-based scheme. More precisely, its security
+is based on the learning-with-errors-and-rounding problem in module
+lattices (MLWER).
+The underlying polynomial ring R (defined in <a href="#S-ring" class="auto internal xref">Section 5</a>) is chosen such that
+multiplication is very fast using the number theoretic transform
+(NTT, see <a href="#S-NTT" class="auto internal xref">Section 5.1.3.1</a>).<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">An InnerPKE private key is a vector <em>s</em> over R of length k which is
+<em>small</em> in a particular way. Here <code>k</code> is a security parameter akin to the
+size of a prime modulus. For Kyber512, which targets AES-128's security level,
+the value of k is 2, for Kyber768 (AES-192 security level) k is 3,
+and for Kyber1024 (AES-256 security level) k is 4.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The public key consists of two values:<a href="#section-3-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-6.1">
+          <p id="section-3-6.1.1"><em>A</em> a k-by-k matrix over R sampled uniformly at random <em>and</em><a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.2">
+          <p id="section-3-6.2.1"><em>t = A s + e</em>, where <code>e</code> is a suitably small masking vector.<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-7">Distinguishing between such A s + e and a uniformly sampled t is the
+decision module learning-with-errors (MLWE) problem. If that is hard, then
+it is also hard to recover the private key from the public key
+as that would allow you to distinguish between those two.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">To save space in the public key, A is recomputed deterministically from
+a 256bit seed <em>rho</em>. Strictly speaking, A is not uniformly random anymore,
+but it's computationally indistuinguishable from it.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">A ciphertext for a message m under this public key is a pair (c_1, c_2)
+computed roughly as follows:<a href="#section-3-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-10">
+<pre>
+c_1 = Compress(A^T r + e_1, d_u)
+c_2 = Compress(t^T r + e_2 + Decompress(m, 1), d_v)
+</pre><a href="#section-3-10" class="pilcrow">¶</a>
+</div>
+<p id="section-3-11">where<a href="#section-3-11" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-12.1">
+          <p id="section-3-12.1.1">e_1, e_2 and r are small blinds;<a href="#section-3-12.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-12.2">
+          <p id="section-3-12.2.1">Compress(-, d) removes some information, leaving d bits per coefficient
+and Decompress is an "approximate inverse" of Compress;<a href="#section-3-12.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-12.3">
+          <p id="section-3-12.3.1">d_u, d_v are scheme parameters; and<a href="#section-3-12.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-12.4">
+          <p id="section-3-12.4.1">superscript T denotes transposition, so <em>A^T</em> is the transpose of A,
+see <a href="#transpose" class="auto internal xref">Section 8.3</a> and <em>t^T r</em> is the dot product
+of t and r, see <a href="#dot-prod" class="auto internal xref">Section 8.2</a>.<a href="#section-3-12.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-13">Distinguishing such a ciphertext and uniformly sampled (c_1, c_2)
+is an example of the full MLWER problem, see Section 4.4 of <span>[<a href="#KYBERV302" class="cite xref">KYBERV302</a>]</span>.<a href="#section-3-13" class="pilcrow">¶</a></p>
+<p id="section-3-14">To decrypt the ciphertext, one computes<a href="#section-3-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-15">
+<pre>
+m = Compress(Decompress(c_2, d_v) - s^T Decompress(c_1, d_u), 1).
+</pre><a href="#section-3-15" class="pilcrow">¶</a>
+</div>
+<p id="section-3-16">It it not straight-forward to see that this formula is correct.
+In fact, there is negligable but non-zero probability that a ciphertext
+does not decrypt correctly given by the DFP column in <a href="#params" class="auto internal xref">Table 4</a>.
+This failure probability can be computed by a careful automated
+analysis of the probabilities involved, see <code>kyber_failure.py</code> of <span>[<a href="#SECEST" class="cite xref">SECEST</a>]</span>.<a href="#section-3-16" class="pilcrow">¶</a></p>
+<p id="section-3-17">To define all these operations precisely, we first define the field
+of coefficients for our polynomial ring; what it means to be small;
+and how to compress. Then we define the polynomial ring R; its operations
+and in particular the NTT. We continue with the different methods of
+sampling and (de)serialization. Then, we first define InnerPKE
+and finally Kyber proper.<a href="#section-3-17" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="the-field-gfq">
+<section id="section-4">
+      <h2 id="name-the-field-gfq">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-the-field-gfq" class="section-name selfRef">The field GF(q)</a>
+      </h2>
+<p id="section-4-1">Kyber is defined over GF(q) = Z/qZ, the integers modulo q = 13*2^8+1 = 3329.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="size">
+<section id="section-4.1">
+        <h3 id="name-size">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-size" class="section-name selfRef">Size</a>
+        </h3>
+<p id="section-4.1-1">To define the size of a field element, we need a signed modulo. For any odd m,
+we write<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-2">
+<pre>
+a smod m
+</pre><a href="#section-4.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-3">for the unique integer b with -(m-1)/2 &lt; b &lt;= (m-1)/2 and b = a modulo m.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">To avoid confusion, for the more familiar modulo we write umod; that is<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-5">
+<pre>
+a umod m
+</pre><a href="#section-4.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-6">is the unique integer b with 0 &lt;= b &lt; m and b = a modulo m.<a href="#section-4.1-6" class="pilcrow">¶</a></p>
+<p id="section-4.1-7">Now we can define the norm of a field element:<a href="#section-4.1-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-8">
+<pre>
+|| a || = abs(a smod q)
+</pre><a href="#section-4.1-8" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-9">Examples:<a href="#section-4.1-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-10">
+<pre>
+ 3325 smod q = -4        ||  3325 || = 4
+-3320 smod q =  9        || -3320 || = 9
+</pre><a href="#section-4.1-10" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-11"><span class="cref" id="_4">TODO (#23) Should we define smod and umod at all, since we don't
+use it.<span class="crefSource">Bas</span></span><a href="#section-4.1-11" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="compression">
+<section id="section-4.2">
+        <h3 id="name-compression">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-compression" class="section-name selfRef">Compression</a>
+        </h3>
+<p id="section-4.2-1">In several parts of the algorithm, we will need a method to compress
+fied elements down into d bits. To do this, we use the following method.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">For any positive integer d, integer x and integer 0 &lt;= y &lt; 2^d, we define<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-3">
+<pre>
+  Compress(x, d) = Round( (2^d / q) x ) umod 2^d
+Decompress(y, d) = Round( (q / 2^d) y )
+</pre><a href="#section-4.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2-4">where Round(x) rounds any fraction to the nearest integer going up with ties.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">Note that in <a href="#S-VectorOps" class="auto internal xref">Section 8.1</a> we extend Compress and Decompress
+to polynomials and vectors of polynomials.<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-6">These two operations have the following properties:<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.2-7.1">
+            <p id="section-4.2-7.1.1"><code>0 &lt;= Compress(x, d) &lt; 2^d</code><a href="#section-4.2-7.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-7.2">
+            <p id="section-4.2-7.2.1"><code>0 &lt;= Decompress(y, d) &lt; q</code><a href="#section-4.2-7.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-7.3">
+            <p id="section-4.2-7.3.1"><code>Compress(Decompress(y, d), d) = y</code><a href="#section-4.2-7.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-7.4">
+            <p id="section-4.2-7.4.1">If <code>Decompress(Compress(x, d), d) = x'</code>, then <code>|| x' - x || &lt;= Round(q/2^(d+1))</code><a href="#section-4.2-7.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-4.2-7.5">
+            <p id="section-4.2-7.5.1">If <code>x = x' modulo q</code>, then <code>Compress(x, d) = Compress(x', d)</code><a href="#section-4.2-7.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-4.2-8">For implementation efficiency, these can be computed as follows.<a href="#section-4.2-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-9">
+<pre>
+  Compress(x, d) = Div( (x &lt;&lt; d) + q/2), q ) &amp; ((1 &lt;&lt; d) - 1)
+Decompress(y, d) = (q*y + (1 &lt;&lt; (d-1))) &gt;&gt; d
+</pre><a href="#section-4.2-9" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2-10">where Div(x, a) = Floor(x / a). <span class="cref" id="_1">TODO Do we want to include the proof that this is correct?
+Do we need to define &gt;&gt; and &lt;&lt;?<span class="crefSource">Bas</span></span><a href="#section-4.2-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="S-ring">
+<section id="section-5">
+      <h2 id="name-the-ring-rq">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-the-ring-rq" class="section-name selfRef">The ring Rq</a>
+      </h2>
+<p id="section-5-1">Kyber is defined over a polynomial ring Rq = GF(q)[x]/(x^n+1)
+where n=256 (and q=3329). Elements of Rq are tuples of 256 integers modulo q.
+We will call them polynomials or elements interchangeably.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">A tuple a = (a_0, ..., a_255) represents the polynomial<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-3">
+<pre>
+a_0 + a_1 x + a_2 x^2 + ... + a_255 x^255.
+</pre><a href="#section-5-3" class="pilcrow">¶</a>
+</div>
+<p id="section-5-4">With polynomial coefficients, vector and matrix indices, we will start
+counting at zero.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<div id="operations">
+<section id="section-5.1">
+        <h3 id="name-operations">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-operations" class="section-name selfRef">Operations</a>
+        </h3>
+<div id="size-of-polynomials">
+<section id="section-5.1.1">
+          <h4 id="name-size-of-polynomials">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-size-of-polynomials" class="section-name selfRef">Size of polynomials</a>
+          </h4>
+<p id="section-5.1.1-1">For a polynomial a = (a_0, ..., a_255) in R, we write:<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.1-2">
+<pre>
+|| a || = max_i || a_i ||
+</pre><a href="#section-5.1.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.1-3">Thus a polynomial is considered large if one of its components is large.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="addition-and-subtraction">
+<section id="section-5.1.2">
+          <h4 id="name-addition-and-subtraction">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-addition-and-subtraction" class="section-name selfRef">Addition and subtraction</a>
+          </h4>
+<p id="section-5.1.2-1">Addition and subtraction of elements is componentwise. Thus<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.2-2">
+<pre>
+(a_0, ..., a_255) + (b_0, ..., b_255) = (a_0 + b_0, ..., a_255 + b_255),
+</pre><a href="#section-5.1.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.2-3">and<a href="#section-5.1.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.2-4">
+<pre>
+(a_0, ..., a_255) - (b_0, ..., b_255) = (a_0 - b_0, ..., a_255 - b_255),
+</pre><a href="#section-5.1.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.2-5">where addition/subtractoin in each component is computed modulo q.<a href="#section-5.1.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="multiplication">
+<section id="section-5.1.3">
+          <h4 id="name-multiplication">
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-multiplication" class="section-name selfRef">Multiplication</a>
+          </h4>
+<p id="section-5.1.3-1">Multiplication is that of polynomials (convolution) with the additional rule
+that x^256=-1. To wit<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3-2">
+<pre>
+(a_0, ..., a_255) \* (b_0, ..., b_255)
+    = (a_0 * b_0 - a_255 * b_1 - ... - a_1 * b_255,
+       a_0 * b_1 + a_1 * b_0 - a_255 * b_2 - ... - a_2 * b_255,
+
+            ...
+
+       a_0 * b_255 + ... + a_255 * b_0)
+</pre><a href="#section-5.1.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3-3">We will not use this schoolbook multiplication to compute the product.
+Instead we will use the more efficient, number theoretic transform (NTT),
+see <a href="#S-NTT" class="auto internal xref">Section 5.1.3.1</a>.<a href="#section-5.1.3-3" class="pilcrow">¶</a></p>
+<div id="S-NTT">
+<section id="section-5.1.3.1">
+            <h5 id="name-background-on-the-number-th">
+<a href="#section-5.1.3.1" class="section-number selfRef">5.1.3.1. </a><a href="#name-background-on-the-number-th" class="section-name selfRef">Background on the Number Theoretic Transform (NTT)</a>
+            </h5>
+<p id="section-5.1.3.1-1">The modulus q was chosen such that 256 divides into q-1. This means that
+there are zeta with<a href="#section-5.1.3.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-2">
+<pre>
+zeta^128 = -1  modulo  q
+</pre><a href="#section-5.1.3.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-3">With such a zeta, we can almost completely split the polynomial x^256+1
+used to define R over GF(q):<a href="#section-5.1.3.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-4">
+<pre>
+x^256 + 1 = x^256 - zeta^128
+          = (x^128 - zeta^64)(x^128 + zeta^64)
+          = (x^128 - zeta^64)(x^128 - zeta^192)
+          = (x^64 - zeta^32)(x^64 + zeta^32)
+                (x^64 - zeta^96)(x^64 + zeta^96)
+
+            ...
+
+          = (x^2 - zeta)(x^2 + zeta)(x^2 - zeta^65)(x^2 + zeta^65)
+                    ... (x^2 - zeta^127)(x^2 + zeta^127)
+</pre><a href="#section-5.1.3.1-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-5">Note that the powers of zeta that appear in the second, fourth, ...,
+and final lines are in binary:<a href="#section-5.1.3.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-6">
+<pre>
+0100000 1100000
+0010000 1010000 0110000 1110000
+0001000 1001000 0101000 1101000 0011000 1011000 0111000 1111000
+            ...
+0000001 1000001 0100001 1100001 0010001 1010001 0110001 ... 1111111
+</pre><a href="#section-5.1.3.1-6" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-7">That is: brv(2), brv(3), brv(4), ..., where brv(x) denotes the 7-bit
+bitreversal of x. The final line is brv(64), brv(65), ..., brv(127).<a href="#section-5.1.3.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1-8">These polynomials x^2 +- zeta^i are irreducible and coprime, hence by
+the Chinese Remainder Theorem for commutative rings, we know<a href="#section-5.1.3.1-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-9">
+<pre>
+R = GF(q)[x]/(x^256+1) -&gt; GF(q)[x]/(x^2-zeta) x ... x GF(q)[x]/(x^2+zeta^127)
+</pre><a href="#section-5.1.3.1-9" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-10">given by a |-&gt; ( a mod x^2 - zeta, ..., a mod x^2 + zeta^127 ) is an isomorphism.
+This is the Number Theoretic Transform (NTT). Multiplication on the right is
+much easier: it's almost componentwise, see <a href="#S-NTT-mul" class="auto internal xref">Section 5.1.3.3</a>.<a href="#section-5.1.3.1-10" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1-11">A propos, the the constant factors that appear in the moduli in order
+can be computed efficiently as follows (all modulo q):<a href="#section-5.1.3.1-11" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-12">
+<pre>
+-zeta     = -zeta^brv(64)  = -zeta^{1 + 2 brv(0)}
+ zeta     =  zeta^brv(64)  = -zeta^{1 + 2 brv(1)}
+-zeta^65  = -zeta^brv(65)  = -zeta^{1 + 2 brv(2)}
+ zeta^65  =  zeta^brv(65)  = -zeta^{1 + 2 brv(3)}
+-zeta^33  = -zeta^brv(66)  = -zeta^{1 + 2 brv(4)}
+ zeta^33  =  zeta^brv(66)  = -zeta^{1 + 2 brv(5)}
+
+             ...
+
+-zeta^127 = -zeta^brv(127) = -zeta^{1 + 2 brv(126)}
+ zeta^127 =  zeta^brv(127) = -zeta^{1 + 2 brv(127)}
+</pre><a href="#section-5.1.3.1-12" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-13">To compute a multiplication in R efficiently, one can first use the
+NTT, to go to the right "into the NTT domain"; compute the multiplication
+there and move back with the inverse NTT.<a href="#section-5.1.3.1-13" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1-14">The NTT can be computed efficiently by performing each binary split
+of the polynomial separately as follows:<a href="#section-5.1.3.1-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-15">
+<pre>
+a |-&gt; ( a mod x^128 - zeta^64, a mod x^128 + zeta^64 ),
+  |-&gt; ( a mod  x^64 - zeta^32, a mod  x^64 + zeta^32,
+        a mod  x^64 - zeta^96, a mod  x^64 + zeta^96 ),
+
+    et cetera
+</pre><a href="#section-5.1.3.1-15" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-16">If we concatenate the resulting coefficients, expanding the definitions,
+for the first step we get:<a href="#section-5.1.3.1-16" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-17">
+<pre>
+a |-&gt; (   a_0 + zeta^64 a_128,   a_1 + zeta^64 a_129,
+         ...
+        a_126 + zeta^64 a_254, a_127 + zeta^64 a_255,
+          a_0 - zeta^64 a_128,   a_1 - zeta^64 a_129,
+         ...
+        a_126 - zeta^64 a_254, a_127 - zeta^64 a_255)
+</pre><a href="#section-5.1.3.1-17" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-18">We can see this as 128 applications of the linear map CT_64, where<a href="#section-5.1.3.1-18" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-19">
+<pre>
+CT_i: (a, b) |-&gt; (a + zeta^i b, a - zeta^i b)   modulo q
+</pre><a href="#section-5.1.3.1-19" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-20">for the appropriate i in the following order, pictured in the case of n=16:<a href="#section-5.1.3.1-20" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-21">
+<pre>
+-x----------------x--------x---
+-|-x--------------|-x------|-x-
+-|-|-x------------|-|-x----x-|-
+-|-|-|-x----------|-|-|-x----x-
+-|-|-|-|-x--------x-|-|-|--x---
+-|-|-|-|-|-x--------x-|-|--|-x-
+-|-|-|-|-|-|-x--------x-|--x-|-
+-|-|-|-|-|-|-|-x--------x----x-
+-x-|-|-|-|-|-|-|--x--------x---
+---x-|-|-|-|-|-|--|-x------|-x-
+-----x-|-|-|-|-|--|-|-x----x-|-
+-------x-|-|-|-|--|-|-|-x----x-
+---------x-|-|-|--x-|-|-|--x---
+-----------x-|-|----x-|-|--|-x-
+-------------x-|------x-|--x-|-
+---------------x--------x----x-
+</pre><a href="#section-5.1.3.1-21" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-22">For n=16 there are 3 levels with 1, 2 and 4 row groups respectively.
+For the full n=256, there are 7 levels with 1, 2, 4, 8, 16, 32 and 64
+row groups respectively. The appropriate power of zeta in the first
+level is brv(1)=64. The second level has brv(2) and brv(3) as powers
+of zeta for the top and bottom row group respectively, and so on.<a href="#section-5.1.3.1-22" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1-23">The CT_i is known as a Cooley-Tukey butterfly. Its inverse is given
+by the Gentleman-Sande butterfly:<a href="#section-5.1.3.1-23" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.1-24">
+<pre>
+GS_i: (a, b) |-&gt; ( (a+b)/2, zeta^-i (a-b)/2 )    modulo q
+</pre><a href="#section-5.1.3.1-24" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.1-25">The inverse NTT can be computed by replacing CS_i by GS_i and flipping
+the diagram horizontally. <span class="cref" id="_2">TODO (#8) This section gives background not necessary for the implementation.
+Should we keep it?<span class="crefSource">Bas</span></span><a href="#section-5.1.3.1-25" class="pilcrow">¶</a></p>
+<div id="optimization-notes">
+<section id="section-5.1.3.1.1">
+              <h6 id="name-optimization-notes">
+<a href="#section-5.1.3.1.1" class="section-number selfRef">5.1.3.1.1. </a><a href="#name-optimization-notes" class="section-name selfRef">Optimization notes</a>
+              </h6>
+<p id="section-5.1.3.1.1-1">The modular divisions by two in the InvNTT can be collected into a
+single modular division by 128.<a href="#section-5.1.3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1.1-2">zeta^-i can be computed as -zeta^(128-i), which allows one to use the same
+precomputed table of powers of zeta for both the NTT and InvNTT.<a href="#section-5.1.3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.1.1-3"><span class="cref" id="_3">TODO Add hints on lazy Montgomery reduction? Including
+https://eprint.iacr.org/2020/1377.pdf<span class="crefSource">Bas</span></span><a href="#section-5.1.3.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="ntt-and-invntt">
+<section id="section-5.1.3.2">
+            <h5 id="name-ntt-and-invntt">
+<a href="#section-5.1.3.2" class="section-number selfRef">5.1.3.2. </a><a href="#name-ntt-and-invntt" class="section-name selfRef">NTT and InvNTT</a>
+            </h5>
+<p id="section-5.1.3.2-1">As primitive 256th root of unity we use zeta=17.<a href="#section-5.1.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.2-2">As before, brv(i) denotes the 7-bit bitreversal of i, so brv(1)=64
+and brv(91)=109.<a href="#section-5.1.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.2-3">The NTT is a linear bijection R -&gt; R given by the matrix:<a href="#section-5.1.3.2-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.2-4">
+<pre>
+             [ zeta^{ (2 brv(i&gt;&gt;1) + 1) (j&gt;&gt;1) }               if i=j mod 2
+(NTT)_{ij} = [
+             [ 0                                               otherwise
+</pre><a href="#section-5.1.3.2-4" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.2-5">Recall that we start counting rows and columns at zero.  The NTT can be
+computed more efficiently as described in section <a href="#S-NTT" class="auto internal xref">Section 5.1.3.1</a>.<a href="#section-5.1.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-5.1.3.2-6">The inverse of the NTT is called InvNTT. It is given by the matrix:<a href="#section-5.1.3.2-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.2-7">
+<pre>
+                    [ zeta^{ 256 - (2 brv(j&gt;&gt;1) + 1) (i&gt;&gt;1) }  if i=j mod 2
+128 (InvNTT)_{ij} = [
+                    [ 0                                        otherwise
+</pre><a href="#section-5.1.3.2-7" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1.3.2-8">Examples:<a href="#section-5.1.3.2-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.2-9">
+<pre>
+NTT(1, 1, 0, ..., 0)   = (1, 1, ..., 1, 1)
+NTT(0, 1, 2, ..., 255) = (2429, 2845, 425, 1865, ..., 2502, 2134, 2717, 2303)
+</pre><a href="#section-5.1.3.2-9" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="S-NTT-mul">
+<section id="section-5.1.3.3">
+            <h5 id="name-multiplication-in-ntt-domai">
+<a href="#section-5.1.3.3" class="section-number selfRef">5.1.3.3. </a><a href="#name-multiplication-in-ntt-domai" class="section-name selfRef">Multiplication in NTT domain</a>
+            </h5>
+<p id="section-5.1.3.3-1">For elements a, b in R, we write a o b for multiplication in the NTT domain.
+That is: a * b = InvNTT(NTT(a) o NTT(b)). Concretely:<a href="#section-5.1.3.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.1.3.3-2">
+<pre>
+            [ a_i b_i + zeta^{2 brv(i &gt;&gt; 1) + 1} a_{i+1} b_{i+1}   if i even
+(a o b)_i = [
+            [ a_{i-1} b_i + a_i b_{i-1}                            otherwise
+</pre><a href="#section-5.1.3.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="symmetric-cryptographic-primitives">
+<section id="section-6">
+      <h2 id="name-symmetric-cryptographic-pri">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-symmetric-cryptographic-pri" class="section-name selfRef">Symmetric cryptographic primitives</a>
+      </h2>
+<p id="section-6-1">Kyber makes use of various symmetric primitives XOF, PRF1, PRF2, H,
+and G, where<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6-2">
+<pre>
+XOF(seed) = SHAKE-128(seed)
+PRF1(seed, counter) = SHAKE-256(seed || counter)
+PRF2(seed, msg) = SHAKE-256(seed || msg)[:32]
+H(msg) = SHA3-256(msg)
+G(msg) = (SHA3-512(msg)[:32], SHA3-512(msg)[32:])
+</pre><a href="#section-6-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6-3">Here <code>counter</code> is an octet; <code>seed</code> is 32 octets; <code>prekey</code> is 64 octets;
+and the length of <code>msg</code> varies.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">On the surface, they look different, but they are all based on
+the same flexible Keccak XOF that uses the f1600 permutation,
+see <span>[<a href="#FIPS202" class="cite xref">FIPS202</a>]</span>:<a href="#section-6-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6-5">
+<pre>
+XOF(seed)       =  Keccak[256](seed || 1111, .)
+PRF1(seed, ctr) =  Keccak[512](seed || ctr || 1111, .)
+PRF2(seed, msg) =  Keccak[512](seed || msg || 1111, 256)
+H(msg)          =  Keccak[512](msg || 01, 256)
+G(msg)          = (Keccak[1024](msg || 01, 512)[:32],
+                   Keccak[1024](msg || 01, 512)[32:])
+
+Keccak[c] = Sponge[Keccak-f[1600], pad10*1, 1600-c]
+</pre><a href="#section-6-5" class="pilcrow">¶</a>
+</div>
+<p id="section-6-6">The reason five different primitives are used is to ensure domain
+separation, which is crucial for security, cf. <span>[<a href="#H2CURVE" class="cite xref">H2CURVE</a>]</span> §2.2.5.
+Additionally, a smaller sponge capacity is used for performance
+where permissable by the security requirements.<a href="#section-6-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sampling-of-polynomials">
+<section id="section-7">
+      <h2 id="name-sampling-of-polynomials">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-sampling-of-polynomials" class="section-name selfRef">Sampling of polynomials</a>
+      </h2>
+<div id="uniformly">
+<section id="section-7.1">
+        <h3 id="name-uniformly">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-uniformly" class="section-name selfRef">Uniformly</a>
+        </h3>
+<p id="section-7.1-1">The polynomials in the matrix A are sampled uniformly and deterministically
+from an octet stream (XOF) using rejection sampling as follows.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Three octets b_0, b_1, b_2 are read from the stream at a time. These are
+interpreted as two 12-bit unsigned integers d_1, d_2 via<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-3">
+<pre>
+d_1 + d_2 2^12 = b_0 + b_1 2^8 + b_2 2^16
+</pre><a href="#section-7.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-7.1-4">This creates a stream of 12-bit <code>d</code>s. Of these, the elements &gt;= q are
+ignored. From the resultant stream, the coefficients of the polynomial
+are taken in order. In Python:<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-5">
+<pre>
+def sampleUniform(stream):
+    cs = []
+    while True:
+        b = stream.read(3)
+        d1 = b[0] + 256*(b[1] % 16)
+        d2 = (b[1] &gt;&gt; 4) + 16*b[2]
+        for d in [d1, d2]:
+            if d &gt;= q: continue
+            cs.append(d)
+            if len(cs) == n: return Poly(cs)
+</pre><a href="#section-7.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-7.1-6">Example:<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-7">
+<pre>
+sampleUniform(SHAKE-128('')) = (3199, 697, 2212, 2302, ..., 255, 846, 1)
+</pre><a href="#section-7.1-7" class="pilcrow">¶</a>
+</div>
+<div id="samplematrix">
+<section id="section-7.1.1">
+          <h4 id="name-samplematrix">
+<a href="#section-7.1.1" class="section-number selfRef">7.1.1. </a><a href="#name-samplematrix" class="section-name selfRef">sampleMatrix</a>
+          </h4>
+<p id="section-7.1.1-1">Now, the <em>k</em> by <em>k</em> matrix <em>A</em> over <em>R</em> is derived deterministically
+from a 32-octet seed <em>rho</em> using sampleUniform as follows.<a href="#section-7.1.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1.1-2">
+<pre>
+sampleMatrix(rho)_{ij} = sampleUniform(XOF(rho || octet(j) || octet(i))
+</pre><a href="#section-7.1.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.1.1-3">That is, to derive the polynomial at the <em>i</em>th row and <em>j</em>th column,
+sampleUniform is called with the 34-octet seed created by first appending
+the octet <em>j</em> and then the octet <em>i</em> to <em>rho</em>. Recall that we start counting
+rows and columns from zero.<a href="#section-7.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1.1-4">As the NTT is a bijection, it does not matter whether we interpret
+the polynomials of the sampled matrix in the NTT domain or not.
+For efficiency, we do interpret the sampled matrix in the NTT domain.<a href="#section-7.1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="from-a-binomial-distribution">
+<section id="section-7.2">
+        <h3 id="name-from-a-binomial-distributio">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-from-a-binomial-distributio" class="section-name selfRef">From a binomial distribution</a>
+        </h3>
+<p id="section-7.2-1">Noise is sampled from a centered binomial distribution Binomial(2eta, 1/2) - eta
+deterministically  as follows.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">An octet array a of length 64*eta is converted to a polynomial CBD(a, eta)<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2-3">
+<pre>
+CBD(a, eta)_i = b_{2i eta} + b_{2i eta + 1} + ... + b_{2i eta + eta-1}
+              - b_{2i eta + eta} - ... - b_{2i eta + 2eta - 1},
+</pre><a href="#section-7.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-7.2-4">where b = OctetsToBits(a).<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.2-5">Examples:<a href="#section-7.2-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2-6">
+<pre>
+CBD((0, 1, 2, ..., 127), 2) = (0, 0, 1, 0, 1, 0, ..., 3328, 1, 0, 1)
+CBD((0, 1, 2, ..., 191), 3) = (0, 1, 3328, 0, 2, ..., 3328, 3327, 3328, 1)
+</pre><a href="#section-7.2-6" class="pilcrow">¶</a>
+</div>
+<div id="samplenoise">
+<section id="section-7.2.1">
+          <h4 id="name-samplenoise">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-samplenoise" class="section-name selfRef">sampleNoise</a>
+          </h4>
+<p id="section-7.2.1-1">A <em>k</em> component small vector <em>v</em> is derived from a seed 32-octet seed <em>sigma</em>,
+an offset <em>offset</em> and size <em>eta</em> as follows:<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2.1-2">
+<pre>
+sampleNoise(sigma, eta, offset)_i = CBD(PRF1(sigma, octet(i+offset)), eta)
+</pre><a href="#section-7.2.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.2.1-3">Recall that we start counting vector indices at zero.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="vector-and-matrices">
+<section id="section-8">
+      <h2 id="name-vector-and-matrices">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-vector-and-matrices" class="section-name selfRef">Vector and matrices</a>
+      </h2>
+<div id="S-VectorOps">
+<section id="section-8.1">
+        <h3 id="name-operations-on-vectors">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-operations-on-vectors" class="section-name selfRef">Operations on vectors</a>
+        </h3>
+<p id="section-8.1-1">Recall that Compress(x, d) maps a field element x into {0, ..., 2^d-1}.
+In Kyber d is at most 11 and so we can interpret Compress(x, d) as a field
+element again.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">In this way, we can extend Compress(-, d) to polynomials by applying
+to each coefficient separately and in turn to vectors by applying
+to each polynomial. That is, for a vector v and polynomial p:<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.1-3">
+<pre>
+Compress(p, d)_i = Compress(p_i, d)
+Compress(v, d)_i = Compress(v_i, d)
+</pre><a href="#section-8.1-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dot-prod">
+<section id="section-8.2">
+        <h3 id="name-dot-product-and-matrix-mult">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-dot-product-and-matrix-mult" class="section-name selfRef">Dot product and matrix multiplication</a>
+        </h3>
+<p id="section-8.2-1">We will also use "o", from section <a href="#S-NTT-mul" class="auto internal xref">Section 5.1.3.3</a>,
+to denote the dot product and matrix multiplication
+in the NTT domain. Concretely:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8.2-2">
+<li id="section-8.2-2.1">
+            <p id="section-8.2-2.1.1">For two length k vector v and w, we write<a href="#section-8.2-2.1.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.2-2.1.2">
+<pre>
+ v o w = v_0 o w_0 + ... + v_{k-1} o w_{k-1}
+</pre><a href="#section-8.2-2.1.2" class="pilcrow">¶</a>
+</div>
+</li>
+          <li id="section-8.2-2.2">
+            <p id="section-8.2-2.2.1">For a k by k matrix A and a length k vector v, we have<a href="#section-8.2-2.2.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.2-2.2.2">
+<pre>
+ (A o v)_i = A_i o v,
+</pre><a href="#section-8.2-2.2.2" class="pilcrow">¶</a>
+</div>
+<p id="section-8.2-2.2.3">
+where A_i denotes the (i+1)th row of the matrix A as we start
+counting at zero.<a href="#section-8.2-2.2.3" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+</section>
+</div>
+<div id="transpose">
+<section id="section-8.3">
+        <h3 id="name-transpose">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-transpose" class="section-name selfRef">Transpose</a>
+        </h3>
+<p id="section-8.3-1">For a matrix A, we denote by A^T the tranposed matrix. To wit:<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.3-2">
+<pre>
+A^T_ij = A_ji.
+</pre><a href="#section-8.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-8.3-3">We define Decompress(-, d) for vectors and polynomials in the same way.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="serialization">
+<section id="section-9">
+      <h2 id="name-serialization">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-serialization" class="section-name selfRef">Serialization</a>
+      </h2>
+<div id="octetstobits">
+<section id="section-9.1">
+        <h3 id="name-octetstobits">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-octetstobits" class="section-name selfRef">OctetsToBits</a>
+        </h3>
+<p id="section-9.1-1">For any list of octets a_0, ..., a_{s-1}, we define OctetsToBits(a), which
+is a list of bits of length 8s, defined by<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.1-2">
+<pre>
+OctetsToBits(a)_i = ((a_(i&gt;&gt;3)) &gt;&gt; (i umod 8)) umod 2.
+</pre><a href="#section-9.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.1-3">Example:<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.1-4">
+<pre>
+OctetsToBits(12,45) = (0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0)
+</pre><a href="#section-9.1-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="encode-and-decode">
+<section id="section-9.2">
+        <h3 id="name-encode-and-decode">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-encode-and-decode" class="section-name selfRef">Encode and Decode</a>
+        </h3>
+<p id="section-9.2-1">For an integer 0 &lt; w &lt;= 12, we define Decode(a, w), which converts
+any  list a of w*l/8 octets into a list of length l with
+values in {0, ..., 2^w-1} as follows.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.2-2">
+<pre>
+Decode(a, w)_i = b_{wi} + b_{wi+1} 2 + b_{wi+2} 2^2 + ... + b_{wi+w-1} 2^{w-1},
+</pre><a href="#section-9.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.2-3">where b = OctetsToBits(a).<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+<p id="section-9.2-4">Encode(-, w) is the unique inverse of Decode(-, w)<a href="#section-9.2-4" class="pilcrow">¶</a></p>
+<div id="polynomials">
+<section id="section-9.2.1">
+          <h4 id="name-polynomials">
+<a href="#section-9.2.1" class="section-number selfRef">9.2.1. </a><a href="#name-polynomials" class="section-name selfRef">Polynomials</a>
+          </h4>
+<p id="section-9.2.1-1">A polynomial p is encoded by passing its coefficients to Encode:<a href="#section-9.2.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.2.1-2">
+<pre>
+EncodePoly(p, w) = Encode(p_0, p_1, ..., p_{n-1}, w)
+</pre><a href="#section-9.2.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.2.1-3">DecodePoly(-, w) is the unique inverse of EncodePoly(-, w).<a href="#section-9.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="vectors">
+<section id="section-9.2.2">
+          <h4 id="name-vectors">
+<a href="#section-9.2.2" class="section-number selfRef">9.2.2. </a><a href="#name-vectors" class="section-name selfRef">Vectors</a>
+          </h4>
+<p id="section-9.2.2-1">A vector v of length k over R is encoded by concatenating the coefficients
+in the obvious way:<a href="#section-9.2.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-9.2.2-2">
+<pre>
+EncodeVec(v, w) = Encode((v_0)_0, ..., (v_0)_{n-1},
+                         (v_1)_{0}, ..., (v_1)_{n-1},
+                                ..., (v_{k-1})_{n-1}, w)
+</pre><a href="#section-9.2.2-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.2.2-3">DecodeVec(-, w) is the unique inverse of EncodeVec(-, w).<a href="#section-9.2.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="inner-malleable-public-key-encryption-scheme">
+<section id="section-10">
+      <h2 id="name-inner-malleable-public-key-">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-inner-malleable-public-key-" class="section-name selfRef">Inner malleable public-key encryption scheme</a>
+      </h2>
+<p id="section-10-1">We are ready to define the IND-CPA secure Public-Key Encryption scheme that
+underlies Kyber. It is unsafe to use this underlying scheme directly as
+its ciphertexts are malleable. Instead, a Public-Key Encryption scheme
+can be constructed on top of Kyber by using HPKE <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span> <span>[<a href="#XYBERHPKE" class="cite xref">XYBERHPKE</a>]</span>.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<div id="parameters">
+<section id="section-10.1">
+        <h3 id="name-parameters">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-parameters" class="section-name selfRef">Parameters</a>
+        </h3>
+<p id="section-10.1-1">We have already been introduced to the following parameters:<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-10.1-2">
+          <dt id="section-10.1-2.1"><em>q</em></dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-2.2">
+            <p id="section-10.1-2.2.1">Order of field underlying <em>R</em>.<a href="#section-10.1-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.1-2.3"><em>n</em></dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-2.4">
+            <p id="section-10.1-2.4.1">Length of polynomials in <em>R</em>.<a href="#section-10.1-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.1-2.5"><em>zeta</em></dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-2.6">
+            <p id="section-10.1-2.6.1">Primitive root of unity in GF(q), used for NTT in R.<a href="#section-10.1-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.1-2.7">
+<em>XOF</em>, <em>H</em>, <em>G</em>, <em>PRF1</em>, <em>PRF2</em>
+</dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-2.8">
+            <p id="section-10.1-2.8.1">Various symmetric primitives.<a href="#section-10.1-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.1-2.9"><em>k</em></dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-2.10">
+            <p id="section-10.1-2.10.1">Main security parameter: the number of rows and columns in the matrix <em>A</em>.<a href="#section-10.1-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-10.1-3">Additionally, Kyber takes the following parameters<a href="#section-10.1-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-10.1-4">
+          <dt id="section-10.1-4.1">
+<em>eta1</em>, <em>eta2</em>
+</dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-4.2">
+            <p id="section-10.1-4.2.1">Size of small coefficients used in the private key and noise vectors.<a href="#section-10.1-4.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-10.1-4.3">
+<em>d_u</em>, <em>d_v</em>
+</dt>
+          <dd style="margin-left: 1.5em" id="section-10.1-4.4">
+            <p id="section-10.1-4.4.1">How many bits to retain per coefficient of the <em>u</em> and <em>v</em> components
+of the ciphertext.<a href="#section-10.1-4.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-10.1-5">The values of these parameters are given in <a href="#S-params" class="auto internal xref">Section 12</a>.<a href="#section-10.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="key-generation">
+<section id="section-10.2">
+        <h3 id="name-key-generation">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-key-generation" class="section-name selfRef">Key generation</a>
+        </h3>
+<p id="section-10.2-1">InnerKeyGen(seed) takes a 32 octet <strong>seed</strong> and deterministically
+produces a keypair as follows.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.2-2">
+<li id="section-10.2-2.1">
+            <p id="section-10.2-2.1.1">Set (rho, sigma) = G(seed).<a href="#section-10.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-10.2-2.2">
+            <p id="section-10.2-2.2.1">Derive<a href="#section-10.2-2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.2-2.2.2">
+<li id="section-10.2-2.2.2.1">
+                <p id="section-10.2-2.2.2.1.1">AHat = sampleMatrix(rho).<a href="#section-10.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.2-2.2.2.2">
+                <p id="section-10.2-2.2.2.2.1">s = sampleNoise(sigma, eta1, 0)<a href="#section-10.2-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.2-2.2.2.3">
+                <p id="section-10.2-2.2.2.3.1">e = sampleNoise(sigma, eta1, k)<a href="#section-10.2-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.2-2.3">
+            <p id="section-10.2-2.3.1">Compute<a href="#section-10.2-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.2-2.3.2">
+<li id="section-10.2-2.3.2.1">
+                <p id="section-10.2-2.3.2.1.1">sHat = NTT(s)<a href="#section-10.2-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.2-2.3.2.2">
+                <p id="section-10.2-2.3.2.2.1">tHat = AHat o sHat + NTT(e)<a href="#section-10.2-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.2-2.4">
+            <p id="section-10.2-2.4.1">Return<a href="#section-10.2-2.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.2-2.4.2">
+<li id="section-10.2-2.4.2.1">
+                <p id="section-10.2-2.4.2.1.1">publicKey = EncodeVec(tHat, 12) || rho<a href="#section-10.2-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.2-2.4.2.2">
+                <p id="section-10.2-2.4.2.2.1">privateKey = EncodeVec(sHat, 12)<a href="#section-10.2-2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+<p id="section-10.2-3">Note that in essence we're simply computing t = A s + e.<a href="#section-10.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="encryption">
+<section id="section-10.3">
+        <h3 id="name-encryption">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-encryption" class="section-name selfRef">Encryption</a>
+        </h3>
+<p id="section-10.3-1">InnerEnc(msg, publicKey, seed) takes a 32-octet seed,
+and deterministically encrypts the 32-octet msg for the InnerPKE public
+key publicKey as follows.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.3-2">
+<li id="section-10.3-2.1">
+            <p id="section-10.3-2.1.1">Split publicKey into<a href="#section-10.3-2.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.3-2.1.2">
+<li id="section-10.3-2.1.2.1">
+                <p id="section-10.3-2.1.2.1.1">k*(n/8)*12-octet tHatPacked<a href="#section-10.3-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.1.2.2">
+                <p id="section-10.3-2.1.2.2.1">32-octet rho<a href="#section-10.3-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.3-2.2">
+            <p id="section-10.3-2.2.1">Parse tHat = DecodeVec(tHatPacked, 12)<a href="#section-10.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-10.3-2.3">
+            <p id="section-10.3-2.3.1">Derive<a href="#section-10.3-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.3-2.3.2">
+<li id="section-10.3-2.3.2.1">
+                <p id="section-10.3-2.3.2.1.1">AHat = sampleMatrix(rho)<a href="#section-10.3-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.3.2.2">
+                <p id="section-10.3-2.3.2.2.1">r = sampleNoise(seed, eta1, 0)<a href="#section-10.3-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.3.2.3">
+                <p id="section-10.3-2.3.2.3.1">e_1 = sampleNoise(seed, eta2, k)<a href="#section-10.3-2.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.3.2.4">
+                <p id="section-10.3-2.3.2.4.1">e_2 = sampleNoise(seed, eta2, 2k)_0<a href="#section-10.3-2.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.3-2.4">
+            <p id="section-10.3-2.4.1">Compute<a href="#section-10.3-2.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.3-2.4.2">
+<li id="section-10.3-2.4.2.1">
+                <p id="section-10.3-2.4.2.1.1">rHat = NTT(r)<a href="#section-10.3-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.4.2.2">
+                <p id="section-10.3-2.4.2.2.1">u = InvNTT(AHat^T o rHat) + e_1<a href="#section-10.3-2.4.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.4.2.3">
+                <p id="section-10.3-2.4.2.3.1">v = InvNTT(tHat o rHat) + e_2 + Decompress(DecodePoly(msg, 1), 1)<a href="#section-10.3-2.4.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.4.2.4">
+                <p id="section-10.3-2.4.2.4.1">c_1 = EncodeVec(Compress(u, d_u), d_u)<a href="#section-10.3-2.4.2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.3-2.4.2.5">
+                <p id="section-10.3-2.4.2.5.1">c_2 = EncodePoly(Compress(v, d_v), d_v)<a href="#section-10.3-2.4.2.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.3-2.5">
+            <p id="section-10.3-2.5.1">Return<a href="#section-10.3-2.5.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.3-2.5.2">
+<li id="section-10.3-2.5.2.1">
+                <p id="section-10.3-2.5.2.1.1">cipherText = c_1 || c_2<a href="#section-10.3-2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+</section>
+</div>
+<div id="decryption">
+<section id="section-10.4">
+        <h3 id="name-decryption">
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-decryption" class="section-name selfRef">Decryption</a>
+        </h3>
+<p id="section-10.4-1">InnerDec(cipherText, privateKey) takes an InnerPKE private key
+privateKey and decrypts a cipher text cipherText as follows.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.4-2">
+<li id="section-10.4-2.1">
+            <p id="section-10.4-2.1.1">Split cipherText into<a href="#section-10.4-2.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.4-2.1.2">
+<li id="section-10.4-2.1.2.1">
+                <p id="section-10.4-2.1.2.1.1">d_u*k*n/8-octet c_1<a href="#section-10.4-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.4-2.1.2.2">
+                <p id="section-10.4-2.1.2.2.1">d_v*n/8-octet c_2<a href="#section-10.4-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.4-2.2">
+            <p id="section-10.4-2.2.1">Parse<a href="#section-10.4-2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.4-2.2.2">
+<li id="section-10.4-2.2.2.1">
+                <p id="section-10.4-2.2.2.1.1">u = Decompress(DecodeVec(c_1, d_u), d_u)<a href="#section-10.4-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.4-2.2.2.2">
+                <p id="section-10.4-2.2.2.2.1">v = Decompress(DecodePoly(c_2, d_v), d_v)<a href="#section-10.4-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-10.4-2.2.2.3">
+                <p id="section-10.4-2.2.2.3.1">sHat = DecodeVec(privateKey, 12)<a href="#section-10.4-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.4-2.3">
+            <p id="section-10.4-2.3.1">Compute<a href="#section-10.4-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.4-2.3.2">
+<li id="section-10.4-2.3.2.1">
+                <p id="section-10.4-2.3.2.1.1">m = v - InvNTT(sHat o NTT(u))<a href="#section-10.4-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-10.4-2.4">
+            <p id="section-10.4-2.4.1">Return<a href="#section-10.4-2.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-10.4-2.4.2">
+<li id="section-10.4-2.4.2.1">
+                <p id="section-10.4-2.4.2.1.1">plainText = EncodePoly(Compress(m, 1), 1)<a href="#section-10.4-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+</section>
+</div>
+</section>
+</div>
+<div id="kyber">
+<section id="section-11">
+      <h2 id="name-kyber">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-kyber" class="section-name selfRef">Kyber</a>
+      </h2>
+<p id="section-11-1">Now we are ready to define Kyber itself.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<div id="key-generation-1">
+<section id="section-11.1">
+        <h3 id="name-key-generation-2">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-key-generation-2" class="section-name selfRef">Key generation</a>
+        </h3>
+<p id="section-11.1-1">A Kyber keypair is derived deterministically from a 64-octet seed as follows.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.1-2">
+<li id="section-11.1-2.1">
+            <p id="section-11.1-2.1.1">Split seed into<a href="#section-11.1-2.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.1-2.1.2">
+<li id="section-11.1-2.1.2.1">
+                <p id="section-11.1-2.1.2.1.1">A 32-octet cpaSeed<a href="#section-11.1-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.1-2.1.2.2">
+                <p id="section-11.1-2.1.2.2.1">A 32-octet z<a href="#section-11.1-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-11.1-2.2">
+            <p id="section-11.1-2.2.1">Compute<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.1-2.2.2">
+<li id="section-11.1-2.2.2.1">
+                <p id="section-11.1-2.2.2.1.1">(cpaPublicKey, cpaPrivateKey) = InnerKeyGen(cpaSeed)<a href="#section-11.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.1-2.2.2.2">
+                <p id="section-11.1-2.2.2.2.1">h = H(cpaPublicKey)<a href="#section-11.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-11.1-2.3">
+            <p id="section-11.1-2.3.1">Return<a href="#section-11.1-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.1-2.3.2">
+<li id="section-11.1-2.3.2.1">
+                <p id="section-11.1-2.3.2.1.1">publicKey = cpaPublicKey<a href="#section-11.1-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.1-2.3.2.2">
+                <p id="section-11.1-2.3.2.2.1">privateKey = cpaPrivateKey || cpaPublicKey || h || z<a href="#section-11.1-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+</section>
+</div>
+<div id="encapsulation">
+<section id="section-11.2">
+        <h3 id="name-encapsulation">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-encapsulation" class="section-name selfRef">Encapsulation</a>
+        </h3>
+<p id="section-11.2-1">Kyber encapsulation takes a public key and generates a shared secret
+and ciphertext for the public key as follows.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.2-2">
+<li id="section-11.2-2.1">
+            <p id="section-11.2-2.1.1">Sample secret cryptographically-secure random 32-octet seed.<a href="#section-11.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-11.2-2.2">
+            <p id="section-11.2-2.2.1">Compute<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.2-2.2.2">
+<li id="section-11.2-2.2.2.1">
+                <p id="section-11.2-2.2.2.1.1">(K, cpaSeed) = G(seed || H(publicKey))<a href="#section-11.2-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.2-2.2.2.2">
+                <p id="section-11.2-2.2.2.2.1">cpaCipherText = InnerEnc(seed, publicKey, cpaSeed)<a href="#section-11.2-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-11.2-2.3">
+            <p id="section-11.2-2.3.1">Return<a href="#section-11.2-2.3.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.2-2.3.2">
+<li id="section-11.2-2.3.2.1">
+                <p id="section-11.2-2.3.2.1.1">cipherText = cpaCipherText<a href="#section-11.2-2.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.2-2.3.2.2">
+                <p id="section-11.2-2.3.2.2.1">sharedSecret = K<a href="#section-11.2-2.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+</section>
+</div>
+<div id="S-decaps">
+<section id="section-11.3">
+        <h3 id="name-decapsulation">
+<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-decapsulation" class="section-name selfRef">Decapsulation</a>
+        </h3>
+<p id="section-11.3-1">Kyber decapsulation takes a private key and a cipher text and
+returns a shared secret as follows.<a href="#section-11.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.3-2">
+<li id="section-11.3-2.1">
+            <p id="section-11.3-2.1.1">Split privateKey into<a href="#section-11.3-2.1.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.3-2.1.2">
+<li id="section-11.3-2.1.2.1">
+                <p id="section-11.3-2.1.2.1.1">A 12*k*n/8-octet cpaPrivateKey<a href="#section-11.3-2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.1.2.2">
+                <p id="section-11.3-2.1.2.2.1">A 12*k*n/8+32-octet cpaPublicKey<a href="#section-11.3-2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.1.2.3">
+                <p id="section-11.3-2.1.2.3.1">A 32-octet h<a href="#section-11.3-2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.1.2.4">
+                <p id="section-11.3-2.1.2.4.1">A 32-octet z<a href="#section-11.3-2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-11.3-2.2">
+            <p id="section-11.3-2.2.1">Compute<a href="#section-11.3-2.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.3-2.2.2">
+<li id="section-11.3-2.2.2.1">
+                <p id="section-11.3-2.2.2.1.1">m2 = InnerDec(cipherText, cpaPrivateKey)<a href="#section-11.3-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.2.2.2">
+                <p id="section-11.3-2.2.2.2.1">(ss1, cpaSeed2) = G(m2 || h)<a href="#section-11.3-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.2.2.3">
+                <p id="section-11.3-2.2.2.3.1">cipherText2 = InnerEnc(m2, cpaPublicKey, cpaSeed2)<a href="#section-11.3-2.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="section-11.3-2.2.2.4">
+                <p id="section-11.3-2.2.2.4.1">ss2 = PRF2(z, cipherText)<a href="#section-11.3-2.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li id="section-11.3-2.3">
+            <p id="section-11.3-2.3.1">In constant-time, set ss = ss1 if cipherText == cipherText2 else set ss = ss2.<a href="#section-11.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-11.3-2.4">
+            <p id="section-11.3-2.4.1">Return<a href="#section-11.3-2.4.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-11.3-2.4.2">
+<li id="section-11.3-2.4.2.1">
+                <p id="section-11.3-2.4.2.1.1">sharedSecret = ss<a href="#section-11.3-2.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+        </ol>
+<p id="section-11.3-3">For security, the implementation <span class="bcp14">MUST NOT</span> explicitly return
+or otherwise leak via a side-channel, decapsulation succeeded,
+viz <code>cipherText == cipherText2</code>.<a href="#section-11.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="S-params">
+<section id="section-12">
+      <h2 id="name-parameter-sets">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-parameter-sets" class="section-name selfRef">Parameter sets</a>
+      </h2>
+<span id="name-common-parameters-to-all-ve"></span><div id="params-comm">
+<table class="center" id="table-1">
+        <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-common-parameters-to-all-ve" class="selfRef">Common parameters to all versions of Kyber</a>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-right" rowspan="1" colspan="1">Name</th>
+            <th class="text-center" rowspan="1" colspan="1">Value</th>
+            <th class="text-left" rowspan="1" colspan="1">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">q</td>
+            <td class="text-center" rowspan="1" colspan="1">3329</td>
+            <td class="text-left" rowspan="1" colspan="1">Order of base field</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">n</td>
+            <td class="text-center" rowspan="1" colspan="1">256</td>
+            <td class="text-left" rowspan="1" colspan="1">Degree of polynomials</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">zeta</td>
+            <td class="text-center" rowspan="1" colspan="1">17</td>
+            <td class="text-left" rowspan="1" colspan="1">nth root of unity in base field</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<span id="name-instantiation-of-symmetric-"></span><div id="params-symm">
+<table class="center" id="table-2">
+        <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-instantiation-of-symmetric-" class="selfRef">Instantiation of symmetric primitives in Kyber</a>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-right" rowspan="1" colspan="1">Primitive</th>
+            <th class="text-left" rowspan="1" colspan="1">Instantiation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">XOF</td>
+            <td class="text-left" rowspan="1" colspan="1">SHAKE-128</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">H</td>
+            <td class="text-left" rowspan="1" colspan="1">SHA3-256</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">G</td>
+            <td class="text-left" rowspan="1" colspan="1">SHA3-512</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">PRF1(s,b)</td>
+            <td class="text-left" rowspan="1" colspan="1">SHAKE-256(s || b)</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">PRF2(s,m)</td>
+            <td class="text-left" rowspan="1" colspan="1">SHAKE-256(s || m)</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<span id="name-description-of-kyber-parame"></span><div id="params-desc">
+<table class="center" id="table-3">
+        <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-description-of-kyber-parame" class="selfRef">Description of kyber parameters</a>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-right" rowspan="1" colspan="1">Name</th>
+            <th class="text-left" rowspan="1" colspan="1">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">k</td>
+            <td class="text-left" rowspan="1" colspan="1">Dimension of module</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">eta1, eta2</td>
+            <td class="text-left" rowspan="1" colspan="1">Size of "small" coefficients used in the private key and noise vectors.</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">d_u</td>
+            <td class="text-left" rowspan="1" colspan="1">How many bits to retain per coefficient of <code>u</code>, the private-key independent part of the ciphertext</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">d_v</td>
+            <td class="text-left" rowspan="1" colspan="1">How many bits to retain per coefficient of <code>v</code>, the private-key dependent part of the ciphertext.</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<span id="name-kyber-parameter-sets-with-n"></span><div id="params">
+<table class="center" id="table-4">
+        <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-kyber-parameter-sets-with-n" class="selfRef">Kyber parameter sets with NIST security level (sec) and decryption failure probability (DFP)</a>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-right" rowspan="1" colspan="1">Parameter set</th>
+            <th class="text-center" rowspan="1" colspan="1">k</th>
+            <th class="text-center" rowspan="1" colspan="1">eta1</th>
+            <th class="text-center" rowspan="1" colspan="1">eta2</th>
+            <th class="text-center" rowspan="1" colspan="1">d_u</th>
+            <th class="text-center" rowspan="1" colspan="1">d_v</th>
+            <th class="text-center" rowspan="1" colspan="1">sec</th>
+            <th class="text-center" rowspan="1" colspan="1">DFP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber512</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">3</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">10</td>
+            <td class="text-center" rowspan="1" colspan="1">4</td>
+            <td class="text-center" rowspan="1" colspan="1">I</td>
+            <td class="text-center" rowspan="1" colspan="1">2^-139</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber768</td>
+            <td class="text-center" rowspan="1" colspan="1">3</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">10</td>
+            <td class="text-center" rowspan="1" colspan="1">4</td>
+            <td class="text-center" rowspan="1" colspan="1">III</td>
+            <td class="text-center" rowspan="1" colspan="1">2^-164</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber1024</td>
+            <td class="text-center" rowspan="1" colspan="1">4</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">2</td>
+            <td class="text-center" rowspan="1" colspan="1">11</td>
+            <td class="text-center" rowspan="1" colspan="1">5</td>
+            <td class="text-center" rowspan="1" colspan="1">V</td>
+            <td class="text-center" rowspan="1" colspan="1">2^-174</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<span id="name-kyber-parameter-sets-with-s"></span><div id="sizes">
+<table class="center" id="table-5">
+        <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-kyber-parameter-sets-with-s" class="selfRef">Kyber parameter sets with sizes of shared secret (ss), public key (pk), cipher text (ct) and private key (sk)</a>
+        </caption>
+<thead>
+          <tr>
+            <th class="text-right" rowspan="1" colspan="1">Parameter set</th>
+            <th class="text-center" rowspan="1" colspan="1">ss</th>
+            <th class="text-center" rowspan="1" colspan="1">pk</th>
+            <th class="text-center" rowspan="1" colspan="1">ct</th>
+            <th class="text-center" rowspan="1" colspan="1">sk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber512</td>
+            <td class="text-center" rowspan="1" colspan="1">32</td>
+            <td class="text-center" rowspan="1" colspan="1">800</td>
+            <td class="text-center" rowspan="1" colspan="1">768</td>
+            <td class="text-center" rowspan="1" colspan="1">1632</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber768</td>
+            <td class="text-center" rowspan="1" colspan="1">32</td>
+            <td class="text-center" rowspan="1" colspan="1">1184</td>
+            <td class="text-center" rowspan="1" colspan="1">1088</td>
+            <td class="text-center" rowspan="1" colspan="1">2400</td>
+          </tr>
+          <tr>
+            <td class="text-right" rowspan="1" colspan="1">Kyber1024</td>
+            <td class="text-center" rowspan="1" colspan="1">32</td>
+            <td class="text-center" rowspan="1" colspan="1">1568</td>
+            <td class="text-center" rowspan="1" colspan="1">1568</td>
+            <td class="text-center" rowspan="1" colspan="1">3168</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+</section>
+</div>
+<div id="S-spec">
+<section id="section-13">
+      <h2 id="name-machine-readable-specificat">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-machine-readable-specificat" class="section-name selfRef">Machine-readable specification</a>
+      </h2>
+<div class="alignLeft art-text artwork" id="section-13-1">
+<pre>
+# WARNING This is a specification of Kyber; not a production ready
+# implementation. It is slow and does not run in constant time.
+
+# Requires the CryptoDome for SHAKE. To install, run
+#
+#   pip install pycryptodome pytest
+from Crypto.Hash import SHAKE128, SHAKE256
+
+import io
+import hashlib
+import functools
+import collections
+
+from math import floor
+
+q = 3329
+nBits = 8
+zeta = 17
+eta2 = 2
+
+n = 2**nBits
+inv2 = (q+1)//2 # inverse of 2
+
+params = collections.namedtuple('params', ('k', 'du', 'dv', 'eta1'))
+
+params512  = params(k = 2, du = 10, dv = 4, eta1 = 3)
+params768  = params(k = 3, du = 10, dv = 4, eta1 = 2)
+params1024 = params(k = 4, du = 11, dv = 5, eta1 = 2)
+
+def smod(x):
+    r = x % q
+    if r &gt; (q-1)//2:
+        r -= q
+    return r
+
+# Rounds to nearest integer with ties going up
+def Round(x):
+    return int(floor(x + 0.5))
+
+def Compress(x, d):
+    return Round((2**d / q) * x) % (2**d)
+
+def Decompress(y, d):
+    assert 0 &lt;= y and y &lt;= 2**d
+    return Round((q / 2**d) * y)
+
+def BitsToWords(bs, w):
+    assert len(bs) % w == 0
+    return [sum(bs[i+j] * 2**j for j in range(w))
+            for i in range(0, len(bs), w)]
+
+def WordsToBits(bs, w):
+    return sum([[(b &gt;&gt; i) % 2 for i in range(w)] for b in bs], [])
+
+def Encode(a, w):
+    return bytes(BitsToWords(WordsToBits(a, w), 8))
+
+def Decode(a, w):
+    return BitsToWords(WordsToBits(a, 8), w)
+
+def brv(x):
+    """ Reverses a 7-bit number """
+    return int(''.join(reversed(bin(x)[2:].zfill(nBits-1))), 2)
+
+class Poly:
+    def __init__(self, cs=None):
+        self.cs = (0,)*n if cs is None else tuple(cs)
+        assert len(self.cs) == n
+
+    def __add__(self, other):
+        return Poly((a+b) % q for a,b in zip(self.cs, other.cs))
+
+    def __neg__(self):
+        return Poly(q-a for a in self.cs)
+    def __sub__(self, other):
+        return self + -other
+
+    def __str__(self):
+        return f"Poly({self.cs}"
+
+    def __eq__(self, other):
+        return self.cs == other.cs
+
+    def NTT(self):
+        cs = list(self.cs)
+        layer = n // 2
+        zi = 0
+        while layer &gt;= 2:
+            for offset in range(0, n-layer, 2*layer):
+                zi += 1
+                z = pow(zeta, brv(zi), q)
+
+                for j in range(offset, offset+layer):
+                    t = (z * cs[j + layer]) % q
+                    cs[j + layer] = (cs[j] - t) % q
+                    cs[j] = (cs[j] + t) % q
+            layer //= 2
+        return Poly(cs)
+
+    def RefNTT(self):
+        # Slower, but simpler, version of the NTT.
+        cs = [0]*n
+        for i in range(0, n, 2):
+            for j in range(n // 2):
+                z = pow(zeta, (2*brv(i//2)+1)*j, q)
+                cs[i] = (cs[i] + self.cs[2*j] * z) % q
+                cs[i+1] = (cs[i+1] + self.cs[2*j+1] * z) % q
+        return Poly(cs)
+
+    def InvNTT(self):
+        cs = list(self.cs)
+        layer = 2
+        zi = n//2
+        while layer &lt; n:
+            for offset in range(0, n-layer, 2*layer):
+                zi -= 1
+                z = pow(zeta, brv(zi), q)
+
+                for j in range(offset, offset+layer):
+                    t = (cs[j+layer] - cs[j]) % q
+                    cs[j] = (inv2*(cs[j] + cs[j+layer])) % q
+                    cs[j+layer] = (inv2 * z * t) % q
+            layer *= 2
+        return Poly(cs)
+
+    def MulNTT(self, other):
+        """ Computes self o other, the multiplication of self and other
+            in the NTT domain. """
+        cs = [None]*n
+        for i in range(0, n, 2):
+            a1 = self.cs[i]
+            a2 = self.cs[i+1]
+            b1 = other.cs[i]
+            b2 = other.cs[i+1]
+            z = pow(zeta, 2*brv(i//2)+1, q)
+            cs[i] = (a1 * b1 + z * a2 * b2) % q
+            cs[i+1] = (a2 * b1 + a1 * b2) % q
+        return Poly(cs)
+
+    def Compress(self, d):
+        return Poly(Compress(c, d) for c in self.cs)
+
+    def Decompress(self, d):
+        return Poly(Decompress(c, d) for c in self.cs)
+
+    def Encode(self, d):
+        return Encode(self.cs, d)
+
+def sampleUniform(stream):
+    cs = []
+    while True:
+        b = stream.read(3)
+        d1 = b[0] + 256*(b[1] % 16)
+        d2 = (b[1] &gt;&gt; 4) + 16*b[2]
+        assert d1 + 2**12 * d2 == b[0] + 2**8 * b[1] + 2**16*b[2]
+        for d in [d1, d2]:
+            if d &gt;= q:
+                continue
+            cs.append(d)
+            if len(cs) == n:
+                return Poly(cs)
+
+def CBD(a, eta):
+    assert len(a) == 64*eta
+    b = WordsToBits(a, 8)
+    cs = []
+    for i in range(n):
+        cs.append((sum(b[:eta]) - sum(b[eta:2*eta])) % q)
+        b = b[2*eta:]
+    return Poly(cs)
+
+def XOF(seed, j, i):
+    h = SHAKE128.new()
+    h.update(seed + bytes([j, i]))
+    return h
+
+def PRF1(seed, nonce):
+    assert len(seed) == 32
+    h = SHAKE256.new()
+    h.update(seed + bytes([nonce]))
+    return h
+
+def PRF2(seed, msg):
+    assert len(seed) == 32
+    h = SHAKE256.new()
+    h.update(seed + msg)
+    return h.read(32)
+
+def G(seed):
+    h = hashlib.sha3_512(seed).digest()
+    return h[:32], h[32:]
+
+def H(msg): return hashlib.sha3_256(msg).digest()
+
+class Vec:
+    def __init__(self, ps):
+        self.ps = tuple(ps)
+
+    def NTT(self):
+        return Vec(p.NTT() for p in self.ps)
+
+    def InvNTT(self):
+        return Vec(p.InvNTT() for p in self.ps)
+
+    def DotNTT(self, other):
+        """ Computes the dot product &lt;self, other&gt; in NTT domain. """
+        return sum((a.MulNTT(b) for a, b in zip(self.ps, other.ps)),
+                   Poly())
+
+    def __add__(self, other):
+        return Vec(a+b for a,b in zip(self.ps, other.ps))
+
+    def Compress(self, d):
+        return Vec(p.Compress(d) for p in self.ps)
+
+    def Decompress(self, d):
+        return Vec(p.Decompress(d) for p in self.ps)
+
+    def Encode(self, d):
+        return Encode(sum((p.cs for p in self.ps), ()), d)
+
+    def __eq__(self, other):
+        return self.ps == other.ps
+
+def EncodeVec(vec, w):
+    return Encode(sum([p.cs for p in vec.ps], ()), w)
+def DecodeVec(bs, k, w):
+    cs = Decode(bs, w)
+    return Vec(Poly(cs[n*i:n*(i+1)]) for i in range(k))
+def DecodePoly(bs, w):
+    return Poly(Decode(bs, w))
+
+class Matrix:
+    def __init__(self, cs):
+        """ Samples the matrix uniformly from seed rho """
+        self.cs = tuple(tuple(row) for row in cs)
+
+    def MulNTT(self, vec):
+        """ Computes matrix multiplication A*vec in the NTT domain. """
+        return Vec(Vec(row).DotNTT(vec) for row in self.cs)
+
+    def T(self):
+        """ Returns transpose of matrix """
+        k = len(self.cs)
+        return Matrix((self.cs[j][i] for j in range(k))
+                      for i in range(k))
+
+def sampleMatrix(rho, k):
+    return Matrix([[sampleUniform(XOF(rho, j, i))
+            for j in range(k)] for i in range(k)])
+
+def sampleNoise(sigma, eta, offset, k):
+    return Vec(CBD(PRF1(sigma, i+offset).read(64*eta), eta)
+               for i in range(k))
+
+def constantTimeSelectOnEquality(a, b, ifEq, ifNeq):
+    # WARNING! In production code this must be done in a
+    # data-independent constant-time manner, which this implementation
+    # is not. In fact, many more lines of code in this
+    # file are not constant-time.
+    return ifEq if a == b else ifNeq
+
+def InnerKeyGen(seed, params):
+    assert len(seed) == 32
+    rho, sigma = G(seed)
+    A = sampleMatrix(rho, params.k)
+    s = sampleNoise(sigma, params.eta1, 0, params.k)
+    e = sampleNoise(sigma, params.eta1, params.k, params.k)
+    sHat = s.NTT()
+    eHat = e.NTT()
+    tHat = A.MulNTT(sHat) + eHat
+    pk = EncodeVec(tHat, 12) + rho
+    sk = EncodeVec(sHat, 12)
+    return (pk, sk)
+
+def InnerEnc(pk, msg, seed, params):
+    assert len(msg) == 32
+    tHat = DecodeVec(pk[:-32], params.k, 12)
+    rho = pk[-32:]
+    A = sampleMatrix(rho, params.k)
+    r = sampleNoise(seed, params.eta1, 0, params.k)
+    e1 = sampleNoise(seed, eta2, params.k, params.k)
+    e2 = sampleNoise(seed, eta2, 2*params.k, 1).ps[0]
+    rHat = r.NTT()
+    u = A.T().MulNTT(rHat).InvNTT() + e1
+    m = Poly(Decode(msg, 1)).Decompress(1)
+    v = tHat.DotNTT(rHat).InvNTT() + e2 + m
+    c1 = u.Compress(params.du).Encode(params.du)
+    c2 = v.Compress(params.dv).Encode(params.dv)
+    return c1 + c2
+
+def InnerDec(sk, ct, params):
+    split = params.du * params.k * n // 8
+    c1, c2 = ct[:split], ct[split:]
+    u = DecodeVec(c1, params.k, params.du).Decompress(params.du)
+    v = DecodePoly(c2, params.dv).Decompress(params.dv)
+    sHat = DecodeVec(sk, params.k, 12)
+    return (v - sHat.DotNTT(u.NTT()).InvNTT()).Compress(1).Encode(1)
+
+def KeyGen(seed, params):
+    assert len(seed) == 64
+    z = seed[32:]
+    pk, sk2 = InnerKeyGen(seed[:32], params)
+    h = H(pk)
+    return (pk, sk2 + pk + h + z)
+
+def Enc(pk, seed, params):
+    assert len(seed) == 32
+
+    K, r = G(seed + H(pk))
+    ct = InnerEnc(pk, seed, r, params)
+    return (ct, K)
+
+def Dec(sk, ct, params):
+    sk2 = sk[:12 * params.k * n//8]
+    pk = sk[12 * params.k * n//8 : 24 * params.k * n//8 + 32]
+    h = sk[24 * params.k * n//8 + 32 : 24 * params.k * n//8 + 64]
+    z = sk[24 * params.k * n//8 + 64 : 24 * params.k * n//8 + 96]
+    m2 = InnerDec(sk, ct, params)
+    K2, r2 = G(m2 + h)
+    ct2 = InnerEnc(pk, m2, r2, params)
+    return constantTimeSelectOnEquality(
+        ct2, ct,
+        K2,                 # if ct == ct2
+        PRF2(z, ct),        # if ct != ct2
+    )
+</pre><a href="#section-13-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-14">
+      <h2 id="name-security-considerations">
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-14-1">Kyber512, Kyber768 and Kyber1024 are designed to be post-quantum
+IND-CCA2 secure KEMs, at the security levels of AES-128, AES-192 and AES-256.<a href="#section-14-1" class="pilcrow">¶</a></p>
+<p id="section-14-2">The designers of Kyber recommend Kyber768.<a href="#section-14-2" class="pilcrow">¶</a></p>
+<p id="section-14-3">The inner public key encryption <span class="bcp14">SHOULD NOT</span> be used directly,
+as its ciphertexts are malleable.  Instead, for public key encryption,
+HPKE can be used to turn Kyber into IND-CCA2 secure PKE <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span> <span>[<a href="#XYBERHPKE" class="cite xref">XYBERHPKE</a>]</span>.<a href="#section-14-3" class="pilcrow">¶</a></p>
+<p id="section-14-4">Any implementation <span class="bcp14">MUST</span> use implicit rejection as specified in <a href="#S-decaps" class="auto internal xref">Section 11.3</a>.<a href="#section-14-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-15">
+      <h2 id="name-references">
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-15.1">
+        <h3 id="name-normative-references">
+<a href="#section-15.1" class="section-number selfRef">15.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="FIPS202">[FIPS202]</dt>
+        <dd>
+<span class="refAuthor">National Institute of Standards and Technology</span>, <span class="refTitle">"FIPS PUB 202: SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions"</span>, <span>n.d.</span>, <span>&lt;<a href="https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf">https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-15.2">
+        <h3 id="name-informative-references">
+<a href="#section-15.2" class="section-number selfRef">15.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="H2CURVE">[H2CURVE]</dt>
+        <dd>
+<span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Scott, S.</span>, <span class="refAuthor">Sullivan, N.</span>, <span class="refAuthor">Wahby, R. S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Hashing to Elliptic Curves"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hash-to-curve-16</span>, <time datetime="2022-06-15" class="refDate">15 June 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="HYBRID">[HYBRID]</dt>
+        <dd>
+<span class="refAuthor">Stebila, D.</span>, <span class="refAuthor">Fluhrer, S.</span>, and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Hybrid key exchange in TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-stebila-tls-hybrid-design-03</span>, <time datetime="2020-02-12" class="refDate">12 February 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-stebila-tls-hybrid-design-03">https://datatracker.ietf.org/doc/html/draft-stebila-tls-hybrid-design-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="KYBERV302">[KYBERV302]</dt>
+        <dd>
+<span class="refAuthor">Avanzi, R.</span>, <span class="refAuthor">Bos, J.</span>, <span class="refAuthor">Ducas, L.</span>, <span class="refAuthor">Kiltz, E.</span>, <span class="refAuthor">Lepoint, T.</span>, <span class="refAuthor">Lyubashevsky, V.</span>, <span class="refAuthor">Schanck, J.</span>, <span class="refAuthor">Schwabe, P.</span>, <span class="refAuthor">Seiler, G.</span>, and <span class="refAuthor">D. Stehle</span>, <span class="refTitle">"CRYSTALS-Kyber, Algorithm Specification And Supporting Documentation (version 3.02)"</span>, <time datetime="2021" class="refDate">2021</time>, <span>&lt;<a href="https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf">https://pq-crystals.org/kyber/data/kyber-specification-round3-20210804.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="NISTR3">[NISTR3]</dt>
+        <dd>
+<span class="refAuthor">The NIST PQC Team</span>, <span class="refTitle">"PQC Standardization Process: Announcing Four Candidates to be Standardized, Plus Fourth Round Candidates"</span>, <span>n.d.</span>, <span>&lt;<a href="https://csrc.nist.gov/News/2022/pqc-candidates-to-be-standardized-and-round-4">https://csrc.nist.gov/News/2022/pqc-candidates-to-be-standardized-and-round-4</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9180">[RFC9180]</dt>
+        <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Bhargavan, K.</span>, <span class="refAuthor">Lipp, B.</span>, and <span class="refAuthor">C. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="seriesInfo">RFC 9180</span>, <span class="seriesInfo">DOI 10.17487/RFC9180</span>, <time datetime="2022-02" class="refDate">February 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180">https://www.rfc-editor.org/rfc/rfc9180</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SECEST">[SECEST]</dt>
+        <dd>
+<span class="refAuthor">Ducas, L.</span> and <span class="refAuthor">J. Schanck</span>, <span class="refTitle">"CRYSTALS security estimate scripts"</span>, <span>n.d.</span>, <span>&lt;<a href="https://github.com/pq-crystals/security-estimates">https://github.com/pq-crystals/security-estimates</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="XYBERHPKE">[XYBERHPKE]</dt>
+        <dd>
+<span class="refAuthor">Westerbaan, B.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"X25519Kyber768Draft00 hybrid post-quantum KEM for HPKE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-westerbaan-cfrg-hpke-xyber768d00-02</span>, <time datetime="2023-05-04" class="refDate">4 May 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-westerbaan-cfrg-hpke-xyber768d00-02">https://datatracker.ietf.org/doc/html/draft-westerbaan-cfrg-hpke-xyber768d00-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="XYBERTLS">[XYBERTLS]</dt>
+      <dd>
+<span class="refAuthor">Westerbaan, B.</span> and <span class="refAuthor">D. Stebila</span>, <span class="refTitle">"X25519Kyber768Draft00 hybrid post-quantum key agreement"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-tls-westerbaan-xyber768d00-03</span>, <time datetime="2023-09-24" class="refDate">24 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-tls-westerbaan-xyber768d00-03">https://datatracker.ietf.org/doc/html/draft-tls-westerbaan-xyber768d00-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">The authors would like to thank
+C. Wood,
+Florence D.,
+I. Liusvaara,
+J. Crawford,
+J. Schanck,
+M. Thomson, and
+N. Sullivan
+for their input and assistance.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="change-log">
+<section id="appendix-B">
+      <h2 id="name-change-log">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-change-log" class="section-name selfRef">Change Log</a>
+      </h2>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="appendix-B-1.1">
+          <p id="appendix-B-1.1.1"><strong>RFC Editor's Note:</strong> Please remove this section prior to publication of a
+final version of this document.<a href="#appendix-B-1.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<div id="since-xxx">
+<section id="appendix-B.1">
+        <h3 id="name-since-xxx">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-since-xxx" class="section-name selfRef">Since XXX</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.1-1.1">
+            <p id="appendix-B.1-1.1.1">Adopt tweak to FO transform.<a href="#appendix-B.1-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.2">
+            <p id="appendix-B.1-1.2.1">Rename PRF to PRF1 and KDF to PRF2.<a href="#appendix-B.1-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.3">
+            <p id="appendix-B.1-1.3.1">Use KDF/PRF2 to compute rejection shared secret instead of G.<a href="#appendix-B.1-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.1-1.4">
+            <p id="appendix-B.1-1.4.1">Remove hash of shame.<a href="#appendix-B.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="since-draft-schwabe-cfrg-kyber-02">
+<section id="appendix-B.2">
+        <h3 id="name-since-draft-schwabe-cfrg-ky">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-since-draft-schwabe-cfrg-ky" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-02</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.2-1.1">
+            <p id="appendix-B.2-1.1.1">Fix a typo in the machine-readable specification, and use a proper
+SHAKE implementation. #5<a href="#appendix-B.2-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.2">
+            <p id="appendix-B.2-1.2.1">Add table with sizes.<a href="#appendix-B.2-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.3">
+            <p id="appendix-B.2-1.3.1">Reordered sections.<a href="#appendix-B.2-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.4">
+            <p id="appendix-B.2-1.4.1">Add reference to Kyber in HPKE.<a href="#appendix-B.2-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.5">
+            <p id="appendix-B.2-1.5.1">Miscellaneous editorial changes.<a href="#appendix-B.2-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.6">
+            <p id="appendix-B.2-1.6.1">Remove encapsulation seed as an explicit parameter in the written
+specification.<a href="#appendix-B.2-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.2-1.7">
+            <p id="appendix-B.2-1.7.1">Write security recommendations. #18<a href="#appendix-B.2-1.7.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="since-draft-schwabe-cfrg-kyber-01">
+<section id="appendix-B.3">
+        <h3 id="name-since-draft-schwabe-cfrg-kyb">
+<a href="#appendix-B.3" class="section-number selfRef">B.3. </a><a href="#name-since-draft-schwabe-cfrg-kyb" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-01</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.3-1.1">
+            <p id="appendix-B.3-1.1.1">Fix various typos.<a href="#appendix-B.3-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.3-1.2">
+            <p id="appendix-B.3-1.2.1">Move sections around.<a href="#appendix-B.3-1.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.3-1.3">
+            <p id="appendix-B.3-1.3.1">Elaborate domain separation and encoding of nonces
+in symmetric primitives.<a href="#appendix-B.3-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.3-1.4">
+            <p id="appendix-B.3-1.4.1">Add explicit formula for InvNTT.<a href="#appendix-B.3-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.3-1.5">
+            <p id="appendix-B.3-1.5.1">Add acknowledgements.<a href="#appendix-B.3-1.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+<div id="since-draft-schwabe-cfrg-kyber-00">
+<section id="appendix-B.4">
+        <h3 id="name-since-draft-schwabe-cfrg-kybe">
+<a href="#appendix-B.4" class="section-number selfRef">B.4. </a><a href="#name-since-draft-schwabe-cfrg-kybe" class="section-name selfRef">Since draft-schwabe-cfrg-kyber-00</a>
+        </h3>
+<ul class="normal">
+<li class="normal" id="appendix-B.4-1.1">
+            <p id="appendix-B.4-1.1.1">Test specification against NIST test vectors.<a href="#appendix-B.4-1.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-B.4-1.2">
+            <p id="appendix-B.4-1.2.1">Fix two unintentional mismatches between this document
+and the reference implementation:<a href="#appendix-B.4-1.2.1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-B.4-1.2.2">
+<li id="appendix-B.4-1.2.2.1">
+                <p id="appendix-B.4-1.2.2.1.1">KDF uses SHAKE-256 instead of SHAKE-128.<a href="#appendix-B.4-1.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li id="appendix-B.4-1.2.2.2">
+                <p id="appendix-B.4-1.2.2.2.1">Reverse order of seed. (<code>z</code> comes at the end.)<a href="#appendix-B.4-1.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ol>
+</li>
+          <li class="normal" id="appendix-B.4-1.3">
+            <p id="appendix-B.4-1.3.1">Elaborate text in particular introduction, and symmetric key section.<a href="#appendix-B.4-1.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Peter Schwabe</span></div>
+<div dir="auto" class="left"><span class="org">MPI-SP &amp; Radboud University</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:peter@cryptojedi.org" class="email">peter@cryptojedi.org</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Bas Westerbaan</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:bas@cloudflare.com" class="email">bas@cloudflare.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
